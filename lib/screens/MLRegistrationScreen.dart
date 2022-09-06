@@ -1,3 +1,4 @@
+import 'package:doctor/screens/MLLoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/components/MLCountryPIckerComponent.dart';
@@ -124,7 +125,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                               decoration: TextDecoration.underline),
                         ).onTap(
                           () {
-                            MLRegistrationScreen().launch(context);
+                            MLLoginScreen().launch(context);
                           },
                         ),
                       ],
