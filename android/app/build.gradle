@@ -63,7 +63,7 @@ android {
        release {
            keyAlias = 'upload'
            keyPassword 'dancan510600'
-           storeFile file('android/app/upload-keystore.jks')
+           storeFile file('upload-keystore.jks')
            storePassword 'dancan510600'
        }
    }
