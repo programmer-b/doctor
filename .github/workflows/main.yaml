@@ -1,40 +1,26 @@
+name: Doctor
+
 on:
-  pull_request:
-    branches:
-      - main
-      - master
   push:
     branches:
-      - main
       - master
-      - develop
-name: "Build & Release"
+
 jobs:
   build:
-    name: Build & Release
-    runs-on: linux
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
         with:
-          java-version: '11.x'
+          java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.3.0'
+          channel: 'beta'
       - run: flutter pub get
-      - run: flutter test
-      - run: flutter build apk --release --split-per-abi
-      # - run: |
-      #     flutter build apk --debug --split-per-abi
-      #     cd build/app/outputs/apk/release/
-      #     mkdir Payload
-      #     cd Payload
-      #     ln -s ../Runner.app
-      #     cd ..
-      #     zip -r app.ipa Payload
-      - name: Push to Releases
-        uses: ncipollo/release-action@v1
+      - run: flutter format --set-exit-if-changed .
+      - run: flutter analyze .
+      - run: flutter build apk
+      - uses: actions/upload-artifact@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*,build/ios/iphoneos/app.ipa"
-          tag: v1.0.${{ github.run_number }}
-          token: ${{ secrets.DANTECH }}
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
