@@ -8,6 +8,8 @@ import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLImage.dart';
 import 'package:doctor/utils/MLString.dart';
 
+import '../main.dart';
+
 class MLRegistrationScreen extends StatefulWidget {
   static String tag = '/MLRegistrationScreen';
 
@@ -53,16 +55,17 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                     16.height,
                     Row(
                       children: [
-                        MLCountryPickerComponent(),
-                        16.width,
                         AppTextField(
-                          textFieldType: TextFieldType.PHONE,
+                          textFieldType: TextFieldType.NAME,
                           decoration: InputDecoration(
-                            labelText: mlPhoneNumber,
+                            prefixIcon: Icon(Icons.account_circle,
+                                color: appStore.isDarkModeOn ? white : black),
+                            labelText: mlUsername!,
                             labelStyle: secondaryTextStyle(size: 16),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
-                                  color: mlColorLightGrey.withOpacity(0.2)),
+                                  color: mlColorLightGrey.withOpacity(0.2),
+                                  width: 1),
                             ),
                           ),
                         ).expand(),
@@ -74,7 +77,8 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       decoration: InputDecoration(
                         labelText: mlPassword!,
                         labelStyle: secondaryTextStyle(size: 16),
-                        prefixIcon: Icon(Icons.lock_outline, size: 20),
+                        prefixIcon: Icon(Icons.lock_outline,
+                            color: appStore.isDarkModeOn ? white : black),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: mlColorLightGrey.withOpacity(0.2)),
@@ -87,7 +91,8 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       decoration: InputDecoration(
                         labelText: mlReenter_password!,
                         labelStyle: secondaryTextStyle(size: 16),
-                        prefixIcon: Icon(Icons.lock_outline, size: 20),
+                        prefixIcon: Icon(Icons.lock_outline,
+                            color: appStore.isDarkModeOn ? white : black),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: mlColorLightGrey.withOpacity(0.2)),

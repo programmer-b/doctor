@@ -22,6 +22,8 @@ jobs:
   build:
     name: Build Artifacts and Release
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.DANTECH }}
     steps:
       - uses: actions/checkout@v1
       - name: Setup Java
@@ -63,6 +65,7 @@ jobs:
         with:
           artifacts: "build/app/outputs/bundle/release/*.aab"
           token: ${{ secrets.DANTECH }}
+          run: hub release create -m "$(date)" "v$(date +%s)"
           tag: v1.0.${{ github.run_number }}
 
       - name: Save APPBUNDLE to Artifacts

@@ -56,11 +56,14 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       AppTextField(
                         textFieldType: TextFieldType.NAME,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.account_circle, color: appStore.isDarkModeOn ? white : black),
+                          prefixIcon: Icon(Icons.account_circle,
+                              color: appStore.isDarkModeOn ? white : black),
                           labelText: mlUsername!,
                           labelStyle: secondaryTextStyle(size: 16),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2), width: 1),
+                            borderSide: BorderSide(
+                                color: mlColorLightGrey.withOpacity(0.2),
+                                width: 1),
                           ),
                         ),
                       ).expand(),
@@ -72,19 +75,21 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                     decoration: InputDecoration(
                       labelText: mlPassword!,
                       labelStyle: secondaryTextStyle(size: 16),
-                      prefixIcon: Icon(Icons.lock_outline, color: appStore.isDarkModeOn ? white : black),
+                      prefixIcon: Icon(Icons.lock_outline,
+                          color: appStore.isDarkModeOn ? white : black),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+                        borderSide: BorderSide(
+                            color: mlColorLightGrey.withOpacity(0.2)),
                       ),
                     ),
                   ),
                   8.height,
                   Align(
                     alignment: Alignment.topRight,
-                    child: Text(mlForget_password!, style: secondaryTextStyle(size: 16)).onTap(
-                      () {
-                        MLForgetPasswordScreen().launch(context);
-                      },
+                    child: Text(mlForget_password!,
+                            style: secondaryTextStyle(size: 16))
+                        .onTap(
+                      () => MLForgetPasswordScreen().launch(context),
                     ),
                   ),
                   24.height,
@@ -93,15 +98,17 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                     width: double.infinity,
                     onTap: () {
                       finish(context);
-                      MLDashboardScreen().launch(context);
+                      MLDashboardScreen().launch(
+                        context, //isNewTask: true
+                      );
                     },
                     child: Text(mlLogin!, style: boldTextStyle(color: white)),
                   ),
                   22.height,
-                  Text(mlLogin_with!, style: secondaryTextStyle(size: 16)).center(),
-                  22.height,
-                  MLSocialAccountsComponent(),
-                  22.height,
+                  // Text(mlLogin_with!, style: secondaryTextStyle(size: 16)).center(),
+                  // 22.height,
+                  // MLSocialAccountsComponent(),
+                  // 22.height,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -109,7 +116,9 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       8.width,
                       Text(
                         mlRegister!,
-                        style: boldTextStyle(color: mlColorBlue, decoration: TextDecoration.underline),
+                        style: boldTextStyle(
+                            color: mlColorBlue,
+                            decoration: TextDecoration.underline),
                       ).onTap(
                         () {
                           MLRegistrationScreen().launch(context);
@@ -125,7 +134,8 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
           Container(
             margin: EdgeInsets.only(top: 75),
             width: context.width(),
-            child: commonCachedNetworkImage(ml_ic_register_indicator!, alignment: Alignment.center, width: 200, height: 200),
+            child: commonCachedNetworkImage(ml_ic_register_indicator!,
+                alignment: Alignment.center, width: 200, height: 200),
           ),
         ],
       ),
