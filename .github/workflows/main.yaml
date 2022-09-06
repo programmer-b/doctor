@@ -5,9 +5,7 @@ name: doctor
 # events but only for the master branch
 
 on:
-  create:
-    tags:
-      - v*
+
   pull_request:
     branches:
       - main
