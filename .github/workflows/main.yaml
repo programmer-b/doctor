@@ -49,3 +49,8 @@ jobs:
           artifacts: "build/app/outputs/apk/debug/*,build/app/outputs/apk/releases/*"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.DANTECH }}
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/    
