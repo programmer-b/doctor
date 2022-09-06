@@ -52,11 +52,12 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                   Row(
                     children: [
                       // MLCountryPickerComponent(),
-                      16.width,
+                      // 16.width,
                       AppTextField(
-                        textFieldType: TextFieldType.PHONE,
+                        textFieldType: TextFieldType.NAME,
                         decoration: InputDecoration(
-                          labelText: mlPhoneNumber!,
+                          prefixIcon: Icon(Icons.account_circle, color: appStore.isDarkModeOn ? white : black),
+                          labelText: mlUsername!,
                           labelStyle: secondaryTextStyle(size: 16),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2), width: 1),

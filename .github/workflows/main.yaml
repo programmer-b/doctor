@@ -63,6 +63,7 @@ jobs:
         with:
           artifacts: "build/app/outputs/bundle/release/*.aab"
           token: ${{ secrets.DANTECH }}
+          tag: v1.0.${{ github.run_number }}
 
       - name: Save APPBUNDLE to Artifacts
         uses: actions/upload-artifact@v2

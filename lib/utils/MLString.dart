@@ -80,5 +80,6 @@ const String? mlNotification = 'Notification';
 
 const String? mlDisease_symptoms = 'Disease Symptoms';
 const String? mlPhoneNumber = 'Your Phone Number';
+const String? mlUsername = 'Your Username';
 
 const BaseUrl = 'https://assets.iqonic.design/old-themeforest-images/prokit';
