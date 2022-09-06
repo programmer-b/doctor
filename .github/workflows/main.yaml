@@ -47,10 +47,10 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab, build/app/outputs/apk/debug/app-debug.apk"
-          tag: v0.0.${{ github.run_number }}
+          tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.DANTECH }}
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           name: release-apk
-          path: build/app/outputs/apk/     
+          path: build/app/outputs/apk/
