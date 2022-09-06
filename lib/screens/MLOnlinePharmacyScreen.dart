@@ -126,6 +126,7 @@ class MLOnlinePharmacyScreenState extends State<MLOnlinePharmacyScreen> {
                   if (index == 0) {
                     return MLPharmacyCategoriesComponent();
                   }
+                  return null;
                 },
               ),
             ),

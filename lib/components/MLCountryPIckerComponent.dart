@@ -36,8 +36,8 @@ class MLCountryPickerComponentState extends State<MLCountryPickerComponent> {
           children: [
             CountryCodePicker(
               onChanged: log,
-              initialSelection: 'IT',
-              favorite: ['+1', 'US'],
+              initialSelection: 'KE',
+              favorite: ['+254', 'KE'],
               showFlag: false,
               alignLeft: false,
               padding: EdgeInsets.all(0),

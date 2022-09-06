@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/components/MLProfileFormComponent.dart';
 import 'package:doctor/screens/MLLoginScreen.dart';
@@ -62,11 +62,11 @@ class _MLUpdateProfileScreenState extends State<MLUpdateProfileScreen> {
               width: context.width(),
               color: mlPrimaryColor,
               onTap: () {
-                finish(context);
-                finish(context);
-                finish(context);
-                finish(context);
-                return MLLoginScreen().launch(context);
+                // finish(context);
+                // finish(context);
+                // finish(context);
+                // finish(context);
+                return MLLoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Scale);
               },
               child: Text('Save', style: boldTextStyle(color: white)),
             ),

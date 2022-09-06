@@ -40,7 +40,6 @@ class MLChatFragmentState extends State<MLChatFragment>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     //
 
     _tabController.dispose();

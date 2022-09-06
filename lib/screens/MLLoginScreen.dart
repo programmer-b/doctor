@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:doctor/components/MLCountryPIckerComponent.dart';
-import 'package:doctor/components/MLSocialAccountComponent.dart';
 import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/screens/MLForgetPasswordScreen.dart';
 import 'package:doctor/screens/MLRegistrationScreen.dart';
@@ -19,6 +18,9 @@ class MLLoginScreen extends StatefulWidget {
 }
 
 class _MLLoginScreenState extends State<MLLoginScreen> {
+  final username = TextEditingController();
+  final password = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -99,7 +101,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                     onTap: () {
                       finish(context);
                       MLDashboardScreen().launch(
-                        context, //isNewTask: true
+                        context, 
                       );
                     },
                     child: Text(mlLogin!, style: boldTextStyle(color: white)),
@@ -121,7 +123,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                             decoration: TextDecoration.underline),
                       ).onTap(
                         () {
-                          MLRegistrationScreen().launch(context);
+                          MLRegistrationScreen().launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
                         },
                       ),
                     ],

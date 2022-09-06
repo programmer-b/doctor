@@ -64,6 +64,7 @@ class MLDoctorDetailScreenState extends State<MLDoctorDetailScreen> {
                       child: MLDoctorDetailComponent(),
                     );
                   }
+                  return null;
                 },
               ),
             ),

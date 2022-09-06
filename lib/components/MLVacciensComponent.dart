@@ -7,7 +7,7 @@ import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLDataProvider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-import 'MLCovidTopRegionComponent.dart';
+// import 'MLCovidTopRegionComponent.dart';
 
 class MLVaccineComponent extends StatefulWidget {
   static String tag = '/MLVaccineComponent';

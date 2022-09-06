@@ -35,7 +35,6 @@ class MLCalendarFragmentState extends State<MLCalendarFragment>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }

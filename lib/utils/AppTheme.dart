@@ -24,7 +24,7 @@ class AppThemeData {
     ),
     textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.black),
     colorScheme: ColorScheme.light(
-        primary: appColorPrimary, primaryVariant: appColorPrimary),
+        primary: appColorPrimary),
     cardTheme: CardTheme(color: Colors.white),
     cardColor: Colors.white,
     iconTheme: IconThemeData(color: textPrimaryColor),
@@ -77,8 +77,7 @@ class AppThemeData {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     colorScheme: ColorScheme.dark(
             primary: appBackgroundColorDark,
-            onPrimary: cardBackgroundBlackDark,
-            primaryVariant: color_primary_black)
+            onPrimary: cardBackgroundBlackDark)
         .copyWith(secondary: whiteColor),
   ).copyWith(
     pageTransitionsTheme:

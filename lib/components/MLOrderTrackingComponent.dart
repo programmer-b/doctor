@@ -119,6 +119,7 @@ class MLOrderTrackingDetailComponentState
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // ignore: deprecated_member_use
                   createRichText(
                     overflow: TextOverflow.ellipsis,
                     list: <TextSpan>[

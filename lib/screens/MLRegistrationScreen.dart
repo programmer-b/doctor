@@ -1,9 +1,7 @@
 import 'package:doctor/screens/MLLoginScreen.dart';
+import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:doctor/components/MLCountryPIckerComponent.dart';
-import 'package:doctor/components/MLSocialAccountComponent.dart';
-import 'package:doctor/screens/MLConfirmPhoneNumberScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLImage.dart';
@@ -107,7 +105,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       width: double.infinity,
                       color: mlPrimaryColor,
                       onTap: () {
-                        return MLConfirmPhoneNumberScreen().launch(context);
+                        return MLUpdateProfileScreen().launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
                       },
                       child:
                           Text(mlRegister!, style: boldTextStyle(color: white)),
@@ -125,7 +123,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                               decoration: TextDecoration.underline),
                         ).onTap(
                           () {
-                            MLLoginScreen().launch(context);
+                            MLLoginScreen().launch(context,);
                           },
                         ),
                       ],

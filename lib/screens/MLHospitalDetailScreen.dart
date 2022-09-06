@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/components/MLHospitalDetailComponent.dart';
@@ -113,6 +112,7 @@ class MLHospitalDetailScreenState extends State<MLHospitalDetailScreen> {
                       child: MLHospitalDetailComponent(),
                     );
                   }
+                  return null;
                 },
               ),
             ),

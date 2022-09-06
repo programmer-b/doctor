@@ -37,20 +37,32 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-            padding: EdgeInsets.all(16.0),
-            decoration: boxDecorationWithRoundedCorners(
-              borderRadius: radius(30.0),
-              backgroundColor: appStore.isDarkModeOn
-                  ? scaffoldDarkColor
-                  : Colors.grey.shade100,
-            ),
-            child: Icon(Icons.camera_alt_outlined, color: mlColorBlue)),
-        16.height,
+        // Container(
+        //     padding: EdgeInsets.all(16.0),
+        //     decoration: boxDecorationWithRoundedCorners(
+        //       borderRadius: radius(30.0),
+        //       backgroundColor: appStore.isDarkModeOn
+        //           ? scaffoldDarkColor
+        //           : Colors.grey.shade100,
+        //     ),
+        //     child: Icon(Icons.camera_alt_outlined, color: mlColorBlue)),
+        // 16.height,
         Text('First Name*', style: primaryTextStyle()),
         AppTextField(
           decoration: InputDecoration(
             hintText: mlFirst_name!,
+            hintStyle: secondaryTextStyle(size: 16),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+            ),
+          ),
+          textFieldType: TextFieldType.NAME,
+        ),
+        16.height,
+        Text('Middle Name', style: primaryTextStyle()),
+        AppTextField(
+          decoration: InputDecoration(
+            hintText: mlMiddle_name!,
             hintStyle: secondaryTextStyle(size: 16),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2)),

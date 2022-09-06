@@ -68,6 +68,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen>
                   64.height,
                   Text(mlEnter_code!, style: boldTextStyle(size: 24)),
                   8.height,
+                  // ignore: deprecated_member_use
                   createRichText(list: [
                     TextSpan(
                         text: mlAuthentication_msg!,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLImage.dart';
 
+// ignore: must_be_immutable
 class MLChatListComponent extends StatefulWidget {
   List<String> data;
   Color color;

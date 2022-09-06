@@ -36,7 +36,6 @@ class MLProductMoreDetailScreenState extends State<MLProductMoreDetailScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }

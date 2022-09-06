@@ -73,6 +73,7 @@ class MLConfirmOrderScreenState extends State<MLConfirmOrderScreen> {
                         return PurchaseMoreScreen()
                             .withHeight(context.height() * 0.5);
                       }
+                      return null;
                     },
                   ),
                 ),

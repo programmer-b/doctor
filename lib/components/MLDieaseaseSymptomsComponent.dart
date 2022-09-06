@@ -36,7 +36,6 @@ class MLDiseaseSymptomsComponentState extends State<MLDiseaseSymptomsComponent>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }

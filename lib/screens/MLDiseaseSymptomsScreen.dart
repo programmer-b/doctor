@@ -144,6 +144,7 @@ class MLDieaseseSymptomsScreenState extends State<MLDieaseseSymptomsScreen> {
                       if (index == 0) {
                         return MLDiseaseSymptomsComponent();
                       }
+                      return null;
                     },
                   ),
                 ),

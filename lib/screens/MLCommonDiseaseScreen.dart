@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/components/MLCommonDiseaseListComponent.dart';
 import 'package:doctor/model/MLDiseaseData.dart';

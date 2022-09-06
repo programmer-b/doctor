@@ -11,7 +11,7 @@ class PurchaseButton extends StatelessWidget {
       textStyle: boldTextStyle(color: Colors.white),
       shapeBorder: RoundedRectangleBorder(borderRadius: radius(10)),
       onTap: () {
-        launch("https://codecanyon.net/item/prokit-flutter-app-ui-design-templete-kit/25787190?s_rank=19");
+        launchUrl(Uri.parse("https://codecanyon.net/item/prokit-flutter-app-ui-design-templete-kit/25787190?s_rank=19"));
       },
     );
   }
