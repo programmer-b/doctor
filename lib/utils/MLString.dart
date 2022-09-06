@@ -21,6 +21,7 @@ const String? mlReenter_password = 'Re-enter Your Password';
 const String? mlForget_password = 'Forgot Password?';
 const String? mlForgetPassword = 'Forgot Password';
 const String? mlDont_have_account = 'Don\'t have an account?';
+const String? ml_have_account = 'Already have an account?';
 const String? mlSend = 'Send';
 const String? mlEnter_code = 'Enter Authentication Code';
 const String? mlContact_msg = 'Confirm Phone Number';

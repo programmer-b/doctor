@@ -18,6 +18,8 @@ class MLRegistrationScreen extends StatefulWidget {
 }
 
 class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
+  final username = TextEditingController();
+  final password = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -109,15 +111,33 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       child:
                           Text(mlRegister!, style: boldTextStyle(color: white)),
                     ),
-                    20.height,
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(mlLogin_with!,
-                          style: secondaryTextStyle(size: 16)),
+                    22.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(ml_have_account!, style: primaryTextStyle()),
+                        8.width,
+                        Text(
+                          mlLogin!,
+                          style: boldTextStyle(
+                              color: mlColorBlue,
+                              decoration: TextDecoration.underline),
+                        ).onTap(
+                          () {
+                            MLRegistrationScreen().launch(context);
+                          },
+                        ),
+                      ],
                     ),
-                    20.height,
-                    MLSocialAccountsComponent(),
                     32.height,
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: Text(mlLogin_with!,
+                    //       style: secondaryTextStyle(size: 16)),
+                    // ),
+                    // 20.height,
+                    // MLSocialAccountsComponent(),
+                    // 32.height,
                   ],
                 ),
               ),
