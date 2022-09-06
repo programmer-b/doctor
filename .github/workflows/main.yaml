@@ -33,7 +33,7 @@ jobs:
       - run: flutter clean    
       - run: flutter pub get
       # - run: flutter test
-      - run: flutter build apk --release --target-platform=android-arm64
+      - run: flutter build apk --target-platform=android-arm64
       - run: flutter build appbundle --release --target-platform=android-arm64
       # - run: |
       #     flutter build ios --no-codesign
