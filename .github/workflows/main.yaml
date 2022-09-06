@@ -50,4 +50,4 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/debug/*,build/app/outputs/apk/releases/*"
           tag: v1.0.${{ github.run_number }}
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.DANTECH }}
