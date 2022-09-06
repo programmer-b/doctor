@@ -14,7 +14,7 @@ on:
       - main
       - master
       - develop
-name: "Build & Release"
+
 jobs:
   build:
     name: Build Artifacts and Release
