@@ -3,10 +3,18 @@ name: doctor
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
+
 on:
+  pull_request:
+    branches:
+      - main
+      - master
   push:
-    tags:
-      - "internal-v*.*.*" # on every version tag will build a new android artifact example: v3.1.2+6
+    branches:
+      - main
+      - master
+      - develop
+name: "Build & Release"
 jobs:
   build:
     name: Build Artifacts and Release
