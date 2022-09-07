@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:doctor/main.dart';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLString.dart';
-
-import 'MLCountryPIckerComponent.dart';
 
 class MLProfileFormComponent extends StatefulWidget {
   static String tag = '/MLProfileFormComponent';
@@ -30,7 +28,11 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
   }
 
   String dropdownValue = 'Female';
-  String bloodGroupValue = 'None';
+  String bloodGroupValue = 'A+';
+  TextEditingController dateOfBirth =
+      TextEditingController(text: DateFormat.yMd().format(DateTime.now()));
+
+  final date = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +87,22 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
         16.height,
         Text('Day of Birth*', style: primaryTextStyle()),
         AppTextField(
+          onTap: () async {
+            DateTime? newDate = await showDatePicker(
+                context: context,
+                initialDate: date,
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+
+            if (newDate == null) return;
+
+            setState(() {
+              dateOfBirth =
+                  TextEditingController(text: DateFormat.yMd().format(newDate));
+            });
+          },
+          readOnly: true,
+          controller: dateOfBirth,
           textFieldType: TextFieldType.OTHER,
           decoration: InputDecoration(
             hintText: mlDate_format!,
@@ -99,11 +117,20 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
         Text('Phone Number*', style: primaryTextStyle()),
         Row(
           children: [
-            MLCountryPickerComponent(),
-            16.width,
             AppTextField(
               textFieldType: TextFieldType.PHONE,
               decoration: InputDecoration(
+                prefix: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('+254', style: boldTextStyle(size: 14)),
+                    6.width,
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 16,
+                    ),
+                  ],
+                ),
                 labelText: mlPhoneNumber!,
                 labelStyle: secondaryTextStyle(size: 16),
                 enabledBorder: UnderlineInputBorder(
@@ -183,13 +210,13 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
               });
             },
             items: <String>[
-              'None',
               'A+',
               'A-',
               'B+',
               'B-',
               'O+',
               'O-',
+              'None',
             ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
