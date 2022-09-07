@@ -19,7 +19,7 @@ on:
 jobs:
   build:
     name: Build Artifacts and Release
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       GITHUB_TOKEN: ${{ secrets.DANTECH }}
     steps:
@@ -30,6 +30,7 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.3.0'
+          channel: 'stable'
       - run: flutter clean    
       - run: flutter pub get
       # - run: flutter test
