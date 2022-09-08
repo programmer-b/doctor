@@ -34,6 +34,8 @@ const String? mlDone = 'Done';
 const String? mlFirst_name = 'Enter your first name...';
 const String? mlMiddle_name = 'Enter your middle name...';
 const String? mlLast_name = 'Enter your last name...';
+const String? mlResidence = 'Enter your residence...';
+
 const String? mlDate_format = 'DD/MM/YY';
 const String? mlRegister = 'Register';
 

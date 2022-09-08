@@ -1,8 +1,10 @@
+import 'package:doctor/State/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLString.dart';
+import 'package:provider/provider.dart';
 
 class MLProfileFormComponent extends StatefulWidget {
   static String tag = '/MLProfileFormComponent';
@@ -34,8 +36,45 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
 
   final date = DateTime.now();
 
+  // Future<List<String?>> fetchResidence(context,String searchUrl) async {
+  //   String url = "https://counties-kenya.herokuapp.com/api/v1";
+  //   Uri uri = Uri.parse(url + searchUrl);
+  //     final provider = Provider.of<AppState>(context);
+
+  //    provider.
+
+  // }
+
+  Future<void> fetchResidence() async {
+    final appState = AppState();
+    await appState.MLget(
+        Uri.parse("https://counties-kenya.herokuapp.com/api/v1"));
+  }
+
+  Future<void> showBottomSheet(context, AppState provider) async {
+    fetchResidence();
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        log("length: ${provider.successMap.length}");
+        return Container(
+            height: 500,
+            //color: Colors.amber,
+            child: ListView.builder(
+                itemCount: provider.successMap.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(provider.successMap[index]['name']),
+                    trailing: Icon(Icons.chevron_right),
+                  );
+                })).paddingSymmetric(vertical: 20);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<AppState>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -78,6 +117,20 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           textFieldType: TextFieldType.NAME,
           decoration: InputDecoration(
             hintText: mlLast_name!,
+            hintStyle: secondaryTextStyle(size: 16),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+            ),
+          ),
+        ),
+
+        Text('Residence*', style: primaryTextStyle()),
+        AppTextField(
+          readOnly: true,
+          onTap: () async => showBottomSheet(context, provider),
+          textFieldType: TextFieldType.NAME,
+          decoration: InputDecoration(
+            hintText: mlResidence!,
             hintStyle: secondaryTextStyle(size: 16),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: mlColorLightGrey.withOpacity(0.2)),

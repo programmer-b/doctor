@@ -1,3 +1,4 @@
+import 'package:doctor/State/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:doctor/screens/MLSplashScreen.dart';
@@ -5,6 +6,7 @@ import 'package:doctor/store/AppStore.dart';
 import 'package:doctor/utils/AppTheme.dart';
 import 'package:doctor/utils/MLDataProvider.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 
 AppStore appStore = AppStore();
 
@@ -27,18 +29,23 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (_) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: '${'MediLab'}${!isMobile ? ' ${platformName()}' : ''}',
-        home: MLSplashScreen(),
-        theme: !appStore.isDarkModeOn
-            ? AppThemeData.lightTheme
-            : AppThemeData.darkTheme,
-        navigatorKey: navigatorKey,
-        scrollBehavior: SBehavior(),
-        supportedLocales: LanguageDataModel.languageLocales(),
-        localeResolutionCallback: (locale, supportedLocales) => locale,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppState>(create: (context) => AppState()),
+      ],
+      child: Observer(
+        builder: (_) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: '${'MediLab'}${!isMobile ? ' ${platformName()}' : ''}',
+          home: MLSplashScreen(),
+          theme: !appStore.isDarkModeOn
+              ? AppThemeData.lightTheme
+              : AppThemeData.darkTheme,
+          navigatorKey: navigatorKey,
+          scrollBehavior: SBehavior(),
+          supportedLocales: LanguageDataModel.languageLocales(),
+          localeResolutionCallback: (locale, supportedLocales) => locale,
+        ),
       ),
     );
   }
