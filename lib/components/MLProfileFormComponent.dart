@@ -1,4 +1,5 @@
 import 'package:doctor/State/app_state.dart';
+import 'package:doctor/components/MLContiesComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -21,7 +22,10 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
   }
 
   Future<void> init() async {
-    //
+    //  @override
+    context
+        .read<AppState>()
+        .MLget(Uri.parse("https://counties-kenya.herokuapp.com/api/v1"));
   }
 
   @override
@@ -36,58 +40,34 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
 
   final date = DateTime.now();
 
-  // Future<List<String?>> fetchResidence(context,String searchUrl) async {
-  //   String url = "https://counties-kenya.herokuapp.com/api/v1";
-  //   Uri uri = Uri.parse(url + searchUrl);
-  //     final provider = Provider.of<AppState>(context);
-
-  //    provider.
-
-  // }
-
-  Future<void> fetchResidence() async {
-    final appState = AppState();
-    await appState.MLget(
-        Uri.parse("https://counties-kenya.herokuapp.com/api/v1"));
-  }
-
   Future<void> showBottomSheet(context, AppState provider) async {
-    fetchResidence();
     await showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        log("length: ${provider.successMap.length}");
-        return Container(
-            height: 500,
-            //color: Colors.amber,
-            child: ListView.builder(
-                itemCount: provider.successMap.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(provider.successMap[index]['name']),
-                    trailing: Icon(Icons.chevron_right),
-                  );
-                })).paddingSymmetric(vertical: 20);
-      },
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return ListView.builder(
+              itemCount: provider.successMap.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    provider.countyResidenceUpdate(
+                        provider.successMap[index]['name']);
+                    Navigator.pop(context);
+                  },
+                  title: Text(provider.successMap[index]['name']),
+                  trailing: Icon(Icons.chevron_right),
+                );
+              });
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppState>(context);
+    TextEditingController residence =
+        TextEditingController(text: context.read<AppState>().countyResidence);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Container(
-        //     padding: EdgeInsets.all(16.0),
-        //     decoration: boxDecorationWithRoundedCorners(
-        //       borderRadius: radius(30.0),
-        //       backgroundColor: appStore.isDarkModeOn
-        //           ? scaffoldDarkColor
-        //           : Colors.grey.shade100,
-        //     ),
-        //     child: Icon(Icons.camera_alt_outlined, color: mlColorBlue)),
-        // 16.height,
         Text('First Name*', style: primaryTextStyle()),
         AppTextField(
           decoration: InputDecoration(
@@ -123,9 +103,9 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
           ),
         ),
-
         Text('Residence*', style: primaryTextStyle()),
         AppTextField(
+          controller: residence,
           readOnly: true,
           onTap: () async => showBottomSheet(context, provider),
           textFieldType: TextFieldType.NAME,
