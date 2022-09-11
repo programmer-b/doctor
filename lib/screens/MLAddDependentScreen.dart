@@ -13,6 +13,15 @@ class MLAddDependentScreen extends StatefulWidget {
 }
 
 class MLAddDependentScreenState extends State<MLAddDependentScreen> {
+  late String firstNameCache = '';
+  late String middleNameCache = '';
+  late String lastNameCache = '';
+  late String dateOfBirthCache = '';
+  late String bloodGroupCache = '';
+  late String phoneNumberCache = '';
+  late String residenceCache = '';
+  late String genderCache = '';
+
   @override
   void initState() {
     super.initState();
@@ -20,7 +29,14 @@ class MLAddDependentScreenState extends State<MLAddDependentScreen> {
   }
 
   Future<void> init() async {
-    //
+    firstNameCache = await getStringAsync("firstName");
+    middleNameCache = await getStringAsync("middleName");
+    lastNameCache = await getStringAsync("lastName");
+    dateOfBirthCache = await getStringAsync("dateOfBirth");
+    bloodGroupCache = await getStringAsync("bloodGroup");
+    phoneNumberCache = await getStringAsync("phoneNumber");
+    residenceCache = await getStringAsync("residence");
+    genderCache = await getStringAsync("gender");
   }
 
   @override
@@ -52,7 +68,16 @@ class MLAddDependentScreenState extends State<MLAddDependentScreen> {
                     34.height,
                     Text('Add A Dependent', style: boldTextStyle(size: 24)),
                     16.height,
-                    MLProfileFormComponent(),
+                    MLProfileFormComponent(
+                      bloodGroupCache: bloodGroupCache,
+                      dateOfBirthCache: dateOfBirthCache,
+                      firstNameCache: firstNameCache,
+                      middleNameCache: middleNameCache,
+                      phoneNumberCache: phoneNumberCache,
+                      residenceCache: residenceCache,
+                      lastNameCache: lastNameCache,
+                      genderCache: genderCache,
+                    ),
                     48.height,
                   ],
                 ),

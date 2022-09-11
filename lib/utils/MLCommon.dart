@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:doctor/main.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/utils/MLColors.dart';
+import 'package:http/http.dart' as http;
 
 Widget mlBackToPrevious(BuildContext context, Color color) {
   return Align(
@@ -136,4 +137,10 @@ Widget placeHolderWidget(
 
 void changeStatusColor(Color color) async {
   setStatusBarColor(color);
+}
+
+extension IsOk on http.Response {
+  bool get OK {
+    return (statusCode ~/ 100) == 2;
+  }
 }

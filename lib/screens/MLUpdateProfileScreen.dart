@@ -13,6 +13,15 @@ class MLUpdateProfileScreen extends StatefulWidget {
 }
 
 class _MLUpdateProfileScreenState extends State<MLUpdateProfileScreen> {
+  late String firstNameCache = '';
+  late String middleNameCache = '';
+  late String lastNameCache = '';
+  late String dateOfBirthCache = '';
+  late String bloodGroupCache = '';
+  late String phoneNumberCache = '';
+  late String residenceCache = '';
+  late String genderCache = '';
+
   @override
   void initState() {
     super.initState();
@@ -20,7 +29,14 @@ class _MLUpdateProfileScreenState extends State<MLUpdateProfileScreen> {
   }
 
   Future<void> init() async {
-    //
+    firstNameCache = await getStringAsync("firstName");
+    middleNameCache = await getStringAsync("middleName");
+    lastNameCache = await getStringAsync("lastName");
+    dateOfBirthCache = await getStringAsync("dateOfBirth");
+    bloodGroupCache = await getStringAsync("bloodGroup");
+    phoneNumberCache = await getStringAsync("phoneNumber");
+    residenceCache = await getStringAsync("residence");
+    genderCache = await getStringAsync("gender");
   }
 
   @override
@@ -43,7 +59,16 @@ class _MLUpdateProfileScreenState extends State<MLUpdateProfileScreen> {
                   Text('Update your information',
                       style: boldTextStyle(size: 24)),
                   32.height,
-                  MLProfileFormComponent(),
+                  MLProfileFormComponent(
+                    bloodGroupCache: bloodGroupCache,
+                    dateOfBirthCache: dateOfBirthCache,
+                    firstNameCache: firstNameCache,
+                    middleNameCache: middleNameCache,
+                    phoneNumberCache: phoneNumberCache,
+                    residenceCache: residenceCache,
+                    lastNameCache: lastNameCache,
+                    genderCache: genderCache,
+                  ),
                   42.height,
                 ],
               ),
@@ -53,24 +78,7 @@ class _MLUpdateProfileScreenState extends State<MLUpdateProfileScreen> {
               top: 30,
               child: mlBackToPrevious(
                   context, appStore.isDarkModeOn ? white : blackColor)),
-          Positioned(
-            bottom: 8,
-            left: 16,
-            right: 16,
-            child: AppButton(
-              height: 50,
-              width: context.width(),
-              color: mlPrimaryColor,
-              onTap: () {
-                // finish(context);
-                // finish(context);
-                // finish(context);
-                // finish(context);
-                return MLLoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Scale);
-              },
-              child: Text('Save', style: boldTextStyle(color: white)),
-            ),
-          ),
+
         ],
       ),
     );

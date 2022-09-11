@@ -1,4 +1,3 @@
-import 'package:doctor/State/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:doctor/screens/MLSplashScreen.dart';
@@ -8,10 +7,13 @@ import 'package:doctor/utils/MLDataProvider.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
+import 'services/networking.dart';
+
 AppStore appStore = AppStore();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initialize();
 
   await initialize(aLocaleLanguageList: languageList());
 
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppState>(create: (context) => AppState()),
+        ChangeNotifierProvider<Networking>(create: (context) => Networking()),
       ],
       child: Observer(
         builder: (_) => MaterialApp(
