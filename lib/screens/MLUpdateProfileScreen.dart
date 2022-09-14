@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/components/MLProfileFormComponent.dart';
-import 'package:doctor/screens/MLLoginScreen.dart';
-import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/main.dart';
 

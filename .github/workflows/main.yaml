@@ -45,7 +45,7 @@ jobs:
       #     ln -s ../Runner.app
       #     cd ..
       #     zip -r app.ipa Payload
-      - run: flutter build apk --target-platform=android-arm64
+      - run: flutter build apk
       # - run: flutter build appbundle --release --target-platform=android-arm64
       # - run: |
       #     flutter build ios --no-codesign

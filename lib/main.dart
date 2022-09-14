@@ -1,3 +1,4 @@
+import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:doctor/screens/MLSplashScreen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Networking>(create: (context) => Networking()),
+        ChangeNotifierProvider<AppState>(create: (context) => AppState()),
       ],
       child: Observer(
         builder: (_) => MaterialApp(

@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
-import 'package:doctor/utils/MLString.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 
 class Networking with ChangeNotifier {
   bool _success = false;
@@ -42,15 +43,19 @@ class Networking with ChangeNotifier {
       {required final Uri uri,
       Map<String, String>? headers,
       Object? body}) async {
+    log('url: $uri \n\n');
     try {
       final data = await http.post(uri, headers: headers, body: body);
-      _success = true;
+      log('${data.body}');
+      
       notifyListeners();
+
       return data;
     } catch (e) {
       _failure = true;
+      _isLoading = false;
       notifyListeners();
-      toast('Check your internet connection and try again');
+      toast("Check your connection and try again", bgColor: mlPrimaryColor, textColor: Colors.white);
       log('$e');
       throw (e.toString());
     }
@@ -63,13 +68,13 @@ class Networking with ChangeNotifier {
     final data = await post(uri: uri, body: body);
     if (data.OK) {
       _successMap = jsonDecode(data.body);
-      log('Login successful: ${data.body}');
+      _success = true;
+      log('Operation successful: ${data.body}');
     } else if (data.statusCode >= 400 && data.statusCode < 500) {
       _failureMap = jsonDecode(data.body);
       log("Login failed: ${data.body}");
     } else {
-      toast("Something went wrong. Please try again later");
-      return;
+      toast("Server error. Try again later", bgColor: mlPrimaryColor, textColor: Colors.white);
     }
     _isLoading = false;
     notifyListeners();

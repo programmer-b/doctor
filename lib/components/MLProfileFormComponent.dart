@@ -1,10 +1,13 @@
 import 'package:doctor/screens/MLLoginScreen.dart';
+import 'package:doctor/state/appstate.dart';
+import 'package:doctor/utils/MLJSON.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLString.dart';
 import 'package:provider/provider.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 import '../services/networking.dart';
 
@@ -36,6 +39,16 @@ class MLProfileFormComponent extends StatefulWidget {
 }
 
 class MLProfileFormComponentState extends State<MLProfileFormComponent> {
+  String? extractError(Networking provider, String name) {
+    try {
+      final error = provider.failureMap["errors"][name][0];
+
+      return error;
+    } catch (e) {
+      return "";
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -52,8 +65,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
   final profileFormKey = GlobalKey<FormState>();
 
   String bloodGroupValue = 'Unknown';
-
-  final date = DateTime.now();
 
   // Future<void> showBottomSheet(context, AppState provider) async {
   //   await showModalBottomSheet<void>(
@@ -76,23 +87,79 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
   // }
   String genderValue = 'Female';
 
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final middleName = TextEditingController();
+
+  final phoneNumber = TextEditingController();
+
+  Future<void> pickDate(AppState provider) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Cancel').onTap(() {
+                  provider.init();
+                  Navigator.pop(context);
+                }),
+                Text('Confirm').onTap(() => Navigator.pop(context))
+              ],
+            ).paddingSymmetric(horizontal: 16, vertical: 16),
+            Container(
+                height: 200,
+                padding: const EdgeInsets.all(8),
+                child: ScrollDatePicker(
+                  maximumDate: DateTime(3000),
+                  minimumDate: DateTime(1000),
+                  options: DatePickerOptions(),
+                  selectedDate: provider.selectedDate,
+                  locale: Locale('en'),
+                  onDateTimeChanged: (DateTime value) {
+                    provider.setDate(value);
+                  },
+                )),
+          ],
+        ).withHeight(350);
+      },
+    );
+  }
+
+  Future<void> pickCounty(AppState provider) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return ListView.builder(
+            itemCount: MLJSON.counties.length,
+            itemBuilder: (_, index) {
+              return ListTile(
+                title: Text(MLJSON.counties[index]['name']),
+                trailing: Icon(Icons.chevron_right),
+                onTap: (() {
+                  provider.setResidence(MLJSON.counties[index]['name']);
+                  Navigator.pop(context);
+                }),
+              ).paddingAll(8);
+            });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Networking>(context);
-
-    String genderValue =
-        widget.genderCache == '' ? 'Female' : widget.genderCache;
+    final appstate = Provider.of<AppState>(context);
 
     TextEditingController dateOfBirth = TextEditingController(
-        text: widget.dateOfBirthCache == ''
-            ? DateFormat.yMd().format(DateTime.now())
-            : widget.dateOfBirthCache);
+      text: DateFormat('dd-MM-yyyy').format(appstate.selectedDate),
+    );
 
-    final firstName = TextEditingController(text: widget.firstNameCache);
-    final lastName = TextEditingController(text: widget.lastNameCache);
-    final middleName = TextEditingController(text: widget.middleNameCache);
-    final residence = TextEditingController(text: widget.residenceCache);
-    final phoneNumber = TextEditingController(text: widget.phoneNumberCache);
+    final residence = TextEditingController(
+      text: appstate.selectedResidence,
+    );
 
     return Form(
       key: profileFormKey,
@@ -101,6 +168,15 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
         children: [
           Text('First Name*', style: primaryTextStyle()),
           AppTextField(
+            validator: (value) {
+              final error = extractError(provider, "first_name").toString();
+
+              if (error.isNotEmpty) {
+                return error;
+              }
+
+              return null;
+            },
             controller: firstName,
             decoration: InputDecoration(
               hintText: mlFirst_name!,
@@ -115,6 +191,15 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           16.height,
           Text('Middle Name', style: primaryTextStyle()),
           AppTextField(
+            validator: (value) {
+              final error = extractError(provider, "middle_name").toString();
+
+              if (error.isNotEmpty) {
+                return error;
+              }
+
+              return null;
+            },
             controller: middleName,
             decoration: InputDecoration(
               hintText: mlMiddle_name!,
@@ -129,6 +214,15 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           16.height,
           Text('Last Name*', style: primaryTextStyle()),
           AppTextField(
+            validator: (value) {
+              final error = extractError(provider, "last_name").toString();
+
+              if (error.isNotEmpty) {
+                return error;
+              }
+
+              return null;
+            },
             controller: lastName,
             textFieldType: TextFieldType.NAME,
             decoration: InputDecoration(
@@ -142,9 +236,18 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           ),
           Text('Residence*', style: primaryTextStyle()),
           AppTextField(
+            validator: (value) {
+              final error = extractError(provider, "residence").toString();
+
+              if (error.isNotEmpty) {
+                return error;
+              }
+
+              return null;
+            },
             readOnly: true,
             controller: residence,
-            onTap: () async => null,
+            onTap: () async => pickCounty(appstate),
             textFieldType: TextFieldType.NAME,
             decoration: InputDecoration(
               hintText: mlResidence!,
@@ -158,19 +261,17 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           16.height,
           Text('Day of Birth*', style: primaryTextStyle()),
           AppTextField(
+            validator: (value) {
+              final error = extractError(provider, "date_of_birth").toString();
+
+              if (error.isNotEmpty) {
+                return error;
+              }
+
+              return null;
+            },
             onTap: () async {
-              DateTime? newDate = await showDatePicker(
-                  context: context,
-                  initialDate: date,
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime(2100));
-
-              if (newDate == null) return;
-
-              setState(() {
-                dateOfBirth = TextEditingController(
-                    text: DateFormat.yMd().format(newDate));
-              });
+              pickDate(appstate);
             },
             readOnly: true,
             controller: dateOfBirth,
@@ -187,10 +288,22 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
           ),
           16.height,
-          Text('Phone Number*', style: primaryTextStyle()),
+          Text('phone_number*', style: primaryTextStyle()),
           Row(
             children: [
               AppTextField(
+                validator: (value) {
+                  // if (!value.validatePhone()) {
+                  //   return "Please enter a valid phone number.";
+                  // }
+                  final error = extractError(provider, "phone").toString();
+
+                  if (error.isNotEmpty) {
+                    return error;
+                  }
+
+                  return null;
+                },
                 controller: phoneNumber,
                 textFieldType: TextFieldType.PHONE,
                 decoration: InputDecoration(
@@ -231,22 +344,26 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             color: mlPrimaryColor,
             onTap: () async {
               hideKeyboard(context);
-
-              await provider.postForm(body: {
-                //"username": "string",
-                "first_name": firstName.text.trim(),
-                "last_name": lastName.text.trim(),
-                "gender": genderValue,
-                "blood_group": bloodGroupValue,
-                "phone": phoneNumber.text.trim(),
-                // "nationality": "string",
-                // "occupation": "string",
-                "residence": residence.text.trim(),
-                // "user_id": 0
-              }, uri: Uri.parse(createProfile));
+              await provider.init();
+              if (profileFormKey.currentState!.validate()) {
+                await provider.postForm(body: {
+                  //"username": "string",
+                  "first_name": firstName.text.trim(),
+                  "last_name": lastName.text.trim(),
+                  "gender": genderValue,
+                  "blood_group": bloodGroupValue,
+                  "phone": phoneNumber.text.trim(),
+                  "date_of_birth": dateOfBirth.text.trim(),
+                  // "nationality": "string",
+                  // "occupation": "string",
+                  "residence": residence.text.trim(),
+                  // "user_id": 0
+                }, uri: Uri.parse(createProfile));
+              }
 
               if (profileFormKey.currentState!.validate()) {
                 if (provider.success) {
+                  await setValue('profile', provider.successMap);
                   MLLoginScreen().launch(context,
                       isNewTask: true,
                       pageRouteAnimation: PageRouteAnimation.Slide);

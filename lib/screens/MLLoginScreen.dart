@@ -1,9 +1,8 @@
+import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/services/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:nb_utils/nb_utils.dart';
-// import 'package:doctor/components/MLCountryPIckerComponent.dart';
-import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/screens/MLForgetPasswordScreen.dart';
 import 'package:doctor/screens/MLRegistrationScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
@@ -20,7 +19,7 @@ class MLLoginScreen extends StatefulWidget {
 }
 
 class _MLLoginScreenState extends State<MLLoginScreen> {
-  late String usernameCache;
+  String usernameCache = '';
 
   final loginFormKey = GlobalKey<FormState>();
 
@@ -35,14 +34,24 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
     usernameCache = await getStringAsync("username");
   }
 
+  String extractError(Networking provider, String name) {
+    try {
+      final error = provider.failureMap["errors"][name][0];
+
+      return error;
+    } catch (e) {
+      return "";
+    }
+  }
+
+  final password = TextEditingController();
+  final username = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     changeStatusColor(mlPrimaryColor);
 
     final provider = Provider.of<Networking>(context);
-
-    final username = TextEditingController(text: usernameCache);
-    final password = TextEditingController();
 
     return Scaffold(
       backgroundColor: mlPrimaryColor,
@@ -69,6 +78,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                         // MLCountryPickerComponent(),
                         // 16.width,
                         AppTextField(
+                          controller: username,
                           readOnly: provider.isLoading,
                           textFieldType: TextFieldType.NAME,
                           decoration: InputDecoration(
@@ -84,21 +94,20 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                           ),
                           validator: (value) {
                             final error =
-                                provider.failureMap["errors"]["username"];
-                            if (error != null) {
+                                extractError(provider, "username").toString();
+
+                            if (error.isNotEmpty) {
                               return error;
                             }
 
                             return null;
-                          },
-                          onChanged: (value) async {
-                            await setValue("username", value);
                           },
                         ).expand(),
                       ],
                     ),
                     16.height,
                     AppTextField(
+                      controller: password,
                       readOnly: provider.isLoading,
                       textFieldType: TextFieldType.PASSWORD,
                       decoration: InputDecoration(
@@ -112,10 +121,13 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                         ),
                       ),
                       validator: (value) {
-                        final error = provider.failureMap["errors"]["password"];
-                        if (error != null) {
+                        final error =
+                            extractError(provider, "password").toString();
+
+                        if (error.isNotEmpty) {
                           return error;
                         }
+
                         return null;
                       },
                     ),
@@ -134,7 +146,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       width: double.infinity,
                       onTap: () async {
                         hideKeyboard(context);
-
+                        await provider.init();
                         await provider.postForm(body: {
                           "username": username.text.trim(),
                           "password": password.text.trim()
@@ -142,7 +154,9 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
 
                         if (loginFormKey.currentState!.validate()) {
                           if (provider.success) {
-                            MLDashboardScreen().launch(context,
+                            await setValue('auth', provider.successMap);
+                            //if has not update profile
+                            MLUpdateProfileScreen().launch(context,
                                 isNewTask: true,
                                 pageRouteAnimation: PageRouteAnimation.Slide);
                           }

@@ -19,8 +19,8 @@ class MLRegistrationScreen extends StatefulWidget {
 }
 
 class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
-  late String usernameCache = '';
-  late String emailCache = '';
+  String usernameCache = '';
+  String emailCache = '';
 
   final registerFormKey = GlobalKey<FormState>();
 
@@ -35,14 +35,25 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
     emailCache = await getStringAsync("email");
   }
 
+  String extractError(Networking provider, String name) {
+    try {
+      final error = provider.failureMap["errors"][name][0];
+
+      return error;
+    } catch (e) {
+      return "";
+    }
+  }
+
+  final password = TextEditingController();
+  final confirmPassword = TextEditingController();
+
+  final username = TextEditingController();
+  final email = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Networking>(context);
-
-    final username = TextEditingController(text: usernameCache);
-    final email = TextEditingController(text: emailCache);
-    final password = TextEditingController();
-    final confirmPassword = TextEditingController();
 
     return SafeArea(
       child: Scaffold(
@@ -88,8 +99,9 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                             ),
                             validator: (value) {
                               final error =
-                                  provider.failureMap["errors"]["username"];
-                              if (error != null) {
+                                  extractError(provider, "username").toString();
+
+                              if (error.isNotEmpty) {
                                 return error;
                               }
 
@@ -109,7 +121,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                             controller: email,
                             textFieldType: TextFieldType.EMAIL,
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.account_circle,
+                              prefixIcon: Icon(Icons.email,
                                   color: appStore.isDarkModeOn ? white : black),
                               labelText: mlEmail!,
                               labelStyle: secondaryTextStyle(size: 16),
@@ -124,8 +136,9 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                                 return "Please enter a valid email";
                               }
                               final error =
-                                  provider.failureMap["errors"]["email"];
-                              if (error != null) {
+                                  extractError(provider, "email").toString();
+
+                              if (error.isNotEmpty) {
                                 return error;
                               }
 
@@ -154,8 +167,8 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                         ),
                         validator: (value) {
                           final error =
-                              provider.failureMap["errors"]["password"];
-                          if (error != null) {
+                              extractError(provider, "password").toString();
+                          if (error.isNotEmpty) {
                             return error;
                           }
 
@@ -178,12 +191,12 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                           ),
                         ),
                         validator: (value) {
-                          if (value != password.text) {
+                          if (value!.trim() != password.text.trim()) {
                             return "password does not match";
                           }
                           final error =
-                              provider.failureMap["errors"]["password"];
-                          if (error != null) {
+                              extractError(provider, "password").toString();
+                          if (error.isNotEmpty) {
                             return error;
                           }
 
@@ -196,13 +209,13 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                         color: mlPrimaryColor,
                         onTap: () async {
                           hideKeyboard(context);
-
+                          await provider.init();
                           if (registerFormKey.currentState!.validate()) {
                             await provider.postForm(body: {
                               "username": username.text.trim(),
                               "email": email.text.trim(),
                               "password": password.text.trim()
-                            }, uri: Uri.parse(loginUrl));
+                            }, uri: Uri.parse(registerUrl));
                           }
 
                           if (registerFormKey.currentState!.validate()) {
