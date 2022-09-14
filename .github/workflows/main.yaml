@@ -19,7 +19,7 @@ on:
 jobs:
   build:
     name: Build Artifacts and Release
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.DANTECH }}
     steps:
