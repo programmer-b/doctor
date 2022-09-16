@@ -54,7 +54,7 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
             future: getAuthCredentials(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data!['data']['token'] != "") {
+                if (snapshot.data!.length > 0) {
                   initializeUser(snapshot.data, appState, context);
                 } else {
                   launchToLogin();
