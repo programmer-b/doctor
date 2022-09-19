@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:doctor/screens/MLDashboardScreen.dart';
@@ -32,11 +33,11 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
     // MLWalkThroughScreen().launch(context);
   }
 
-  Future<Map<String,dynamic>?> getAuthCredentials() async {
+  Future<Map<String, dynamic>?> getAuthCredentials() async {
     return await getJSONAsync('auth');
   }
 
-  Future<Map<String,dynamic>?> getProfileInfo() async {
+  Future<Map<String, dynamic>?> getProfileInfo() async {
     return await getJSONAsync('profile');
   }
 
@@ -46,15 +47,22 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
 
+  Future<void> initializeProfile() async {}
+
+  void launchDashBoard(context) {
+    MLDashboardScreen().launch(context,
+        pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     return Scaffold(
-        body: FutureBuilder<Map<String,dynamic>?>(
+        body: FutureBuilder<Map<String, dynamic>?>(
             future: getAuthCredentials(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data!.length > 0) {
+                if (snapshot.data?.isNotEmpty ?? false) {
                   initializeUser(snapshot.data, appState, context);
                 } else {
                   launchToLogin();
@@ -69,27 +77,35 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
   Future<void> initializeUser(
       Object? data, AppState provider, BuildContext context) async {
     log('Data: $data');
-    await 3.seconds.delay;
+
     provider.initializeAuthInfo(data);
     final profile = await getProfileInfo();
 
-    if (profile!.length > 0) {
+    if (profile?.isNotEmpty ?? false) {
       provider.initializeProfileInfo(profile);
-      MLDashboardScreen().launch(context,
-          pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
+      await 2.seconds.delay;
+      launchDashBoard(context);
     } else {
       try {
         final data = await http.get(Uri.parse(getProfile));
+        // ignore: todo
+        //TODO: we need to get profile data from database
         if (data.OK) {
-          provider.initializeProfileInfo(data);
+          provider.initializeProfileInfo(jsonDecode(data.body));
+          await 2.seconds.delay;
+          launchDashBoard(context);
         } else {
-          //TODo: check if there is a database error
+          // ignore: todo
+          //TODO: check if there is a database error
+          await 2.seconds.delay;
           MLUpdateProfileScreen()
               .launch(context, pageRouteAnimation: PageRouteAnimation.Scale);
         }
       } catch (e) {
         toast('Check your connection and try again',
-            bgColor: mlPrimaryColor, textColor: Colors.white);
+            bgColor: mlPrimaryColor,
+            textColor: Colors.white,
+            length: Toast.LENGTH_LONG);
       }
     }
   }

@@ -28,19 +28,20 @@ const String? mlDont_have_account = 'Don\'t have an account?';
 const String? ml_have_account = 'Already have an account?';
 const String? mlSend = 'Send';
 const String? mlEnter_code = 'Enter Authentication Code';
-const String? mlContact_msg = 'Confirm Phone Number';
+const String? mlContact_msg = 'Enter Phone Number';
 const String? mlContact_sub_msg =
     'To use Medilab services, you need to verify your phone number';
 const String? mlForget_password_msg =
     'Enter your phone number than we will send you a code to reset password';
 const String? mlAuthentication_msg =
-    'Enter the 6 digit that we have sent via a phone number ';
+    'Enter the 6 digit that we have sent via a phone number\n';
 const String? mlHave_no_code = 'Dont have a code?';
 const String? mlDone = 'Done';
 
 const String? mlFirst_name = 'Enter your first name...';
 const String? mlMiddle_name = 'Enter your middle name...';
 const String? mlLast_name = 'Enter your last name...';
+const String? mlEmail = 'Enter your email...';
 const String? mlResidence = 'Enter your residence...';
 
 const String? mlDate_format = 'DD/MM/YY';
@@ -94,7 +95,7 @@ const String? mlNotification = 'Notification';
 const String? mlDisease_symptoms = 'Disease Symptoms';
 const String? mlPhoneNumber = 'Your Phone Number';
 const String? mlUsername = 'Your Username';
-const String? mlEmail = 'Your Email';
+
 
 const BaseUrlUI = 'https://assets.iqonic.design/old-themeforest-images/prokit';
 const BaseUrl = 'http://api.afya365.com';

@@ -69,14 +69,7 @@ class MLAddDependentScreenState extends State<MLAddDependentScreen> {
                     Text('Add A Dependent', style: boldTextStyle(size: 24)),
                     16.height,
                     MLProfileFormComponent(
-                      bloodGroupCache: bloodGroupCache,
-                      dateOfBirthCache: dateOfBirthCache,
-                      firstNameCache: firstNameCache,
-                      middleNameCache: middleNameCache,
-                      phoneNumberCache: phoneNumberCache,
-                      residenceCache: residenceCache,
-                      lastNameCache: lastNameCache,
-                      genderCache: genderCache,
+
                     ),
                     48.height,
                   ],

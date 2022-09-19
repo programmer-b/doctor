@@ -2,8 +2,9 @@ import 'package:doctor/screens/MLLoginScreen.dart';
 import 'package:doctor/state/appstate.dart';
 import 'package:doctor/utils/MLJSON.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:intl/intl.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide Loader;
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLString.dart';
 import 'package:provider/provider.dart';
@@ -14,25 +15,11 @@ import '../services/networking.dart';
 class MLProfileFormComponent extends StatefulWidget {
   MLProfileFormComponent(
       {Key? key,
-      required this.dateOfBirthCache,
-      required this.phoneNumberCache,
-      required this.firstNameCache,
-      required this.middleNameCache,
-      required this.bloodGroupCache,
-      required this.residenceCache,
-      required this.lastNameCache,
-      required this.genderCache})
+     })
       : super(key: key);
   static String tag = '/MLProfileFormComponent';
 
-  final String dateOfBirthCache;
-  final String phoneNumberCache;
-  final String firstNameCache;
-  final String lastNameCache;
-  final String middleNameCache;
-  final String bloodGroupCache;
-  final String residenceCache;
-  final String genderCache;
+
 
   @override
   MLProfileFormComponentState createState() => MLProfileFormComponentState();
@@ -90,7 +77,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
   final firstName = TextEditingController();
   final lastName = TextEditingController();
   final middleName = TextEditingController();
-
+  final email = TextEditingController();
   final phoneNumber = TextEditingController();
 
   Future<void> pickDate(AppState provider) async {
@@ -153,6 +140,9 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
     final provider = Provider.of<Networking>(context);
     final appstate = Provider.of<AppState>(context);
 
+        provider.isLoading ? Loader.show(context) : Loader.hide();
+
+
     TextEditingController dateOfBirth = TextEditingController(
       text: DateFormat('dd-MM-yyyy').format(appstate.selectedDate),
     );
@@ -188,7 +178,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
             textFieldType: TextFieldType.NAME,
           ),
-          16.height,
+
           Text('Middle Name', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
@@ -211,7 +201,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
             textFieldType: TextFieldType.NAME,
           ),
-          16.height,
+ 
           Text('Last Name*', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
@@ -227,6 +217,28 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             textFieldType: TextFieldType.NAME,
             decoration: InputDecoration(
               hintText: mlLast_name!,
+              hintStyle: secondaryTextStyle(size: 16),
+              enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+              ),
+            ),
+          ),
+          Text('Email*', style: primaryTextStyle()),
+          AppTextField(
+            validator: (value) {
+              final error = extractError(provider, "last_name").toString();
+
+              if (error.isNotEmpty) {
+                return error;
+              }
+
+              return null;
+            },
+            controller:  email,
+            textFieldType: TextFieldType.EMAIL,
+            decoration: InputDecoration(
+              hintText: mlEmail!,
               hintStyle: secondaryTextStyle(size: 16),
               enabledBorder: UnderlineInputBorder(
                 borderSide:
@@ -288,46 +300,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
           ),
           16.height,
-          Text('phone_number*', style: primaryTextStyle()),
-          Row(
-            children: [
-              AppTextField(
-                validator: (value) {
-                  // if (!value.validatePhone()) {
-                  //   return "Please enter a valid phone number.";
-                  // }
-                  final error = extractError(provider, "phone").toString();
 
-                  if (error.isNotEmpty) {
-                    return error;
-                  }
-
-                  return null;
-                },
-                controller: phoneNumber,
-                textFieldType: TextFieldType.PHONE,
-                decoration: InputDecoration(
-                  prefix: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('+254', style: boldTextStyle(size: 14)),
-                      6.width,
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 16,
-                      ),
-                    ],
-                  ),
-                  labelText: mlPhoneNumber!,
-                  labelStyle: secondaryTextStyle(size: 16),
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: mlColorLightGrey.withOpacity(0.2))),
-                ),
-              ).expand(),
-            ],
-          ),
-          16.height,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,12 +343,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
                 }
               }
             },
-            child: provider.isLoading
-                ? Loader(
-                    color: mlPrimaryColor,
-                    valueColor: AlwaysStoppedAnimation(Colors.white),
-                  )
-                : Text('Save', style: boldTextStyle(color: white)),
+            child: Text('Save', style: boldTextStyle(color: white)),
           ),
         ],
       ),

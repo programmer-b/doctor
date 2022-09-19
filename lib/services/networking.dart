@@ -47,7 +47,7 @@ class Networking with ChangeNotifier {
     try {
       final data = await http.post(uri, headers: headers, body: body);
       log('${data.body}');
-      
+
       notifyListeners();
 
       return data;
@@ -55,7 +55,10 @@ class Networking with ChangeNotifier {
       _failure = true;
       _isLoading = false;
       notifyListeners();
-      toast("Check your connection and try again", bgColor: mlPrimaryColor, textColor: Colors.white);
+      toast("Check your connection and try again",
+          bgColor: mlPrimaryColor,
+          textColor: Colors.white,
+          gravity: ToastGravity.TOP);
       log('$e');
       throw (e.toString());
     }
@@ -74,7 +77,10 @@ class Networking with ChangeNotifier {
       _failureMap = jsonDecode(data.body);
       log("Login failed: ${data.body}");
     } else {
-      toast("Server error. Try again later", bgColor: mlPrimaryColor, textColor: Colors.white);
+      toast("Server error. Try again later",
+          bgColor: mlPrimaryColor,
+          textColor: Colors.white,
+          gravity: ToastGravity.TOP);
     }
     _isLoading = false;
     notifyListeners();

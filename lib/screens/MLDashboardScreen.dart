@@ -28,18 +28,19 @@ class _MLDashboardScreenState extends State<MLDashboardScreen> {
   @override
   void initState() {
     super.initState();
+
     init();
   }
 
   Future<void> init() async {
-    //
+    // changeStatusColor(mlPrimaryColor);
   }
 
-  @override
-  void dispose() {
-    changeStatusColor(mlPrimaryColor);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   changeStatusColor(mlPrimaryColor);
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

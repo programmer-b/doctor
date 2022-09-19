@@ -1,13 +1,18 @@
 import 'dart:async';
 
+import 'package:doctor/screens/MLDashboardScreen.dart';
+import 'package:doctor/screens/MLUpdateProfileScreen.dart';
+import 'package:doctor/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart' hide OTPTextField;
+import 'package:nb_utils/nb_utils.dart' hide OTPTextField hide Loader;
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLString.dart';
 import 'package:doctor/main.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
+import 'package:provider/provider.dart';
 
 import 'MLLoginScreen.dart';
 
@@ -24,7 +29,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen>
   double buttonOpacity = 1.0;
   double buttonHeight = 50.0;
   double containerOpacity = 0.0;
-  String? phoneNumber = '+34 409 5446 54664';
+  String? phoneNumber = '+2547 2848 7928';
 
   Duration get duration => controller.duration! * controller.value;
 
@@ -48,11 +53,14 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen>
   @override
   void dispose() {
     super.dispose();
+    Loader.hide();
     changeStatusColor(appStore.isDarkModeOn ? scaffoldDarkColor : white);
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Networking>(context);
+    provider.isLoading ? Loader.show(context) : Loader.hide();
     return Scaffold(
       body: Stack(
         children: [
@@ -73,6 +81,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen>
                     TextSpan(
                         text: mlAuthentication_msg!,
                         style: secondaryTextStyle()),
+                        
                     TextSpan(
                         text: phoneNumber!,
                         style: boldTextStyle(color: mlColorDarkBlue)),
@@ -100,65 +109,68 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen>
                       width: double.infinity,
                       color: mlColorDarkBlue,
                       onTap: () {
-                        setState(() {
-                          buttonOpacity = 0.0;
-                          buttonHeight = 0.0;
-                          containerOpacity = 1.0;
-                        });
+                        return MLUpdateProfileScreen().launch(context);
+                        // setState(() {
+                        //   buttonOpacity = 0.0;
+                        //   buttonHeight = 0.0;
+                        //   containerOpacity = 1.0;
+                        // });
                       },
                       child: Text(mlDone!, style: boldTextStyle(color: white)),
                     ),
                   ).opacity(opacity: buttonOpacity),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Divider(height: 0.5),
-                      32.height,
-                      Text(mlAdd_password!, style: boldTextStyle(size: 20)),
-                      8.height,
-                      AppTextField(
-                        textFieldType: TextFieldType.PASSWORD,
-                        decoration: InputDecoration(
-                          labelText: mlPassword!,
-                          labelStyle: secondaryTextStyle(size: 16),
-                          prefixIcon: Icon(Icons.lock_outline,
-                              size: 20,
-                              color: appStore.isDarkModeOn ? white : black),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: mlColorLightGrey.withOpacity(0.2)),
-                          ),
-                        ),
-                      ),
-                      16.height,
-                      AppTextField(
-                        textFieldType: TextFieldType.PASSWORD,
-                        decoration: InputDecoration(
-                          labelText: mlReenter_password!,
-                          labelStyle: secondaryTextStyle(size: 16),
-                          prefixIcon: Icon(Icons.lock_outline,
-                              size: 20,
-                              color: appStore.isDarkModeOn ? white : black),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: mlColorLightGrey.withOpacity(0.2)),
-                          ),
-                        ),
-                      ),
-                      32.height,
-                      AppButton(
-                        width: double.infinity,
-                        color: mlColorDarkBlue,
-                        onTap: () {
-                          finish(context);
-                          finish(context);
-                          return MLLoginScreen().launch(context);
-                        },
-                        child:
-                            Text(mlDone!, style: boldTextStyle(color: white)),
-                      ),
-                    ],
-                  ).opacity(opacity: containerOpacity),
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Divider(height: 0.5),
+                  //     32.height,
+                  //     Text(mlAdd_password!, style: boldTextStyle(size: 20)),
+                  //     8.height,
+                  //     AppTextField(
+                  //       textFieldType: TextFieldType.PASSWORD,
+                  //       decoration: InputDecoration(
+                  //         labelText: mlPassword!,
+                  //         labelStyle: secondaryTextStyle(size: 16),
+                  //         prefixIcon: Icon(Icons.lock_outline,
+                  //             size: 20,
+                  //             color: appStore.isDarkModeOn ? white : black),
+                  //         enabledBorder: UnderlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //               color: mlColorLightGrey.withOpacity(0.2)),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     16.height,
+                  //     AppTextField(
+                  //       textFieldType: TextFieldType.PASSWORD,
+                  //       decoration: InputDecoration(
+                  //         labelText: mlReenter_password!,
+                  //         labelStyle: secondaryTextStyle(size: 16),
+                  //         prefixIcon: Icon(Icons.lock_outline,
+                  //             size: 20,
+                  //             color: appStore.isDarkModeOn ? white : black),
+                  //         enabledBorder: UnderlineInputBorder(
+                  //           borderSide: BorderSide(
+                  //               color: mlColorLightGrey.withOpacity(0.2)),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     32.height,
+                  //     AppButton(
+                  //       width: double.infinity,
+                  //       color: mlColorDarkBlue,
+                  //       onTap: () {
+                  //         // finish(context);
+                  //         // finish(context);
+                  //         return MLUpdateProfileScreen().launch(context);
+                  //       },
+                  //       child:
+                  //           Text(mlDone!, style: boldTextStyle(color: white)),
+                  //     ),
+                  //   ],
+                  // )
+                  // .opacity(opacity: containerOpacity)
+                  // ,
                 ],
               ).paddingAll(16.0),
             ),

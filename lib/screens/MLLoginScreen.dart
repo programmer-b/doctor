@@ -1,8 +1,8 @@
-import 'package:doctor/screens/MLUpdateProfileScreen.dart';
+import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/services/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor/utils/MLCommon.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide Loader;
 import 'package:doctor/screens/MLForgetPasswordScreen.dart';
 import 'package:doctor/screens/MLRegistrationScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
@@ -10,6 +10,7 @@ import 'package:doctor/utils/MLImage.dart';
 import 'package:doctor/utils/MLString.dart';
 import 'package:doctor/main.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 class MLLoginScreen extends StatefulWidget {
   static String tag = '/MLLoginScreen';
@@ -29,12 +30,18 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
     init();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    Loader.hide();
+  }
+
   Future<void> init() async {
     // changeStatusColor(mlPrimaryColor);
     usernameCache = await getStringAsync("username");
   }
 
-  String extractError(Networking provider, String name) {
+  String? extractError(Networking provider, String name) {
     try {
       final error = provider.failureMap["errors"][name][0];
 
@@ -52,6 +59,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
     changeStatusColor(mlPrimaryColor);
 
     final provider = Provider.of<Networking>(context);
+    provider.isLoading ? Loader.show(context) : Loader.hide();
 
     return Scaffold(
       backgroundColor: mlPrimaryColor,
@@ -93,10 +101,9 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                             ),
                           ),
                           validator: (value) {
-                            final error =
-                                extractError(provider, "username").toString();
+                            final error = extractError(provider, "username");
 
-                            if (error.isNotEmpty) {
+                            if (error?.isNotEmpty ?? false) {
                               return error;
                             }
 
@@ -121,10 +128,9 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                         ),
                       ),
                       validator: (value) {
-                        final error =
-                            extractError(provider, "password").toString();
+                        final error = extractError(provider, "password");
 
-                        if (error.isNotEmpty) {
+                        if (error?.isNotEmpty ?? false) {
                           return error;
                         }
 
@@ -145,6 +151,9 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       color: mlPrimaryColor,
                       width: double.infinity,
                       onTap: () async {
+                        // MLDashboardScreen().launch(context,
+                        //     pageRouteAnimation: PageRouteAnimation.Scale,
+                        //     isNewTask: true);
                         hideKeyboard(context);
                         await provider.init();
                         await provider.postForm(body: {
@@ -156,18 +165,11 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                           if (provider.success) {
                             await setValue('auth', provider.successMap);
                             //if has not update profile
-                            MLUpdateProfileScreen().launch(context,
-                                isNewTask: true,
-                                pageRouteAnimation: PageRouteAnimation.Slide);
+                            //pull profile data here, if it does not exist take to [MLProfileFormComponent]
                           }
                         }
                       },
-                      child: provider.isLoading
-                          ? Loader(
-                              color: mlPrimaryColor,
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                            )
-                          : Text(mlLogin!, style: boldTextStyle(color: white)),
+                      child: Text(mlLogin!, style: boldTextStyle(color: white)),
                     ),
                     22.height,
                     // Text(mlLogin_with!, style: secondaryTextStyle(size: 16)).center(),
@@ -185,9 +187,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                               color: mlColorBlue,
                               decoration: TextDecoration.underline),
                         ).onTap(
-                          () => provider.isLoading
-                              ? null
-                              : MLRegistrationScreen().launch(context,
+                          () =>  MLRegistrationScreen().launch(context,
                                   pageRouteAnimation: PageRouteAnimation.Slide),
                         ),
                       ],

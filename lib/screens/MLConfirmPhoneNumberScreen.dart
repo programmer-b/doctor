@@ -1,12 +1,15 @@
+import 'package:doctor/screens/MLAuthenticationScreen.dart';
+import 'package:doctor/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:doctor/components/MLCountryPIckerComponent.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
+import 'package:nb_utils/nb_utils.dart' hide Loader;
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLImage.dart';
 import 'package:doctor/utils/MLString.dart';
 import 'package:doctor/main.dart';
+import 'package:provider/provider.dart';
 
 class MLConfirmPhoneNumberScreen extends StatefulWidget {
   static String tag = '/MLConfirmPhoneNumberScreen';
@@ -31,11 +34,26 @@ class _MLConfirmPhoneNumberScreenState
   @override
   void dispose() {
     super.dispose();
-    changeStatusColor(mlPrimaryColor);
+    Loader.hide();
+    // changeStatusColor(mlPrimaryColor);
   }
 
+  String? extractError(Networking provider, String name) {
+    try {
+      final error = provider.failureMap["errors"][name][0];
+
+      return error;
+    } catch (e) {
+      return "";
+    }
+  }
+
+  final phoneNumber = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Networking>(context);
+    provider.isLoading ? Loader.show(context) : Loader.hide();
+    changeStatusColor(appStore.isDarkModeOn ? scaffoldDarkColor : white);
     return Scaffold(
       body: Stack(
         children: [
@@ -66,26 +84,47 @@ class _MLConfirmPhoneNumberScreenState
                   16.height,
                   Row(
                     children: [
-                      MLCountryPickerComponent(),
-                      16.width,
                       AppTextField(
+                        validator: (value) {
+                          // if (!value.validatePhone()) {
+                          //   return "Please enter a valid phone number.";
+                          // }
+                          final error = extractError(provider, "phone");
+
+                          if (error?.isNotEmpty ?? false) {
+                            return error;
+                          }
+
+                          return null;
+                        },
+                        controller: phoneNumber,
                         textFieldType: TextFieldType.PHONE,
                         decoration: InputDecoration(
-                          labelText: mlPhoneNumber,
+                          prefix: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('+254', style: boldTextStyle(size: 14)),
+                              6.width,
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                          labelText: mlPhoneNumber!,
                           labelStyle: secondaryTextStyle(size: 16),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: mlColorLightGrey.withOpacity(0.2)),
-                          ),
+                              borderSide: BorderSide(
+                                  color: mlColorLightGrey.withOpacity(0.2))),
                         ),
-                      ).expand(),
+                      ).expand()
                     ],
                   ),
                   24.height,
                   AppButton(
                     width: double.infinity,
                     color: mlColorDarkBlue,
-                    onTap: () => MLUpdateProfileScreen().launch(context),
+                    onTap: () => MLAuthenticationScreen().launch(context),
                     child: Text(mlSend!, style: boldTextStyle(color: white)),
                   ),
                 ],

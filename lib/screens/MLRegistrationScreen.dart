@@ -1,8 +1,10 @@
+import 'package:doctor/screens/MLConfirmPhoneNumberScreen.dart';
 import 'package:doctor/screens/MLLoginScreen.dart';
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
+import 'package:nb_utils/nb_utils.dart' hide Loader;
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLImage.dart';
@@ -35,7 +37,13 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
     emailCache = await getStringAsync("email");
   }
 
-  String extractError(Networking provider, String name) {
+  @override
+  void dispose() {
+    super.dispose();
+    Loader.hide();
+  }
+
+  String? extractError(Networking provider, String name) {
     try {
       final error = provider.failureMap["errors"][name][0];
 
@@ -49,11 +57,13 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
   final confirmPassword = TextEditingController();
 
   final username = TextEditingController();
-  final email = TextEditingController();
+ 
+  
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Networking>(context);
+    provider.isLoading ? Loader.show(context) : Loader.hide();
 
     return SafeArea(
       child: Scaffold(
@@ -83,12 +93,9 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       Row(
                         children: [
                           AppTextField(
-                            readOnly: provider.isLoading,
                             controller: username,
                             textFieldType: TextFieldType.NAME,
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.account_circle,
-                                  color: appStore.isDarkModeOn ? white : black),
                               labelText: mlUsername!,
                               labelStyle: secondaryTextStyle(size: 16),
                               enabledBorder: UnderlineInputBorder(
@@ -98,77 +105,72 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                               ),
                             ),
                             validator: (value) {
-                              final error =
-                                  extractError(provider, "username").toString();
+                              final error = extractError(provider, "username");
 
-                              if (error.isNotEmpty) {
+                              if (error?.isNotEmpty ?? false) {
                                 return error;
                               }
 
                               return null;
                             },
-                            onChanged: (value) async {
-                              await setValue("username", value);
-                            },
                           ).expand(),
                         ],
                       ),
                       16.height,
-                      Row(
-                        children: [
-                          AppTextField(
-                            readOnly: provider.isLoading,
-                            controller: email,
-                            textFieldType: TextFieldType.EMAIL,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.email,
-                                  color: appStore.isDarkModeOn ? white : black),
-                              labelText: mlEmail!,
-                              labelStyle: secondaryTextStyle(size: 16),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: mlColorLightGrey.withOpacity(0.2),
-                                    width: 1),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (!value.validateEmail()) {
-                                return "Please enter a valid email";
-                              }
-                              final error =
-                                  extractError(provider, "email").toString();
+                      // Row(
+                      //   children: [
+                      //     AppTextField(
+                      //       validator: (value) {
+                      //         // if (!value.validatePhone()) {
+                      //         //   return "Please enter a valid phone number.";
+                      //         // }
+                      //         final error = extractError(provider, "phone");
 
-                              if (error.isNotEmpty) {
-                                return error;
-                              }
+                      //         if (error?.isNotEmpty ?? false) {
+                      //           return error;
+                      //         }
 
-                              return null;
-                            },
-                            onChanged: (value) async {
-                              await setValue("email", value);
-                            },
-                          ).expand(),
-                        ],
-                      ),
-                      16.height,
+                      //         return null;
+                      //       },
+                      //       controller: phoneNumber,
+                      //       textFieldType: TextFieldType.PHONE,
+                      //       decoration: InputDecoration(
+                      //         prefix: Row(
+                      //           mainAxisSize: MainAxisSize.min,
+                      //           children: [
+                      //             Text('+254', style: boldTextStyle(size: 14)),
+                      //             6.width,
+                      //             Icon(
+                      //               Icons.keyboard_arrow_down,
+                      //               size: 16,
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         labelText: mlPhoneNumber!,
+                      //         labelStyle: secondaryTextStyle(size: 16),
+                      //         enabledBorder: UnderlineInputBorder(
+                      //             borderSide: BorderSide(
+                      //                 color:
+                      //                     mlColorLightGrey.withOpacity(0.2))),
+                      //       ),
+                      //     ).expand()
+                      //   ],
+                      // ),
+                      // 16.height,
                       AppTextField(
-                        readOnly: provider.isLoading,
                         controller: password,
                         textFieldType: TextFieldType.PASSWORD,
                         decoration: InputDecoration(
                           labelText: mlPassword!,
                           labelStyle: secondaryTextStyle(size: 16),
-                          prefixIcon: Icon(Icons.lock_outline,
-                              color: appStore.isDarkModeOn ? white : black),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: mlColorLightGrey.withOpacity(0.2)),
                           ),
                         ),
                         validator: (value) {
-                          final error =
-                              extractError(provider, "password").toString();
-                          if (error.isNotEmpty) {
+                          final error = extractError(provider, "password");
+                          if (error?.isNotEmpty ?? false) {
                             return error;
                           }
 
@@ -177,14 +179,11 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       ),
                       16.height,
                       AppTextField(
-                        readOnly: provider.isLoading,
                         controller: confirmPassword,
                         textFieldType: TextFieldType.PASSWORD,
                         decoration: InputDecoration(
                           labelText: mlReenter_password!,
                           labelStyle: secondaryTextStyle(size: 16),
-                          prefixIcon: Icon(Icons.lock_outline,
-                              color: appStore.isDarkModeOn ? white : black),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: mlColorLightGrey.withOpacity(0.2)),
@@ -194,9 +193,8 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                           if (value!.trim() != password.text.trim()) {
                             return "password does not match";
                           }
-                          final error =
-                              extractError(provider, "password").toString();
-                          if (error.isNotEmpty) {
+                          final error = extractError(provider, "password");
+                          if (error?.isNotEmpty ?? false) {
                             return error;
                           }
 
@@ -208,31 +206,26 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                         width: double.infinity,
                         color: mlPrimaryColor,
                         onTap: () async {
-                          hideKeyboard(context);
-                          await provider.init();
-                          if (registerFormKey.currentState!.validate()) {
-                            await provider.postForm(body: {
-                              "username": username.text.trim(),
-                              "email": email.text.trim(),
-                              "password": password.text.trim()
-                            }, uri: Uri.parse(registerUrl));
-                          }
+                          return MLConfirmPhoneNumberScreen().launch(context);
+                          // hideKeyboard(context);
+                          // await provider.init();
+                          // if (registerFormKey.currentState!.validate()) {
+                          //   await provider.postForm(body: {
+                          //     "username": username.text.trim(),
+                          //     "email": email.text.trim(),
+                          //     "password": password.text.trim()
+                          //   }, uri: Uri.parse(registerUrl));
+                          // }
 
-                          if (registerFormKey.currentState!.validate()) {
-                            if (provider.success) {
-                              return MLUpdateProfileScreen().launch(context,
-                                  pageRouteAnimation: PageRouteAnimation.Slide);
-                            }
-                          }
+                          // if (registerFormKey.currentState!.validate()) {
+                          //   if (provider.success) {
+                          //     return MLUpdateProfileScreen().launch(context,
+                          //         pageRouteAnimation: PageRouteAnimation.Slide);
+                          //   }
+                          // }
                         },
-                        child: provider.isLoading
-                            ? Loader(
-                                color: mlPrimaryColor,
-                                valueColor:
-                                    AlwaysStoppedAnimation(Colors.white),
-                              )
-                            : Text(mlRegister!,
-                                style: boldTextStyle(color: white)),
+                        child: Text(mlRegister!,
+                            style: boldTextStyle(color: white)),
                       ),
                       22.height,
                       Row(
@@ -246,11 +239,8 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                                 color: mlColorBlue,
                                 decoration: TextDecoration.underline),
                           ).onTap(
-                            () => provider.isLoading
-                                ? null
-                                : MLLoginScreen().launch(context,
-                                    pageRouteAnimation:
-                                        PageRouteAnimation.Scale),
+                            () => MLLoginScreen().launch(context,
+                                pageRouteAnimation: PageRouteAnimation.Scale),
                           ),
                         ],
                       ),
