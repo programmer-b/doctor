@@ -1,4 +1,5 @@
 import 'package:doctor/state/appstate.dart';
+import 'package:doctor/utils/MLCommon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:doctor/screens/MLSplashScreen.dart';
@@ -22,7 +23,7 @@ void main() async {
 
   defaultRadius = 10;
   defaultToastGravityGlobal = ToastGravity.BOTTOM;
-
+  changeStatusColor(Colors.transparent);
   runApp(const MyApp());
 }
 

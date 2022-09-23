@@ -27,18 +27,18 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  Object? _authCredentials = {};
-  Object? get authCredentials => _authCredentials;
+  Map<String,dynamic>? _authCredentials = {};
+  Map<String,dynamic>? get authCredentials => _authCredentials;
 
-  Object? _profileInfo = {};
-  Object? get profileInfo => _profileInfo;
+  Map<String,dynamic>? _profileInfo = {};
+  Map<String,dynamic>? get profileInfo => _profileInfo;
 
-  void initializeAuthInfo(Object? credentials) {
+  void initializeAuthInfo(Map<String,dynamic>? credentials) {
     _authCredentials = credentials;
     notifyListeners();
   }
 
-  void initializeProfileInfo(Object? data) {
+  void initializeProfileInfo(Map<String,dynamic>? data) {
     _profileInfo = data;
     notifyListeners();
   }

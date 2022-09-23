@@ -27,18 +27,13 @@ class _MLWalkThroughScreenState extends State<MLWalkThroughScreen> {
     init();
   }
 
-  Future<void> init() async {
-    changeStatusColor(mlPrimaryColor);
-  }
+  Future<void> init() async {}
 
-  @override
-  void dispose() {
-    super.dispose();
-    changeStatusColor(appStore.isDarkModeOn ? scaffoldDarkColor : white);
-  }
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: mlPrimaryColor,
       body: Stack(
@@ -88,7 +83,8 @@ class _MLWalkThroughScreenState extends State<MLWalkThroughScreen> {
                 DotIndicator(pageController: controller, pages: list),
                 AppButton(
                   onTap: () {
-                    return MLLoginScreen().launch(context);
+                    return MLLoginScreen().launch(context,
+                        pageRouteAnimation: PageRouteAnimation.Slide);
                   },
                   color: white,
                   child: Text(mlGet_started!,
@@ -104,7 +100,8 @@ class _MLWalkThroughScreenState extends State<MLWalkThroughScreen> {
                 .paddingOnly(top: 8, right: 8)
                 .onTap(
               () {
-                MLLoginScreen().launch(context);
+                return MLLoginScreen().launch(context,
+                    pageRouteAnimation: PageRouteAnimation.Slide);
               },
             ),
           ),

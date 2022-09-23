@@ -31,7 +31,7 @@ class MLVideoConsultScreenState extends State<MLVideoConsultScreen> {
   @override
   void dispose() {
     super.dispose();
-    changeStatusColor(mlPrimaryColor);
+    ;
   }
 
   @override

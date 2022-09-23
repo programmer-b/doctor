@@ -14,9 +14,9 @@ const String? mlSlide_four = 'Heart Tracker';
 const String? mlSlide_four_subtitle =
     'Carefully track your health indicators and come up with the best solution';
 
-const String? mlLogin = 'Login';
+const String? mlLogin = 'Confirm';
 const String? mlLogin_with = 'Or, login with...';
-const String? mlLogin_title = 'Enter your username to login';
+const String? mlLogin_title = 'Enter your username or phone number to login';
 const String? mlPhone_number = '';
 const String? mlPassword = 'Your Password';
 const String? mlAdd_password = 'Add New Password';
@@ -30,7 +30,7 @@ const String? mlSend = 'Send';
 const String? mlEnter_code = 'Enter Authentication Code';
 const String? mlContact_msg = 'Enter Phone Number';
 const String? mlContact_sub_msg =
-    'To use Medilab services, you need to verify your phone number';
+    'To use Afya365 services, you need to verify your phone number';
 const String? mlForget_password_msg =
     'Enter your phone number than we will send you a code to reset password';
 const String? mlAuthentication_msg =
@@ -94,7 +94,8 @@ const String? mlNotification = 'Notification';
 
 const String? mlDisease_symptoms = 'Disease Symptoms';
 const String? mlPhoneNumber = 'Your Phone Number';
-const String? mlUsername = 'Your Username';
+const String? mlUsername = 'Your username';
+const String? mlLoginUsername = 'Your Phone or Username';
 
 
 const BaseUrlUI = 'https://assets.iqonic.design/old-themeforest-images/prokit';
@@ -102,4 +103,4 @@ const BaseUrl = 'http://api.afya365.com';
 const loginUrl = BaseUrl + '/v1/login';
 const registerUrl = BaseUrl + '/v1/register';
 const createProfile = BaseUrl + '/v1/profile';
-const getProfile = BaseUrl + '/v1/profile/{Id}';
+const getProfile = BaseUrl + '/v1/profile/';

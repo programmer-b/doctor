@@ -30,7 +30,7 @@ class _MLForgetPasswordScreenState extends State<MLForgetPasswordScreen> {
   @override
   void dispose() {
     super.dispose();
-    changeStatusColor(mlPrimaryColor);
+    ;
   }
 
   String? extractError(Networking provider, String name) {
@@ -68,7 +68,6 @@ class _MLForgetPasswordScreenState extends State<MLForgetPasswordScreen> {
                   16.height,
                   Row(
                     children: [
-
                       AppTextField(
                         validator: (value) {
                           // if (!value.validatePhone()) {

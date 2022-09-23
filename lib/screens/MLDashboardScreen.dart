@@ -33,12 +33,12 @@ class _MLDashboardScreenState extends State<MLDashboardScreen> {
   }
 
   Future<void> init() async {
-    // changeStatusColor(mlPrimaryColor);
+    // ;
   }
 
   // @override
   // void dispose() {
-  //   changeStatusColor(mlPrimaryColor);
+  //   ;
   //   super.dispose();
   // }
 

@@ -41,6 +41,9 @@ abstract class AppStoreBase with Store {
   @observable
   Color? textSecondaryColor;
 
+  @observable
+  Color? appBarTextColor;
+
   @action
   Future<void> toggleDarkMode({bool? value}) async {
     isDarkModeOn = value ?? !isDarkModeOn;
@@ -49,6 +52,7 @@ abstract class AppStoreBase with Store {
       scaffoldBackground = appBackgroundColorDark;
 
       appBarColor = cardBackgroundBlackDark;
+      appBarTextColor = appTextColorPrimary;
       backgroundColor = Colors.white;
       backgroundSecondaryColor = Colors.white;
       appColorPrimaryLightColor = cardBackgroundBlackDark;
@@ -69,7 +73,7 @@ abstract class AppStoreBase with Store {
       backgroundColor = Colors.black;
       backgroundSecondaryColor = appSecondaryBackgroundColor;
       appColorPrimaryLightColor = appColorPrimaryLight;
-
+      appBarTextColor = Colors.black;
       iconColor = iconColorPrimaryDark;
       iconSecondaryColor = iconColorSecondaryDark;
 

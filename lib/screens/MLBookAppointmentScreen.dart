@@ -40,7 +40,7 @@ class MLBookAppointmentScreenState extends State<MLBookAppointmentScreen> {
   @override
   void dispose() {
     super.dispose();
-    changeStatusColor(mlPrimaryColor);
+    ;
   }
 
   @override
