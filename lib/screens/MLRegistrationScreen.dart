@@ -105,17 +105,6 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                     controller: phoneNumber,
                     textFieldType: TextFieldType.PHONE,
                     decoration: InputDecoration(
-                      prefix: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('+254', style: boldTextStyle(size: 14)),
-                          6.width,
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 16,
-                          ),
-                        ],
-                      ),
                       labelText: mlPhoneNumber!,
                       labelStyle: secondaryTextStyle(size: 16),
                       enabledBorder: UnderlineInputBorder(
@@ -207,7 +196,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                   await provider.init();
                   if (registerFormKey.currentState!.validate()) {
                     await provider.postForm(body: {
-                      "mobile": '0'+ phoneNumber.text.trim(),
+                      "mobile": phoneNumber.text.trim(),
                       "username": username.text.trim(),
                       "password": password.text.trim()
                     }, uri: Uri.parse(registerUrl));

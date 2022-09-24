@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:doctor/screens/MLDashboardScreen.dart';
+import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/state/appstate.dart';
+import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLString.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor/screens/MLWalkThroughScreen.dart';
 import 'package:doctor/utils/MLImage.dart';
+import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +35,7 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
     // MLWalkThroughScreen().launch(context);
   }
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   Future<Map<String, dynamic>?> getAuthCredentials() async {
     return await getJSONAsync('auth');
@@ -42,20 +45,18 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
     return await getJSONAsync('profile');
   }
 
-  Future<Map<String, dynamic>?> getProfileFromDatabase(
+  Future<Response> getProfileFromDatabase(
       {required Uri uri, required String token}) async {
-    setState(() => isLoading = true);
     try {
       final data = await http.get(uri, headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       });
-      setState(() => isLoading = true);
-      return jsonDecode(data.body);
+
+      return data;
     } catch (e) {
-      setState(() => isLoading = false);
-      return null;
+      throw (e);
     }
   }
 
@@ -81,7 +82,7 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
       {required Map<String, dynamic>? credentials}) async {
     await 2.seconds.delay;
     context.read<AppState>().initializeAuthInfo(credentials);
-    MLDashboardScreen().launch(context,
+    MLUpdateProfileScreen().launch(context,
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
 
@@ -111,23 +112,27 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
                                 token:
                                     '${credentials.data?['data']['token'] ?? ''}'),
                             builder: (context,
-                                AsyncSnapshot<Map<String, dynamic>?>
-                                    profileFromDb) {
+                                AsyncSnapshot<Response> profileFromDb) {
                               if (profileFromDb.connectionState ==
                                   ConnectionState.done) {
-                                log('PROFILE DATA: ${profileFromDb.data}');
-                                if (profileFromDb.data?.isNotEmpty ?? false) {
+                                log('PROFILE DATA: ${profileFromDb.data!.body}');
+                                int statusCode = jsonDecode(
+                                    profileFromDb.data!.body)['statusCode'];
+                                log('StatusCode: $statusCode \n HAS DATA: ${statusCode == 200}');
+                                if (statusCode == 200) {
                                   launchToDashboard(
-                                      profile: profileFromDb.data,
+                                      profile:
+                                          jsonDecode(profileFromDb.data!.body),
                                       credentials: credentials.data);
                                 } else {
                                   launchToProfile(
                                       credentials: credentials.data);
                                 }
-                              }
-                              else if (profileFromDb.hasError) {
+                              } else if (profileFromDb.hasError) {
                                 toast(
-                                    'Something went wrong ${profileFromDb.error}');
+                                    'Something went wrong ${profileFromDb.error}',
+                                    gravity: ToastGravity.TOP,
+                                    bgColor: Colors.red);
                               }
                               return buildSplash();
                             });

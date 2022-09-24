@@ -46,7 +46,7 @@ class Networking with ChangeNotifier {
       Object? body}) async {
     log('url: $uri \n\n');
     try {
-      final data = await http.post(uri, headers: headers, body: jsonEncode(body));
+      final data = await http.post(uri, headers: headers, body: body);
       log('${data.body}');
 
       notifyListeners();
@@ -76,7 +76,7 @@ class Networking with ChangeNotifier {
         body: body,
         headers: token != null
             ? {
-                'Content-Type': 'application/json',
+                // 'Content-Type':'application/json-patch+json',
                 'Accept': 'application/json',
                 'Authorization': 'Bearer $token',
               }
@@ -112,6 +112,7 @@ class Networking with ChangeNotifier {
     log('url: $uri \n\n token: $token\n\n');
     init();
     load();
+    log('running http get ...');
     try {
       final data = await http.get(uri,
           headers: token != null
@@ -121,27 +122,31 @@ class Networking with ChangeNotifier {
                   'Authorization': 'Bearer $token',
                 }
               : null);
+      log('GET DATA; ${data.body}\n StatusCode: ${data.statusCode}');
       if (data.OK) {
         _success = true;
         _successMap = jsonDecode(data.body);
         log('Operation Success: ${data.body}');
-      } else if (jsonDecode(data.body)["statusCode"] == 401) {
-        log('Refreshing token');
-        //TODO implement or  call a method to refresh your token
-        toast('Your credentials are expired, Login to continue',
-            gravity: ToastGravity.TOP, bgColor: mlPrimaryColor);
-        final authCredentials = await getJSONAsync('auth');
-        if (context != null) {
-          MLLoginScreen(
-            phoneNumber: authCredentials['data']['phone number'],
-          ).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-        } else {
-          toast('Something went wrong, try again later',
-              bgColor: Colors.red, gravity: ToastGravity.TOP);
-        }
+      }else{
+        _failureMap = jsonDecode(data.body);
       }
+      // } else if (jsonDecode(data.body)["statusCode"] == 401) {
+      //   log('Refreshing token');
+      //   //TODO implement or  call a method to refresh your token
+      //   toast('Your credentials are expired, Login to continue',
+      //       gravity: ToastGravity.TOP, bgColor: mlPrimaryColor);
+      //   final authCredentials = await getJSONAsync('auth');
+      //   if (context != null) {
+      //     MLLoginScreen(
+      //       phoneNumber: authCredentials['data']['phone number'],
+      //     ).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+      //   } else {
+      //     toast('Something went wrong, try again later',
+      //         bgColor: Colors.red, gravity: ToastGravity.TOP);
+      //   }
+      // }
     } catch (e) {
-      toast('Check your connection and try again',
+      toast('Something went wrong, try again later',
           bgColor: Colors.red, gravity: ToastGravity.TOP);
     }
     _isLoading = false;

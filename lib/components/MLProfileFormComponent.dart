@@ -210,7 +210,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           Text('Email', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
-              final error = extractError(provider, "last_name").toString();
+              final error = extractError(provider, "email").toString();
 
               if (error.isNotEmpty) {
                 return error;
@@ -232,7 +232,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           Text('County of residence*', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
-              final error = extractError(provider, "residence").toString();
+              final error = extractError(provider, "county_of_residence").toString();
 
               if (error.isNotEmpty) {
                 return error;
@@ -257,7 +257,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           Text('Sub county*', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
-              final error = extractError(provider, "residence").toString();
+              final error = extractError(provider, "sub_county").toString();
 
               if (error.isNotEmpty) {
                 return error;

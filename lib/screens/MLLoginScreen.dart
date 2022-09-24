@@ -61,18 +61,19 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
   Future<void> setupProfile(
       Networking provider, Map<String, dynamic>? credentials) async {
     await provider.get(
-        uri: Uri.parse(getProfile + credentials?['data']['user_id'] ?? ''),
+        uri: Uri.parse(getProfile + '${credentials?['data']['user_id'] ?? ''}'),
         token: credentials?['data']['token'] ?? '');
-    if (provider.success) {
-      if (provider.successMap.isNotEmpty) {
+    if (provider.successMap.isNotEmpty) {
+      if (provider.successMap['statusCode'] == 200) {
         MLDashboardScreen().launch(context,
             pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
-      } else {
+      }
+    }
+    if (provider.failureMap.isNotEmpty) {
+      if (provider.failureMap['statusCode'] == 404) {
         MLUpdateProfileScreen().launch(context,
             pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
       }
-    } else {
-      toast('Check your connection and try again');
     }
   }
 
@@ -127,17 +128,6 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                     controller: phoneNumber,
                     textFieldType: TextFieldType.PHONE,
                     decoration: InputDecoration(
-                      prefix: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('+254', style: boldTextStyle(size: 14)),
-                          6.width,
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 16,
-                          ),
-                        ],
-                      ),
                       labelText: mlPhoneNumber!,
                       labelStyle: secondaryTextStyle(size: 16),
                       enabledBorder: UnderlineInputBorder(
@@ -190,7 +180,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                   hideKeyboard(context);
                   await provider.init();
                   await provider.postForm(body: {
-                    "mobile": '0' + phoneNumber.text.trim(),
+                    "mobile": phoneNumber.text.trim(),
                     "password": password.text.trim()
                   }, uri: Uri.parse(loginUrl));
 
