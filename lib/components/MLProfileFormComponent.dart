@@ -127,7 +127,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
 
 
     TextEditingController dateOfBirth = TextEditingController(
-      text: DateFormat('dd-MM-yyyy').format(appState.selectedDate),
+      text: DateFormat('yyyy-MM-dd').format(appState.selectedDate),
     );
 
     final countyOfResidence = TextEditingController(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 final DateTime now = DateTime.now();
-final DateFormat formatter = DateFormat('dd-MM-yyyy');
+final DateFormat formatter = DateFormat('yyyy-MM-dd');
 final String formatted = formatter.format(now);
 
 class AppState with ChangeNotifier {
