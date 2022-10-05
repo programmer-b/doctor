@@ -58,13 +58,15 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
 
   final password = TextEditingController();
 
-  Future<void> setupProfile(
-      Networking provider, Map<String, dynamic>? credentials) async {
+  Future<void> setupProfile(Networking provider, AppState appState,
+      Map<String, dynamic>? credentials) async {
+    await provider.init();
     await provider.get(
-        uri: Uri.parse(getProfile + '${credentials?['data']['user_id'] ?? ''}'),
-        token: credentials?['data']['token'] ?? '');
+        uri: Uri.parse(getProfile + '${credentials?['data']?['user_id'] ?? ''}'),
+        token: credentials?['data']?['token'] ?? '');
     if (provider.successMap.isNotEmpty) {
       if (provider.successMap['statusCode'] == 200) {
+        appState.initializeProfileInfo(provider.successMap);
         MLDashboardScreen().launch(context,
             pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
       }
@@ -117,7 +119,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       //     return "Please enter a valid phone number.";
                       //   }
                       // }
-                      final error = extractError(provider, "mobile");
+                      final error = extractError(provider, "username");
 
                       if (error?.isNotEmpty ?? false) {
                         return error;
@@ -128,7 +130,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                     controller: phoneNumber,
                     textFieldType: TextFieldType.PHONE,
                     decoration: InputDecoration(
-                      labelText: mlPhoneNumber!,
+                      labelText: mlUsernameOrPhoneNumber!,
                       labelStyle: secondaryTextStyle(size: 16),
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -180,7 +182,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                   hideKeyboard(context);
                   await provider.init();
                   await provider.postForm(body: {
-                    "mobile": phoneNumber.text.trim(),
+                    "username": phoneNumber.text.trim(),
                     "password": password.text.trim()
                   }, uri: Uri.parse(loginUrl));
 
@@ -190,7 +192,8 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       appState.initializeAuthInfo(provider.successMap);
                       //if has not update profile
                       //pull profile data here, if it does not exist take to [MLProfileFormComponent]
-                      await setupProfile(provider, provider.successMap);
+                      await setupProfile(
+                          provider, appState, provider.successMap);
                     }
                   }
                 },

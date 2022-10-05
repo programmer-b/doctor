@@ -42,4 +42,25 @@ class AppState with ChangeNotifier {
     _profileInfo = data;
     notifyListeners();
   }
+
+  bool _countDownTimerExpired = false;
+  bool get countDownTimerExpired => _countDownTimerExpired;
+
+  int _timerEndTime =  DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+  int get timerEndTime => _timerEndTime;
+
+  void updateCountDownTimer({required bool expired}){
+    if(!expired){
+      _timerEndTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+    }
+    _countDownTimerExpired = expired;
+    notifyListeners();
+  }
+
+  void resetCountDownTimer(){
+    _countDownTimerExpired = false;
+    _timerEndTime =  DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+    notifyListeners();
+  }
+
 }

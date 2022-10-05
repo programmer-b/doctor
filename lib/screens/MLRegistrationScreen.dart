@@ -2,6 +2,7 @@ import 'package:doctor/screens/MLConfirmPhoneNumberScreen.dart';
 import 'package:doctor/screens/MLLoginScreen.dart';
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/services/networking.dart';
+import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
@@ -11,6 +12,7 @@ import 'package:doctor/utils/MLString.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
+import 'MLAuthenticationScreen.dart';
 
 class MLRegistrationScreen extends StatefulWidget {
   static String tag = '/MLRegistrationScreen';
@@ -55,12 +57,15 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
   final username = TextEditingController();
-  final phoneNumber = TextEditingController();
+  final mobile = TextEditingController();
+  final confirmMobile = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<Networking>(context);
     provider.isLoading ? Loader.show(context) : Loader.hide();
+
+    final appState = Provider.of<AppState>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -85,72 +90,97 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
               Text('Fill the information below to continue',
                   style: boldTextStyle(size: 16)),
               16.height,
-              Row(
-                children: [
-                  AppTextField(
-                    validator: (value) {
-                      // if (value != null) {
-                      //   if (value.length < 9) {
-                      //     return "Please enter a valid phone number.";
-                      //   }
-                      // }
-                      final error = extractError(provider, "mobile");
+              TextFormField(
+                enableInteractiveSelection: false,
+                validator: (value) {
+                  // if (value != null) {
+                  //   if (value.length < 9) {
+                  //     return "Please enter a valid phone number.";
+                  //   }
+                  // }
+                  final error = extractError(provider, "mobile");
 
-                      if (error?.isNotEmpty ?? false) {
-                        return error;
-                      }
+                  if (error?.isNotEmpty ?? false) {
+                    return error;
+                  }
 
-                      return null;
-                    },
-                    controller: phoneNumber,
-                    textFieldType: TextFieldType.PHONE,
-                    decoration: InputDecoration(
-                      labelText: mlPhoneNumber!,
-                      labelStyle: secondaryTextStyle(size: 16),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: mlColorLightGrey.withOpacity(0.2))),
-                    ),
-                  ).expand()
-                ],
+                  return null;
+                },
+                controller: mobile,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  suffixIcon: Icon(
+                    Icons.phone,
+                  ),
+                  labelText: mlPhoneNumber!,
+                  labelStyle: secondaryTextStyle(size: 16),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: mlColorLightGrey)),
+                ),
               ),
               16.height,
-              Row(
-                children: [
-                  AppTextField(
-                    controller: username,
-                    textFieldType: TextFieldType.NAME,
-                    decoration: InputDecoration(
-                      labelText: mlUsername!,
-                      labelStyle: secondaryTextStyle(size: 16),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: mlColorLightGrey.withOpacity(0.2), width: 1),
-                      ),
-                    ),
-                    validator: (value) {
-                      final error = extractError(provider, "username");
+              TextFormField(
+                enableInteractiveSelection: false,
+                validator: (value) {
+                  // if (value != null) {
+                  //   if (value.length < 9) {
+                  //     return "Please enter a valid phone number.";
+                  //   }
+                  // }
+                  final error = extractError(provider, "confirm_mobile");
 
-                      if (error?.isNotEmpty ?? false) {
-                        return error;
-                      }
+                  if (error?.isNotEmpty ?? false) {
+                    return error;
+                  }
 
-                      return null;
-                    },
-                  ).expand(),
-                ],
+                  return null;
+                },
+                controller: confirmMobile,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  suffixIcon: Icon(
+                    Icons.phone,
+                  ),
+                  labelText: mlReenterPhone!,
+                  labelStyle: secondaryTextStyle(size: 16),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: mlColorLightGrey)),
+                ),
               ),
               16.height,
+              TextFormField(
+                enableInteractiveSelection: false,
+                controller: username,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.person),
+                  labelText: mlUsername!,
+                  labelStyle: secondaryTextStyle(size: 16),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: mlColorLightGrey, width: 1),
+                  ),
+                ),
+                validator: (value) {
+                  final error = extractError(provider, "username");
 
+                  if (error?.isNotEmpty ?? false) {
+                    return error;
+                  }
+
+                  return null;
+                },
+              ),
+              16.height,
               AppTextField(
+
                 controller: password,
                 textFieldType: TextFieldType.PASSWORD,
                 decoration: InputDecoration(
+
                   labelText: mlPassword!,
                   labelStyle: secondaryTextStyle(size: 16),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+                    borderSide: BorderSide(color: mlColorLightGrey),
                   ),
                 ),
                 validator: (value) {
@@ -167,18 +197,15 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                 controller: confirmPassword,
                 textFieldType: TextFieldType.PASSWORD,
                 decoration: InputDecoration(
+
                   labelText: mlReenter_password!,
                   labelStyle: secondaryTextStyle(size: 16),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+                    borderSide: BorderSide(color: mlColorLightGrey),
                   ),
                 ),
                 validator: (value) {
-                  if (value!.trim() != password.text.trim()) {
-                    return "password does not match";
-                  }
-                  final error = extractError(provider, "password");
+                  final error = extractError(provider, "confirm_password");
                   if (error?.isNotEmpty ?? false) {
                     return error;
                   }
@@ -191,24 +218,31 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                 width: double.infinity,
                 color: mlPrimaryColor,
                 onTap: () async {
-
-                  hideKeyboard(context);
-                  await provider.init();
-                  if (registerFormKey.currentState!.validate()) {
-                    await provider.postForm(body: {
-                      "mobile": phoneNumber.text.trim(),
-                      "username": username.text.trim(),
-                      "password": password.text.trim()
-                    }, uri: Uri.parse(registerUrl));
-                  }
-
-                  if (registerFormKey.currentState!.validate()) {
-                    if (provider.success) {
-                      finish(context);
-                      return MLLoginScreen(phoneNumber:  phoneNumber.text.trim()).launch(context,
-                          pageRouteAnimation: PageRouteAnimation.Scale);
-                    }
-                  }
+                  // hideKeyboard(context);
+                  // await provider.init();
+                  // await provider.postForm(body: {
+                  //   "mobile": mobile.text.trim(),
+                  //   "confirm_mobile": confirmMobile.text.trim(),
+                  //   "username": username.text.trim(),
+                  //   "password": password.text.trim(),
+                  //   "confirm_password": confirmPassword.text.trim()
+                  // }, uri: Uri.parse(registerUrl));
+                  //
+                  // if (registerFormKey.currentState!.validate()) {
+                  //   if (provider.success) {
+                  //     finish(context);
+                  //     if(provider.successMap['data']['token'] == '') {
+                  //
+                  //       return MLLoginScreen(phoneNumber: mobile.text.trim())
+                  //           .launch(context,
+                  //               pageRouteAnimation: PageRouteAnimation.Scale);
+                  //     }
+                  //     appState.initializeAuthInfo(provider.successMap);
+                  //     return MLConfirmPhoneNumberScreen();
+                  //   }
+                  // }
+                  //TODO to include isNewTask: true
+                  return MLAuthenticationScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
                 },
                 child: Text('Confirm', style: boldTextStyle(color: white)),
               ),
@@ -226,13 +260,13 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                   ).onTap(
                     () {
                       finish(context);
-                      return MLLoginScreen().launch(context,
+                      return MLLoginScreen().launch(
+                        context,
                       );
                     },
                   ),
                 ],
               ),
-
             ],
           ),
         ),

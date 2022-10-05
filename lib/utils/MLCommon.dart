@@ -144,3 +144,7 @@ extension IsOk on http.Response {
     return (statusCode ~/ 100) == 2;
   }
 }
+
+void toastError({dynamic error}){
+  toast('$error', bgColor: Colors.red, gravity: ToastGravity.TOP);
+}

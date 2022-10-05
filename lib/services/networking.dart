@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:doctor/screens/MLLoginScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
@@ -46,18 +48,32 @@ class Networking with ChangeNotifier {
       Object? body}) async {
     log('url: $uri \n\n');
     try {
-      final data = await http.post(uri, headers: headers, body: body);
+      final data = await http.post(uri, headers: headers, body: body).timeout(
+            const Duration(seconds: 15),
+          );
       log('${data.body}');
 
       notifyListeners();
 
       return data;
       // return await http.get(Uri.parse('https://www.google.com'));
+    } on SocketException {
+      _isLoading = false;
+      notifyListeners();
+      toast('Check your internet connection and try again',
+          gravity: ToastGravity.TOP, bgColor: Colors.red);
+      rethrow;
+    } on TimeoutException {
+      _isLoading = false;
+      notifyListeners();
+      toast('Oops! Connection time out reached',
+          gravity: ToastGravity.TOP, bgColor: Colors.red);
+      rethrow;
     } catch (e) {
       _failure = true;
       _isLoading = false;
       notifyListeners();
-      toast("Something went wrong \n $e",
+      toast("Oops! Something went wrong \n $e",
           bgColor: Colors.red,
           textColor: Colors.white,
           gravity: ToastGravity.TOP);
@@ -127,7 +143,7 @@ class Networking with ChangeNotifier {
         _success = true;
         _successMap = jsonDecode(data.body);
         log('Operation Success: ${data.body}');
-      }else{
+      } else {
         _failureMap = jsonDecode(data.body);
       }
       // } else if (jsonDecode(data.body)["statusCode"] == 401) {

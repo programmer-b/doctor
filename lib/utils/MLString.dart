@@ -94,6 +94,8 @@ const String? mlNotification = 'Notification';
 
 const String? mlDisease_symptoms = 'Disease Symptoms';
 const String? mlPhoneNumber = 'Your Phone Number';
+const String? mlReenterPhone = 'Re-enter your phone number';
+const String? mlUsernameOrPhoneNumber = 'Username or Phone Number';
 const String? mlUsername = 'Your username';
 const String? mlLoginUsername = 'Your Phone or Username';
 
@@ -104,3 +106,4 @@ const loginUrl = BaseUrl + '/v1/login';
 const registerUrl = BaseUrl + '/v1/register';
 const createProfile = BaseUrl + '/v1/profile';
 const getProfile = BaseUrl + '/v1/profile/';
+const verifyOtp = BaseUrl + '/v1/otp';
