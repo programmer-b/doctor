@@ -172,11 +172,9 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
               ),
               16.height,
               AppTextField(
-
                 controller: password,
                 textFieldType: TextFieldType.PASSWORD,
                 decoration: InputDecoration(
-
                   labelText: mlPassword!,
                   labelStyle: secondaryTextStyle(size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -197,7 +195,6 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                 controller: confirmPassword,
                 textFieldType: TextFieldType.PASSWORD,
                 decoration: InputDecoration(
-
                   labelText: mlReenter_password!,
                   labelStyle: secondaryTextStyle(size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -218,31 +215,30 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                 width: double.infinity,
                 color: mlPrimaryColor,
                 onTap: () async {
-                  // hideKeyboard(context);
-                  // await provider.init();
-                  // await provider.postForm(body: {
-                  //   "mobile": mobile.text.trim(),
-                  //   "confirm_mobile": confirmMobile.text.trim(),
-                  //   "username": username.text.trim(),
-                  //   "password": password.text.trim(),
-                  //   "confirm_password": confirmPassword.text.trim()
-                  // }, uri: Uri.parse(registerUrl));
-                  //
-                  // if (registerFormKey.currentState!.validate()) {
-                  //   if (provider.success) {
-                  //     finish(context);
-                  //     if(provider.successMap['data']['token'] == '') {
-                  //
-                  //       return MLLoginScreen(phoneNumber: mobile.text.trim())
-                  //           .launch(context,
-                  //               pageRouteAnimation: PageRouteAnimation.Scale);
-                  //     }
-                  //     appState.initializeAuthInfo(provider.successMap);
-                  //     return MLConfirmPhoneNumberScreen();
-                  //   }
-                  // }
-                  //TODO to include isNewTask: true
-                  return MLAuthenticationScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+                  hideKeyboard(context);
+                  await provider.init();
+                  await provider.postForm(body: {
+                    "mobile": mobile.text.trim(),
+                    "confirm_mobile": confirmMobile.text.trim(),
+                    "username": username.text.trim(),
+                    "password": password.text.trim(),
+                    "confirm_password": confirmPassword.text.trim()
+                  }, uri: Uri.parse(registerUrl));
+
+                  if (registerFormKey.currentState!.validate()) {
+                    if (provider.success) {
+                      finish(context);
+                      if (provider.successMap['data']['token'] == '') {
+                        return MLLoginScreen(phoneNumber: mobile.text.trim())
+                            .launch(context,
+                                pageRouteAnimation: PageRouteAnimation.Scale);
+                      }
+                      appState.initializeAuthInfo(provider.successMap);
+                      return MLAuthenticationScreen().launch(context,
+                          pageRouteAnimation: PageRouteAnimation.Slide,
+                          isNewTask: true);
+                    }
+                  }
                 },
                 child: Text('Confirm', style: boldTextStyle(color: white)),
               ),
