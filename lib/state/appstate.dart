@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -27,18 +29,18 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String,dynamic>? _authCredentials = {};
-  Map<String,dynamic>? get authCredentials => _authCredentials;
+  Map<String, dynamic>? _authCredentials = {};
+  Map<String, dynamic>? get authCredentials => _authCredentials;
 
-  Map<String,dynamic>? _profileInfo = {};
-  Map<String,dynamic>? get profileInfo => _profileInfo;
+  Map<String, dynamic>? _profileInfo = {};
+  Map<String, dynamic>? get profileInfo => _profileInfo;
 
-  void initializeAuthInfo(Map<String,dynamic>? credentials) {
+  void initializeAuthInfo(Map<String, dynamic>? credentials) {
     _authCredentials = credentials;
     notifyListeners();
   }
 
-  void initializeProfileInfo(Map<String,dynamic>? data) {
+  void initializeProfileInfo(Map<String, dynamic>? data) {
     _profileInfo = data;
     notifyListeners();
   }
@@ -46,21 +48,64 @@ class AppState with ChangeNotifier {
   bool _countDownTimerExpired = false;
   bool get countDownTimerExpired => _countDownTimerExpired;
 
-  int _timerEndTime =  DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+  int _timerEndTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
   int get timerEndTime => _timerEndTime;
 
-  void updateCountDownTimer({required bool expired}){
-    if(!expired){
+  void updateCountDownTimer({required bool expired}) {
+    if (!expired) {
       _timerEndTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
     }
     _countDownTimerExpired = expired;
     notifyListeners();
   }
 
-  void resetCountDownTimer(){
+  void resetCountDownTimer() {
     _countDownTimerExpired = false;
-    _timerEndTime =  DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+    _timerEndTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
     notifyListeners();
   }
 
+  ///Delaring a countdown timer
+  Timer? _countdownTimer;
+  Timer? get countdownTimer => _countdownTimer;
+
+  bool _timerExpired = false;
+  bool get timerExpired => _timerExpired;
+
+  Duration _otpExpiryTime = Duration(seconds: 120);
+  Duration get otpExpiryTime => _otpExpiryTime;
+
+  void startTimer() {
+    _countdownTimer =
+        Timer.periodic(Duration(seconds: 1), (timer) => setCountDown());
+  }
+
+  void setCountDown() {
+    final reduceSecondsBy = 1;
+
+    final seconds = otpExpiryTime.inSeconds - reduceSecondsBy;
+    if (seconds < 0) {
+      _timerExpired = true;
+      countdownTimer!.cancel();
+    } else {
+      _otpExpiryTime = Duration(seconds: seconds);
+    }
+    notifyListeners();
+  }
+
+  void resetTimer() {
+    stopTimer();
+    _otpExpiryTime = Duration(seconds: 117);
+    notifyListeners();
+  }
+
+  void stopTimer() {
+    _countdownTimer!.cancel();
+    notifyListeners();
+  }
+
+  void updateTimerExpired(bool expired) {
+    _timerExpired = expired;
+    notifyListeners();
+  }
 }
