@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 class MLForgetPasswordScreen extends StatefulWidget {
+  const MLForgetPasswordScreen({Key? key}) : super(key: key);
   static String tag = '/MLForgetPasswordScreen';
 
   @override

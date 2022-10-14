@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class MLAuthenticationScreen extends StatefulWidget {
+  const MLAuthenticationScreen({Key? key}) : super(key: key);
   static String tag = '/MLAuthenticationScreen';
 
   @override
@@ -25,10 +26,13 @@ class MLAuthenticationScreen extends StatefulWidget {
 }
 
 class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
-  late CountdownTimerController controller;
   int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 117;
 
+  var duration = const Duration(minutes: 1);
+
   bool timerExpired = false;
+
+  bool showTimer = true;
 
   @override
   void initState() {
@@ -39,7 +43,6 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
 
   late final _code;
   Future<void> init() async {
-    controller = CountdownTimerController(endTime: endTime, onEnd: onEnd);
     _code = TextEditingController();
     await SmsAutoFill().listenForCode;
   }
@@ -48,15 +51,9 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
   void dispose() {
     super.dispose();
     _code.dispose();
-    controller.dispose();
   }
 
-  void onEnd() {
-    print('onEnd');
-    setState(() {
-      timerExpired = true;
-    });
-  }
+  void onEnd() => context.read<AppState>().rebuildTimer();
 
   String phoneNumber = '';
 
@@ -110,24 +107,48 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
                           8.width,
                           TextButton(
                             child: Text('RESEND'),
-                            onPressed: timerExpired ? () {
-                              //Implement resend OTP
-                            } : null,
+                            onPressed: appState.otpTimerExpired
+                                ? () => appState.rebuildTimer()
+                                : null,
                           ),
                         ],
                       ),
-                      CountdownTimer(
-                        controller: controller,
-                        onEnd: onEnd,
-                        endTime: endTime,
-                        widgetBuilder: (_, CurrentRemainingTime? time) {
-                          if (time == null) {
-                            return Text('00:00');
-                          }
-                          return Text(
-                              '0${time.min}:${time.sec}');
-                        },
-                      ),
+                      Builder(builder: (context) {
+                        return appState.otpTimerExpired
+                            ? const Center()
+                            : TweenAnimationBuilder<Duration>(
+                                duration: appState.otpTimerDuration,
+                                tween: Tween(
+                                    begin: appState.otpTimerDuration,
+                                    end: Duration.zero),
+                                onEnd: onEnd,
+                                builder: (BuildContext context, Duration value,
+                                    Widget? child) {
+                                  final minutes = value.inMinutes;
+                                  final seconds = value.inSeconds % 60;
+                                  return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Text('$minutes:$seconds',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 30)));
+                                });
+                      }),
+                      // CountdownTimer(
+                      //   controller: controller,
+                      //   onEnd: onEnd,
+                      //   endTime: endTime,
+                      //   widgetBuilder: (_, CurrentRemainingTime? time) {
+                      //     if (time == null) {
+                      //       return Text('00:00');
+                      //     }
+                      //     return Text(
+                      //         '0${time.min == null ? '0' : time.min}:${time.sec}');
+                      //   },
+                      // ),
                     ]),
                 24.height,
                 AppButton(
