@@ -116,7 +116,7 @@ class AppState with ChangeNotifier {
   Duration get otpTimerDuration => _otpTimerDuration;
 
   void rebuildTimer() {
-    _otpTimerDuration = const Duration(seconds: 10);
+    _otpTimerDuration = _otpTimerDuration;
     _otpTimerExpired = !_otpTimerExpired;
     notifyListeners();
   }

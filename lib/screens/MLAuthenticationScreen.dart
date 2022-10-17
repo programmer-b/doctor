@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/services/networking.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:nb_utils/nb_utils.dart' hide OTPTextField hide Loader;
+import 'package:nb_utils/nb_utils.dart' hide OTPTextField hide Loader hide log;
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:doctor/utils/MLString.dart';
@@ -96,7 +97,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
                       style: boldTextStyle(color: mlColorDarkBlue)),
                 ]),
                 16.height,
-                otpField(appState.authCredentials?['data']?['token'] ?? ''),
+                otpField(appState.authCredentials?['data']?['token'] ?? '', appState),
                 24.height,
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,18 +138,6 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
                                               fontSize: 30)));
                                 });
                       }),
-                      // CountdownTimer(
-                      //   controller: controller,
-                      //   onEnd: onEnd,
-                      //   endTime: endTime,
-                      //   widgetBuilder: (_, CurrentRemainingTime? time) {
-                      //     if (time == null) {
-                      //       return Text('00:00');
-                      //     }
-                      //     return Text(
-                      //         '0${time.min == null ? '0' : time.min}:${time.sec}');
-                      //   },
-                      // ),
                     ]),
                 24.height,
                 AppButton(
@@ -158,8 +147,12 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
                     if (_code.text.length != 6) {
                       toastError(error: 'Invalid OTP');
                     } else {
-                      submitCode(context, provider, _code.text,
-                          appState.authCredentials?['data']?['token'] ?? '');
+                      submitCode(
+                          context,
+                          provider,
+                          _code.text,
+                          appState.authCredentials?['data']?['token'] ?? '',
+                          appState);
                     }
                   },
                   child: Text(mlDone!, style: boldTextStyle(color: white)),
@@ -172,12 +165,12 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
     );
   }
 
-  Widget otpField(token) => Consumer<Networking>(
+  Widget otpField(token, AppState appState) => Consumer<Networking>(
         builder: (context, provider, child) {
           return PinFieldAutoFill(
             controller: _code,
             onCodeSubmitted: (code) async =>
-                submitCode(context, provider, code, token),
+                submitCode(context, provider, code, token, appState),
             decoration: BoxLooseDecoration(
               strokeColorBuilder:
                   FixedColorBuilder(Colors.black.withOpacity(0.3)),
@@ -186,11 +179,16 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
         },
       );
 
-  Future<void> submitCode(context, provider, code, token) async {
+  Future<void> submitCode(
+      context, provider, code, token, AppState appState) async {
     hideKeyboard(context);
+    int user_id = appState.authCredentials?["data"]["user_id"] ?? 0;
+    log("USER ID $user_id");
     await provider.init();
-    await provider.postForm(
-        uri: Uri.parse(verifyOtp), body: {"otp": "$code"}, token: token);
+    await provider.postForm(uri: Uri.parse(verifyOtp), body: {
+      "OTP": "$code",
+      "user_id": '$user_id' ?? "0"
+    });
     if (provider.success) {
       MLUpdateProfileScreen().launch(context,
           isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
