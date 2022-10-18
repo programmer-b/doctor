@@ -128,7 +128,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       return null;
                     },
                     controller: phoneNumber,
-                    textFieldType: TextFieldType.PHONE,
+                    textFieldType: TextFieldType.OTHER,
                     decoration: InputDecoration(
                       labelText: mlUsernameOrPhoneNumber!,
                       labelStyle: secondaryTextStyle(size: 16),
