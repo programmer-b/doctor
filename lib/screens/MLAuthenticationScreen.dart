@@ -6,9 +6,6 @@ import 'package:doctor/services/networking.dart';
 import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
-import 'package:flutter_countdown_timer/current_remaining_time.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:nb_utils/nb_utils.dart' hide OTPTextField hide Loader hide log;
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
@@ -187,7 +184,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
     await provider.init();
     await provider.postForm(uri: Uri.parse(verifyOtp), body: {
       "OTP": "$code",
-      "user_id": '$user_id' ?? "0"
+      "user_id": '$user_id'
     });
     if (provider.success) {
       MLUpdateProfileScreen().launch(context,

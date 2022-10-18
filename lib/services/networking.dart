@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:doctor/screens/MLLoginScreen.dart';
-import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLCommon.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -103,7 +101,7 @@ class Networking with ChangeNotifier {
       log('Operation successful: ${data.body}');
     } else if (jsonDecode(data.body)['errors'] == null) {
       toast(
-        "Something went wrong. Try again later",
+        "Something went wrong. Try again later\n\n${data.body}",
         bgColor: Colors.red,
         textColor: Colors.white,
         gravity: ToastGravity.TOP,
@@ -146,23 +144,8 @@ class Networking with ChangeNotifier {
       } else {
         _failureMap = jsonDecode(data.body);
       }
-      // } else if (jsonDecode(data.body)["statusCode"] == 401) {
-      //   log('Refreshing token');
-      //   //TODO implement or  call a method to refresh your token
-      //   toast('Your credentials are expired, Login to continue',
-      //       gravity: ToastGravity.TOP, bgColor: mlPrimaryColor);
-      //   final authCredentials = await getJSONAsync('auth');
-      //   if (context != null) {
-      //     MLLoginScreen(
-      //       phoneNumber: authCredentials['data']['phone number'],
-      //     ).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-      //   } else {
-      //     toast('Something went wrong, try again later',
-      //         bgColor: Colors.red, gravity: ToastGravity.TOP);
-      //   }
-      // }
     } catch (e) {
-      toast('Something went wrong, try again later',
+      toast('Something went wrong, try again later\n$e',
           bgColor: Colors.red, gravity: ToastGravity.TOP);
     }
     _isLoading = false;

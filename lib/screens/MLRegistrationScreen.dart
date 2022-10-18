@@ -233,6 +233,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                             .launch(context,
                                 pageRouteAnimation: PageRouteAnimation.Scale);
                       }
+                      await setValue("auth", provider.success);
                       appState.initializeAuthInfo(provider.successMap);
                       return MLAuthenticationScreen().launch(context,
                           pageRouteAnimation: PageRouteAnimation.Slide,
