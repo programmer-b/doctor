@@ -44,7 +44,7 @@ class _MLDashboardScreenState extends State<MLDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(Colors.transparent);
+    changeStatusColor(mlPrimaryColor);
     return SafeArea(
       child: Scaffold(
         body: widgets[currentWidget],
