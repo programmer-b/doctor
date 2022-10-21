@@ -267,7 +267,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             },
 
             controller: subCounty,
-            onTap: () async => pickCounty(appState),
             textFieldType: TextFieldType.NAME,
             decoration: InputDecoration(
               hintText: mlResidence!,
@@ -341,7 +340,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
                   "county_of_residence": countyOfResidence.text.trim(),
                   "sub_county": subCounty.text.trim(),
 
-                  "user_id": appState.authCredentials?["data"]["user_id"] ?? 0
+                  "user_id":"${appState.authCredentials?["data"]["user_id"] ?? 0}"
                 }, uri: Uri.parse(createProfile), token: appState.authCredentials?['data']['token'] ?? '');
               }
 

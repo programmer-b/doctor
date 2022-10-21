@@ -49,7 +49,6 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
   String? extractError(Networking provider, String name) {
     try {
       final error = provider.failureMap["errors"][name][0];
-
       return error;
     } catch (e) {
       return "";
@@ -62,10 +61,12 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
       Map<String, dynamic>? credentials) async {
     await provider.init();
     await provider.get(
-        uri: Uri.parse(getProfile + '${credentials?['data']?['user_id'] ?? ''}'),
+        uri:
+            Uri.parse(getProfile + '${credentials?['data']?['user_id'] ?? ''}'),
         token: credentials?['data']?['token'] ?? '');
     if (provider.successMap.isNotEmpty) {
       if (provider.successMap['statusCode'] == 200) {
+        await setValue('profile', provider.successMap);
         appState.initializeProfileInfo(provider.successMap);
         MLDashboardScreen().launch(context,
             pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
@@ -125,7 +126,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       if (error?.isNotEmpty ?? false) {
                         return error;
                       }
-                      if( error2?.isNotEmpty ?? false){
+                      if (error2?.isNotEmpty ?? false) {
                         return error2;
                       }
 

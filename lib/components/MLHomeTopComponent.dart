@@ -1,11 +1,15 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:doctor/model/MLServiceData.dart';
 import 'package:doctor/screens/MLAddToCartScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
 import 'package:doctor/utils/MLDataProvider.dart';
-import 'package:doctor/utils/MLImage.dart';
 import 'package:doctor/utils/MLString.dart';
+import 'package:provider/provider.dart';
 
 class MLHomeTopComponent extends StatefulWidget {
   static String tag = '/MLHomeTopComponent';
@@ -30,6 +34,8 @@ class _MLHomeTopComponentState extends State<MLHomeTopComponent> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    log("${appState.authCredentials}");
     return Container(
       height: 260,
       width: context.width(),
@@ -47,15 +53,28 @@ class _MLHomeTopComponentState extends State<MLHomeTopComponent> {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                      child: Image.asset(ml_ic_profile_picture!),
-                      radius: 22,
-                      backgroundColor: mlColorCyan),
+                  CachedNetworkImage(
+                    imageUrl:
+                        'https://cdn-icons-png.flaticon.com/128/1177/1177568.png',
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 50.0,
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    placeholder: (context, url) => CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                   8.width,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(mlProfile_name!,
+                      Text("Hi ${appState.profileInfo?["data"]["first_name"] ?? "user"}",
                           style: boldTextStyle(color: whiteColor)),
                       4.height,
                       Text(mlWelcome!,
