@@ -120,15 +120,19 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
                       //   }
                       // }
                       final error = extractError(provider, "username");
+                      final error2 = extractError(provider, "mobile");
 
                       if (error?.isNotEmpty ?? false) {
                         return error;
+                      }
+                      if( error2?.isNotEmpty ?? false){
+                        return error2;
                       }
 
                       return null;
                     },
                     controller: phoneNumber,
-                    textFieldType: TextFieldType.OTHER,
+                    textFieldType: TextFieldType.NAME,
                     decoration: InputDecoration(
                       labelText: mlUsernameOrPhoneNumber!,
                       labelStyle: secondaryTextStyle(size: 16),

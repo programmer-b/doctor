@@ -339,8 +339,9 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
                   // "nationality": "string",
                   // "occupation": "string",
                   "county_of_residence": countyOfResidence.text.trim(),
-                  "sub_county": subCounty.text.trim()
-                  // "user_id": 0
+                  "sub_county": subCounty.text.trim(),
+
+                  "user_id": appState.authCredentials?["data"]["user_id"] ?? 0
                 }, uri: Uri.parse(createProfile), token: appState.authCredentials?['data']['token'] ?? '');
               }
 
