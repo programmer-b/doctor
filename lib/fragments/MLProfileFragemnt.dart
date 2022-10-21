@@ -67,10 +67,12 @@ class MLProfileFragmentState extends State<MLProfileFragment> {
                         errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                       8.height,
-                      Text('${appState.profileInfo?["data"]["first_name"] ?? ""} ${appState.profileInfo?["data"]["last_name"] ?? ""}',
+                      Text(
+                          '${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["data"]["dataModels"][0]["first_name"] ?? ""} ${appState.profileInfo?["data"]["last_name"] ?? appState.profileInfo?["data"]["dataModels"][0]["last_name"] ?? ""}',
                           style: boldTextStyle(color: white, size: 24)),
                       4.height,
-                      Text('${appState.profileInfo?["data"]["email"] ?? appState.authCredentials?["data"]["phone number"]}',
+                      Text(
+                          '${appState.profileInfo?["data"]["email"] ?? appState.authCredentials?["data"]["phone number"]}',
                           style: secondaryTextStyle(color: white, size: 16)),
                     ],
                   ),

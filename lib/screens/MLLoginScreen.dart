@@ -62,7 +62,7 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
     await provider.init();
     await provider.get(
         uri:
-            Uri.parse(getProfile + '${credentials?['data']?['user_id'] ?? ''}'),
+            Uri.parse(getProfile),
         token: credentials?['data']?['token'] ?? '');
     if (provider.successMap.isNotEmpty) {
       if (provider.successMap['statusCode'] == 200) {

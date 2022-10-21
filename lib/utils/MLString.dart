@@ -105,5 +105,5 @@ const BaseUrl = 'http://api.afya365.com';
 const loginUrl = BaseUrl + '/v1/login';
 const registerUrl = BaseUrl + '/v1/register';
 const createProfile = BaseUrl + '/v1/profile';
-const getProfile = BaseUrl + '/v1/profile/';
+const getProfile = BaseUrl + '/v1/profile';
 const verifyOtp = BaseUrl + '/v1/verify';
