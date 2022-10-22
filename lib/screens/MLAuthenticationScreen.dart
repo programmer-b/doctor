@@ -16,8 +16,10 @@ import 'package:provider/provider.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class MLAuthenticationScreen extends StatefulWidget {
-  const MLAuthenticationScreen({Key? key}) : super(key: key);
+  const MLAuthenticationScreen({Key? key, required this.resend})
+      : super(key: key);
   static String tag = '/MLAuthenticationScreen';
+  final bool resend;
 
   @override
   _MLAuthenticationScreenState createState() => _MLAuthenticationScreenState();
@@ -42,7 +44,9 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
   late final _code;
   Future<void> init() async {
     _code = TextEditingController();
-    await SmsAutoFill().listenForCode;
+
+    await SmsAutoFill().listenForCode(smsCodeRegexPattern: "6");
+    if (widget.resend) carryResend();
   }
 
   @override
@@ -54,6 +58,11 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
   void onEnd() => context.read<AppState>().rebuildTimer();
 
   String phoneNumber = '';
+
+  Future<void> carryResend() async {
+    await Future.delayed(Duration.zero,
+        () => resendOtp(context.read<Networking>(), context.read<AppState>()));
+  }
 
   @override
   Widget build(BuildContext context) {

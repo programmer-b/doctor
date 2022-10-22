@@ -94,7 +94,7 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
       {required Map<String, dynamic>? credentials}) async {
     await 2.seconds.delay;
     context.read<AppState>().initializeAuthInfo(credentials);
-    MLAuthenticationScreen().launch(context,
+    MLAuthenticationScreen(resend: true).launch(context,
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
 
@@ -131,7 +131,7 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
                           if (decodedToken?["profile"]?["mobile_verified"] ??
                               "null" == "null") {
                             launchToAuthentication(
-                                credentials: credentials.data);
+                                credentials: credentials.data,);
                           } else if (profileExists) {
                             final profileData = decodedToken?["profile"];
                             launchToDashboard(

@@ -109,7 +109,7 @@ class _MLForgetPasswordScreenState extends State<MLForgetPasswordScreen> {
                   AppButton(
                     width: double.infinity,
                     color: mlPrimaryColor,
-                    onTap: () => MLAuthenticationScreen().launch(context),
+                    onTap: () => MLAuthenticationScreen(resend: false,).launch(context),
                     child: Text('Send', style: boldTextStyle(color: white)),
                   ),
                 ],

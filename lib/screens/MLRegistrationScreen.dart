@@ -233,7 +233,7 @@ class _MLRegistrationScreenState extends State<MLRegistrationScreen> {
                       }
                       await setValue("auth", provider.successMap);
                       appState.initializeAuthInfo(provider.successMap);
-                      return MLAuthenticationScreen().launch(context,
+                      return MLAuthenticationScreen(resend:false,).launch(context,
                           pageRouteAnimation: PageRouteAnimation.Slide,
                           isNewTask: true);
                     }

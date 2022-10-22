@@ -129,7 +129,7 @@ class _MLConfirmPhoneNumberScreenState
                     showConfirmDialog(context,
                         'You have entered +254${phoneNumber.text} as your phone number.\n Is this correct?',
                         onAccept: () =>
-                            MLAuthenticationScreen().launch(context));
+                            MLAuthenticationScreen(resend: false,).launch(context));
                   }
                 },
                 child: Text(mlRegister!, style: boldTextStyle(color: white)),
