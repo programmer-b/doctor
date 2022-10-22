@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/state/appstate.dart';
-import 'package:doctor/utils/MLString.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor/screens/MLWalkThroughScreen.dart';
 import 'package:doctor/utils/MLImage.dart';
@@ -82,6 +80,7 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
     MLDashboardScreen().launch(context,
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
+
   Future<dynamic> launchToProfile(
       {required Map<String, dynamic>? credentials}) async {
     await 2.seconds.delay;
@@ -109,46 +108,28 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
                             credentials: credentials.data,
                             profile: profile.data);
                       } else {
-                        log('Profile data not found in the cache: Checking for profile in the database ...');
-                        return FutureBuilder(
-                            future: getProfileFromDatabase(
-                                uri: Uri.parse(getProfile),
-                                token:
-                                    '${credentials.data?['data']['token'] ?? ''}'),
-                            builder: (context,
-                                AsyncSnapshot<Response> profileFromDb) {
-                              if (profileFromDb.connectionState ==
-                                  ConnectionState.done) {
-                                log('PROFILE DATA: ${profileFromDb.data!.body}');
-                                int statusCode = jsonDecode(
-                                    profileFromDb.data!.body)['statusCode'];
-                                log('StatusCode: $statusCode \n HAS DATA: ${statusCode == 200}');
-                                if (statusCode == 200) {
-                                  launchToDashboard(
-                                      firstTime: true,
-                                      profile:
-                                          jsonDecode(profileFromDb.data!.body),
-                                      credentials: credentials.data);
-                                } else if (statusCode == 401) {
-                                  toast(
-                                      'Your session has expired, Please Login again',
-                                      length: Toast.LENGTH_LONG,
-                                      gravity: ToastGravity.TOP,
-                                      bgColor: Colors.red);
-                                  launchToLogin();
-                                } else if (statusCode == 404) {
-                                  launchToProfile(
-                                      credentials: credentials.data);
-                                }
-                              } else {
-                                toast(
-                                    'Something went wrong ${profileFromDb.error}',
-                                    length: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.TOP,
-                                    bgColor: Colors.red);
-                              }
-                              return buildSplash();
-                            });
+                        log('Profile data not found in the cache: Checking for profile in the token ...');
+                        return Builder(builder: (context) {
+                          final token =
+                              credentials.data?['data']['token'] ?? '';
+                          final decodedToken = JwtDecoder.decode(token);
+
+                          log("$decodedToken");
+                          final profileExists = decodedToken?["profile"]
+                                  ?["first_name"] ??
+                              null != null;
+
+                          if (profileExists) {
+                            final profileData = decodedToken?["profile"];
+                            launchToDashboard(
+                                profile: profileData,
+                                credentials: credentials.data,
+                                firstTime: true);
+                          } else {
+                            launchToProfile(credentials: credentials.data);
+                          }
+                          return buildSplash();
+                        });
                       }
                     }
                     return buildSplash();

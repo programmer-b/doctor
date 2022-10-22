@@ -68,11 +68,11 @@ class MLProfileFragmentState extends State<MLProfileFragment> {
                       ),
                       8.height,
                       Text(
-                          '${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["data"]["dataModels"][0]["first_name"] ?? ""} ${appState.profileInfo?["data"]["last_name"] ?? appState.profileInfo?["data"]["dataModels"][0]["last_name"] ?? ""}',
+                          '${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["first_name"] ?? ""} ${appState.profileInfo?["last_name"] ?? ""}',
                           style: boldTextStyle(color: white, size: 24)),
                       4.height,
                       Text(
-                          '${appState.profileInfo?["data"]["email"] ?? appState.authCredentials?["data"]["phone number"]}',
+                          '${appState.profileInfo?["data"]["email"] ?? appState.profileInfo?["email"] ?? appState.authCredentials?["data"]["phone number"]}',
                           style: secondaryTextStyle(color: white, size: 16)),
                     ],
                   ),

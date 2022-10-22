@@ -59,24 +59,19 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
 
   Future<void> setupProfile(Networking provider, AppState appState,
       Map<String, dynamic>? credentials) async {
-    await provider.init();
-    await provider.get(
-        uri:
-            Uri.parse(getProfile),
-        token: credentials?['data']?['token'] ?? '');
-    if (provider.successMap.isNotEmpty) {
-      if (provider.successMap['statusCode'] == 200) {
-        await setValue('profile', provider.successMap);
-        appState.initializeProfileInfo(provider.successMap);
-        MLDashboardScreen().launch(context,
-            pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
-      }
-    }
-    if (provider.failureMap.isNotEmpty) {
-      if (provider.failureMap['statusCode'] == 404) {
-        MLUpdateProfileScreen().launch(context,
-            pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
-      }
+    final token = credentials?['data']?['token'] ?? '';
+    final decodedToken = JwtDecoder.decode(token);
+    log("$decodedToken");
+
+    final profile = decodedToken?["profile"] ?? null;
+    if (profile != null) {
+      await setValue('profile', profile);
+      appState.initializeProfileInfo(profile);
+      MLDashboardScreen().launch(context,
+          pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+    } else {
+      MLUpdateProfileScreen().launch(context,
+          pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
     }
   }
 

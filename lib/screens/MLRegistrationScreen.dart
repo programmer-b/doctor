@@ -1,6 +1,4 @@
-import 'package:doctor/screens/MLConfirmPhoneNumberScreen.dart';
 import 'package:doctor/screens/MLLoginScreen.dart';
-import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/services/networking.dart';
 import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';

@@ -35,7 +35,7 @@ class _MLHomeTopComponentState extends State<MLHomeTopComponent> {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-    log("AUTH: ${appState.authCredentials}\nPROFILE:  ${appState.profileInfo}");
+    // log("AUTH: ${appState.authCredentials}\nPROFILE:  ${appState.profileInfo}");
     return Container(
       height: 260,
       width: context.width(),
@@ -75,7 +75,7 @@ class _MLHomeTopComponentState extends State<MLHomeTopComponent> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "Hi ${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["data"]["dataModels"][0]["first_name"] ?? "User"}",
+                          "Hi ${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["first_name"] ?? "User"}",
                           style: boldTextStyle(color: whiteColor)),
                       4.height,
                       Text(mlWelcome!,
