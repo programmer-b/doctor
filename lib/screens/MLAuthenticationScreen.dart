@@ -61,7 +61,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
     provider.isLoading ? Loader.show(context) : Loader.hide();
     final appState = Provider.of<AppState>(context);
 
-    phoneNumber = appState.authCredentials?['data']?['mobile'] ?? '';
+    phoneNumber = appState.authCredentials?['data']?['phone number'] ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +94,8 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
                       style: boldTextStyle(color: mlColorDarkBlue)),
                 ]),
                 16.height,
-                otpField(appState.authCredentials?['data']?['token'] ?? '', appState),
+                otpField(appState.authCredentials?['data']?['token'] ?? '',
+                    appState),
                 24.height,
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +107,10 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
                           TextButton(
                             child: Text('RESEND'),
                             onPressed: appState.otpTimerExpired
-                                ? () => appState.rebuildTimer()
+                                ? () {
+                                    appState.rebuildTimer();
+                                    resendOtp(provider, appState);
+                                  }
                                 : null,
                           ),
                         ],
@@ -176,16 +180,24 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
         },
       );
 
+  Future<void> resendOtp(provider, AppState state) async {
+    int user_id = state.authCredentials?["data"]["user_id"] ?? 0;
+    final String mobileNumber = state.authCredentials?["data"]["phone number"];
+    await provider.init();
+    await provider.postForm(
+        uri: Uri.parse(resendOTP),
+        body: {"user_id": "$user_id", "mobile_number": mobileNumber});
+  }
+
   Future<void> submitCode(
       context, provider, code, token, AppState appState) async {
     hideKeyboard(context);
     int user_id = appState.authCredentials?["data"]["user_id"] ?? 0;
     log("USER ID $user_id");
     await provider.init();
-    await provider.postForm(uri: Uri.parse(verifyOtp), body: {
-      "OTP": "$code",
-      "user_id": '$user_id'
-    });
+    await provider.postForm(
+        uri: Uri.parse(verifyOTP),
+        body: {"OTP": "$code", "user_id": '$user_id'});
     if (provider.success) {
       MLUpdateProfileScreen().launch(context,
           isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);

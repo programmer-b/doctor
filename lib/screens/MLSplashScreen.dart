@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:doctor/screens/MLAuthenticationScreen.dart';
 import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/state/appstate.dart';
@@ -89,6 +90,14 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
 
+  Future<void> launchToAuthentication(
+      {required Map<String, dynamic>? credentials}) async {
+    await 2.seconds.delay;
+    context.read<AppState>().initializeAuthInfo(credentials);
+    MLAuthenticationScreen().launch(context,
+        pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     // final provider = Provider.of<Networking>(context);
@@ -119,7 +128,11 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
                                   ?["first_name"] ??
                               null != null;
 
-                          if (profileExists) {
+                          if (decodedToken?["profile"]?["mobile_verified"] ??
+                              "null" == "null") {
+                            launchToAuthentication(
+                                credentials: credentials.data);
+                          } else if (profileExists) {
                             final profileData = decodedToken?["profile"];
                             launchToDashboard(
                                 profile: profileData,

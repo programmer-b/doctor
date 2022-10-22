@@ -99,11 +99,11 @@ const String? mlUsernameOrPhoneNumber = 'Username or Phone Number';
 const String? mlUsername = 'Your username';
 const String? mlLoginUsername = 'Your Phone or Username';
 
-
 const BaseUrlUI = 'https://assets.iqonic.design/old-themeforest-images/prokit';
 const BaseUrl = 'http://api.afya365.com';
 const loginUrl = BaseUrl + '/v1/login';
 const registerUrl = BaseUrl + '/v1/register';
 const createProfile = BaseUrl + '/v1/profile';
 const getProfile = BaseUrl + '/v1/profile';
-const verifyOtp = BaseUrl + '/v1/verify';
+const verifyOTP = BaseUrl + '/v1/verify';
+const resendOTP = BaseUrl + '/v1/resend';
