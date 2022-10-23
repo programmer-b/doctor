@@ -14,7 +14,7 @@ class MLChatFragment extends StatefulWidget {
 }
 
 class MLChatFragmentState extends State<MLChatFragment>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin { 
   int notificationCounter = 3;
   TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
