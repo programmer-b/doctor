@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:doctor/components/MLProfileBottomComponent.dart';
 import 'package:doctor/utils/MLColors.dart';
-import 'package:doctor/utils/MLImage.dart';
 import 'package:provider/provider.dart';
 
 class MLProfileFragment extends StatefulWidget {
@@ -68,11 +67,11 @@ class MLProfileFragmentState extends State<MLProfileFragment> {
                       ),
                       8.height,
                       Text(
-                          '${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["first_name"] ?? ""} ${appState.profileInfo?["last_name"] ?? ""}',
+                          '${appState.profile?.firstName ?? ""} ${appState.profile?.lastName ?? ""}',
                           style: boldTextStyle(color: white, size: 24)),
                       4.height,
                       Text(
-                          '${appState.profileInfo?["data"]["email"] ?? appState.profileInfo?["email"] ?? appState.authCredentials?["data"]["phone number"]}',
+                          '${appState.profile?.email ?? appState.authCredentials?["data"]["phone number"]}',
                           style: secondaryTextStyle(color: white, size: 16)),
                     ],
                   ),

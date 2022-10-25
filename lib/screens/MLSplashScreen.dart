@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:doctor/model/MLJWTDecoder.dart';
 import 'package:doctor/screens/MLAuthenticationScreen.dart';
 import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
@@ -7,10 +8,8 @@ import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor/screens/MLWalkThroughScreen.dart';
 import 'package:doctor/utils/MLImage.dart';
-import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 // import '../services/networking.dart';
 
@@ -39,24 +38,8 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
     return await getJSONAsync('auth');
   }
 
-  Future<Map<String, dynamic>?> getProfileInfo() async {
+  Future<Map<String, dynamic>?> getProfileCredentials() async {
     return await getJSONAsync('profile');
-  }
-
-  Future<Response> getProfileFromDatabase(
-      {required Uri uri, required String token}) async {
-    log("$uri");
-    try {
-      final data = await http.get(uri, headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      });
-
-      return data;
-    } catch (e) {
-      throw (e);
-    }
   }
 
   Future<dynamic> launchToLogin() async {
@@ -65,19 +48,16 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
 
-  Future<void> initializeProfile() async {}
-
   Future<dynamic> launchToDashboard(
-      {required Map<String, dynamic>? profile,
-      required Map<String, dynamic>? credentials,
-      bool firstTime = false}) async {
-    if (firstTime) {
-      log("setting profile to shared_preferences");
-      await setValue("profile", profile);
-    }
+      {MLJWTDecoder? decodedToken,
+      Map<String, dynamic>? profile,
+      required Map<String, dynamic>? credentials}) async {
+    assert(profile != null || decodedToken != null);
     await 2.seconds.delay;
     context.read<AppState>().initializeAuthInfo(credentials);
-    context.read<AppState>().initializeProfileInfo(profile);
+    profile != null
+        ? context.read<AppState>().initializeProfileInfo(profile: profile)
+        : context.read<AppState>().initializeProfileInfo(data: decodedToken);
     MLDashboardScreen().launch(context,
         pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
   }
@@ -106,43 +86,37 @@ class _MLSplashScreenState extends State<MLSplashScreen> {
         builder: (context, AsyncSnapshot<Map<String, dynamic>?> credentials) {
           if (credentials.connectionState == ConnectionState.done) {
             if (credentials.data?.isNotEmpty ?? false) {
-              log("$credentials");
               return FutureBuilder<Map<String, dynamic>?>(
-                  future: getProfileInfo(),
-                  builder:
-                      (context, AsyncSnapshot<Map<String, dynamic>?> profile) {
-                    if (profile.connectionState == ConnectionState.done) {
-                      if (profile.data?.isNotEmpty ?? false) {
+                  future: getProfileCredentials(),
+                  builder: (context, AsyncSnapshot profileSnap) {
+                    if (profileSnap.connectionState == ConnectionState.done) {
+                      if (profileSnap.data?.isNotEmpty ?? false) {
+                        log("PROFILE IN CACHE: ${profileSnap.data}");
                         launchToDashboard(
-                            credentials: credentials.data,
-                            profile: profile.data);
+                            profile: profileSnap.data,
+                            credentials: credentials.data);
                       } else {
-                        log('Profile data not found in the cache: Checking for profile in the token ...');
-                        return Builder(builder: (context) {
-                          final token =
-                              credentials.data?['data']['token'] ?? '';
-                          final decodedToken = JwtDecoder.decode(token);
+                        final token = credentials.data?['data']?['token'] ?? '';
 
-                          log("$decodedToken");
-                          final profileExists = decodedToken?["profile"]
-                                  ?["first_name"] ??
-                              null != null;
+                        final decodedToken = JwtDecoder.decode(token) ?? {};
 
-                          if (decodedToken?["profile"]?["mobile_verified"] ??
-                              "null" == "null") {
-                            launchToAuthentication(
-                                credentials: credentials.data,);
-                          } else if (profileExists) {
-                            final profileData = decodedToken?["profile"];
-                            launchToDashboard(
-                                profile: profileData,
-                                credentials: credentials.data,
-                                firstTime: true);
-                          } else {
-                            launchToProfile(credentials: credentials.data);
-                          }
-                          return buildSplash();
-                        });
+                        log("DECODED TOKEN: $decodedToken");
+
+                        if (decodedToken["usr"]["mobile_verified"] == null) {
+                          launchToAuthentication(credentials: credentials.data);
+                        } else if (decodedToken["usr"]["profile_verified"] ==
+                            null) {
+                          launchToProfile(credentials: credentials.data);
+                        } else {
+                          log("Launching to dashboard...");
+
+                          final decodedTokenModel = MLJWTDecoder.fromJson(
+                              JwtDecoder.decode(token) ?? {});
+
+                          launchToDashboard(
+                              credentials: credentials.data,
+                              decodedToken: decodedTokenModel);
+                        }
                       }
                     }
                     return buildSplash();

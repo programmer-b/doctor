@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:doctor/model/MLJWTDecoder.dart';
 import 'package:doctor/screens/MLDashboardScreen.dart';
 import 'package:doctor/screens/MLUpdateProfileScreen.dart';
 import 'package:doctor/services/networking.dart';
@@ -5,7 +9,7 @@ import 'package:doctor/state/appstate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:nb_utils/nb_utils.dart' hide Loader;
+import 'package:nb_utils/nb_utils.dart' hide Loader hide log;
 import 'package:doctor/screens/MLForgetPasswordScreen.dart';
 import 'package:doctor/screens/MLRegistrationScreen.dart';
 import 'package:doctor/utils/MLColors.dart';
@@ -60,16 +64,19 @@ class _MLLoginScreenState extends State<MLLoginScreen> {
   Future<void> setupProfile(Networking provider, AppState appState,
       Map<String, dynamic>? credentials) async {
     final token = credentials?['data']?['token'] ?? '';
-    final decodedToken = JwtDecoder.decode(token);
-    log("$decodedToken");
+    final decodedToken = JwtDecoder.decode(token) ?? {};
 
-    final profile = decodedToken?["profile"] ?? null;
-    if (profile != null) {
-      await setValue('profile', profile);
-      appState.initializeProfileInfo(profile);
+    log("DECODED TOKEN $decodedToken");
+
+    if (decodedToken["usr"]["profile_verified"] != null) {
+      final decodedTokenModel =
+          MLJWTDecoder.fromJson(JwtDecoder.decode(token) ?? {});
+
+      appState.initializeProfileInfo(data: decodedTokenModel);
       MLDashboardScreen().launch(context,
           pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
     } else {
+      log("launching profile; mobile_verified is null => $decodedToken");
       MLUpdateProfileScreen().launch(context,
           pageRouteAnimation: PageRouteAnimation.Scale, isNewTask: true);
     }

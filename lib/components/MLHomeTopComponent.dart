@@ -75,7 +75,7 @@ class _MLHomeTopComponentState extends State<MLHomeTopComponent> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "Hi ${appState.profileInfo?["data"]["first_name"] ?? appState.profileInfo?["first_name"] ?? "User"}",
+                          "Hi ${appState.profile?.firstName ?? "User"}",
                           style: boldTextStyle(color: whiteColor)),
                       4.height,
                       Text(mlWelcome!,

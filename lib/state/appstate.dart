@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:doctor/model/MLJWTDecoder.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -32,16 +34,28 @@ class AppState with ChangeNotifier {
   Map<String, dynamic>? _authCredentials = {};
   Map<String, dynamic>? get authCredentials => _authCredentials;
 
-  Map<String, dynamic>? _profileInfo = {};
-  Map<String, dynamic>? get profileInfo => _profileInfo;
+  MLJWTDecoder? _decodedToken;
+  MLJWTDecoder? get decodedToken => _decodedToken;
+
+  Profile? _profile;
+  Profile? get profile => _profile;
 
   void initializeAuthInfo(Map<String, dynamic>? credentials) {
     _authCredentials = credentials;
     notifyListeners();
   }
 
-  void initializeProfileInfo(Map<String, dynamic>? data) {
-    _profileInfo = data;
+  void initializeProfileInfo(
+      {MLJWTDecoder? data = null, Map<String, dynamic>? profile = null}) {
+    assert(data != null || profile != null);
+    if (data != null) {
+      _decodedToken = data;
+      _profile = data.usr?.profile ?? null;
+    } else {
+      log("TO SET THIS PROFILE => $profile");
+      _profile = Profile.fromJson(profile ?? {});
+      log("CARRIED OUT A PROFILE SET: TESTING FIRST NAME FROM PROFILE MODEL: ${_profile?.firstName ?? null}");
+    }
     notifyListeners();
   }
 

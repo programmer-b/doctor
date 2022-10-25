@@ -49,7 +49,6 @@ class Networking with ChangeNotifier {
       final data = await http.post(uri, headers: headers, body: body).timeout(
             const Duration(seconds: 15),
           );
-      log('${data.body}');
 
       notifyListeners();
 
@@ -98,7 +97,6 @@ class Networking with ChangeNotifier {
     if (data.OK) {
       _successMap = jsonDecode(data.body);
       _success = true;
-      log('Operation successful: ${data.body}');
     } else if (jsonDecode(data.body)['errors'] == null) {
       toast(
         "Something went wrong. Try again later\n\n${data.body}",

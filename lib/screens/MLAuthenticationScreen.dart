@@ -199,7 +199,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
   }
 
   Future<void> submitCode(
-      context, provider, code, token, AppState appState) async {
+      context, Networking provider, code, token, AppState appState) async {
     hideKeyboard(context);
     int user_id = appState.authCredentials?["data"]["user_id"] ?? 0;
     log("USER ID $user_id");
@@ -208,6 +208,7 @@ class _MLAuthenticationScreenState extends State<MLAuthenticationScreen> {
         uri: Uri.parse(verifyOTP),
         body: {"OTP": "$code", "user_id": '$user_id'});
     if (provider.success) {
+      log("${provider.successMap}");
       MLUpdateProfileScreen().launch(context,
           isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
     } else {

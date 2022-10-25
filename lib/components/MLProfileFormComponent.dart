@@ -14,13 +14,10 @@ import 'package:scroll_date_picker/scroll_date_picker.dart';
 import '../services/networking.dart';
 
 class MLProfileFormComponent extends StatefulWidget {
-  MLProfileFormComponent(
-      {Key? key,
-     })
-      : super(key: key);
+  MLProfileFormComponent({
+    Key? key,
+  }) : super(key: key);
   static String tag = '/MLProfileFormComponent';
-
-
 
   @override
   MLProfileFormComponentState createState() => MLProfileFormComponentState();
@@ -61,7 +58,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
   final middleName = TextEditingController();
   final email = TextEditingController();
   final subCounty = TextEditingController();
-
 
   Future<void> pickDate(AppState provider) async {
     await showModalBottomSheet<void>(
@@ -123,8 +119,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
     final provider = Provider.of<Networking>(context);
     final appState = Provider.of<AppState>(context);
 
-        provider.isLoading ? Loader.show(context) : Loader.hide();
-
+    provider.isLoading ? Loader.show(context) : Loader.hide();
 
     TextEditingController dateOfBirth = TextEditingController(
       text: DateFormat('yyyy-MM-dd').format(appState.selectedDate),
@@ -161,7 +156,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
             textFieldType: TextFieldType.NAME,
           ),
-
           Text('Middle Name', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
@@ -184,7 +178,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
             textFieldType: TextFieldType.NAME,
           ),
- 
           Text('Last Name*', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
@@ -218,7 +211,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
 
               return null;
             },
-            controller:  email,
+            controller: email,
             textFieldType: TextFieldType.EMAIL,
             decoration: InputDecoration(
               hintText: mlEmail!,
@@ -232,7 +225,8 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
           Text('County of residence*', style: primaryTextStyle()),
           AppTextField(
             validator: (value) {
-              final error = extractError(provider, "county_of_residence").toString();
+              final error =
+                  extractError(provider, "county_of_residence").toString();
 
               if (error.isNotEmpty) {
                 return error;
@@ -265,7 +259,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
 
               return null;
             },
-
             controller: subCounty,
             textFieldType: TextFieldType.NAME,
             decoration: InputDecoration(
@@ -273,7 +266,7 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
               hintStyle: secondaryTextStyle(size: 16),
               enabledBorder: UnderlineInputBorder(
                 borderSide:
-                BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
+                    BorderSide(color: mlColorLightGrey.withOpacity(0.2)),
               ),
             ),
           ),
@@ -307,7 +300,6 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
             ),
           ),
           16.height,
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,28 +318,32 @@ class MLProfileFormComponentState extends State<MLProfileFormComponent> {
               hideKeyboard(context);
               await provider.init();
               if (profileFormKey.currentState!.validate()) {
+                await provider.postForm(
+                    body: {
+                      //"username": "string",
+                      "first_name": firstName.text.trim(),
+                      "middle_name": middleName.text.trim(),
+                      "last_name": lastName.text.trim(),
+                      "gender": genderValue,
+                      "blood_group": bloodGroupValue,
+                      "date_of_birth": dateOfBirth.text.trim(),
+                      // "nationality": "string",
+                      // "occupation": "string",
+                      "county_of_residence": countyOfResidence.text.trim(),
+                      "sub_county": subCounty.text.trim(),
 
-                await provider.postForm(body: {
-                  //"username": "string",
-                  "first_name": firstName.text.trim(),
-                  "middle_name": middleName.text.trim(),
-                  "last_name": lastName.text.trim(),
-                  "gender": genderValue,
-                  "blood_group": bloodGroupValue,
-                  "date_of_birth": dateOfBirth.text.trim(),
-                  // "nationality": "string",
-                  // "occupation": "string",
-                  "county_of_residence": countyOfResidence.text.trim(),
-                  "sub_county": subCounty.text.trim(),
-
-                  "user_id":"${appState.authCredentials?["data"]["user_id"] ?? 0}"
-                }, uri: Uri.parse(createProfile), token: appState.authCredentials?['data']['token'] ?? '');
+                      "user_id":
+                          "${appState.authCredentials?["data"]["user_id"] ?? 0}"
+                    },
+                    uri: Uri.parse(createProfile),
+                    token: appState.authCredentials?['data']['token'] ?? '');
               }
 
               if (profileFormKey.currentState!.validate()) {
                 if (provider.success) {
-                  await setValue('profile', provider.successMap);
-                  appState.initializeProfileInfo(provider.successMap);
+                  await setValue('profile', provider.successMap["data"]);
+                  appState.initializeProfileInfo(
+                      profile: provider.successMap["data"]);
                   MLDashboardScreen().launch(context,
                       isNewTask: true,
                       pageRouteAnimation: PageRouteAnimation.Slide);
