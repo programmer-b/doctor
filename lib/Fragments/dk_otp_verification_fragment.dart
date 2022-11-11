@@ -4,7 +4,6 @@ import 'package:afyadaktari/Commons/dk_strings.dart';
 import 'package:afyadaktari/Components/dk_otp_count_down_component.dart';
 import 'package:afyadaktari/Fragments/dk_profile_fragment.dart';
 import 'package:afyadaktari/Fragments/dk_register_fragment.dart';
-import 'package:afyadaktari/Functions/auth_functions.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_otp_data_provider.dart';
 import 'package:flutter/material.dart';
