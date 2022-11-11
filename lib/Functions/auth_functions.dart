@@ -12,7 +12,6 @@ import 'package:afyadaktari/Models/dk_user_token_decode_model.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Screens/dk_auth_screen.dart';
 import 'package:afyadaktari/Screens/dk_home_screen.dart';
-import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:http/http.dart' as http;
@@ -49,15 +48,20 @@ Future<bool> saveCredentials(
   return false;
 }
 
-Future<DKRefreshTokenModel> refreshToken() async {
+Future<DKRefreshTokenModel?> refreshToken() async {
   final userId = getIntAsync(keyUserId);
-  final uri = Uri.parse(dkRefreshUrl);
+  log("user_id: $userId");
 
-  final Map<String, String> body = {"userId": "$userId"};
+  final uri = Uri.parse(dkRefreshUrl);
+  log("URL: $uri");
+
+  final Map<String, String> body = {keyUserId: "$userId"};
 
   try {
     final response = await http.post(uri, body: body);
-    if (response.ok) {
+    log("REFRESHED TOKEN: ${response.body}");
+
+    if (response.ok && userId != 0 && response.body != "null") {
       final refreshTokenModel =
           DKRefreshTokenModel.fromJson(jsonDecode(response.body));
 
@@ -70,10 +74,11 @@ Future<DKRefreshTokenModel> refreshToken() async {
         log("Couldn't save refresh credentials");
       }
     }
-    throw "Bad Response: ${response.body}";
+    log("Bad Response: ${response.body}");
+    return null;
   } on Exception catch (e) {
-    DKToast.showErrorToast("$e");
-    rethrow;
+    log("$e");
+    return null;
   }
 }
 
@@ -90,7 +95,9 @@ void analyzeCredentials(
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context
           .read<DkAuthUiState>()
-          .switchFragment(const DKOTPVerificationFragment(resend: true,));
+          .switchFragment(const DKOTPVerificationFragment(
+            resend: true,
+          ));
       const DKAuthScreen().launch(context);
     });
   } else if (!profileUpdated) {
@@ -101,6 +108,7 @@ void analyzeCredentials(
       const DKAuthScreen().launch(context);
     });
   } else {
+    
     Future.delayed(Duration.zero,
         () => const DKHomeScreen().launch(context, isNewTask: true));
   }

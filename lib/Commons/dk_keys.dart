@@ -18,3 +18,5 @@ const keyUserName = "user_name";
 const keyConfirmMobile = "confirm_mobile";
 const keyPassword = "password";
 const keyConfirmPassword = "confirm_password";
+
+const keyMessage = "message";

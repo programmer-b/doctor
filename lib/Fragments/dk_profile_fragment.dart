@@ -185,6 +185,8 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
     }
   }
 
+  final _profileKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final provider = context.read<DKProfileDataProvider>();
@@ -197,92 +199,98 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
     final countyOfResidence = TextEditingController(
         text: context.watch<DKProfileDataProvider>().countyOfResidence);
 
-    return Column(
-      children: [
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            dkCreateYourProfile,
-            style: boldTextStyle(size: 22, color: dkPrimaryTextColor),
+    return Form(
+      key: _profileKey,
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              dkCreateYourProfile,
+              style: boldTextStyle(size: 22, color: dkPrimaryTextColor),
+            ),
           ),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkFirstName,
-          validator: (p0) => _validate(context, keyFirstName),
-          onChanged: (text) => provider.setFirstName(text),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkMiddleName,
-          validator: (p0) => _validate(context, keyMiddleName),
-          onChanged: (text) => provider.setMiddleNameName(text),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkLastName,
-          validator: (p0) => _validate(context, keyLastName),
-          onChanged: (text) => provider.setLastName(text),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkEmail,
-          validator: (p0) => _validate(context, keyEmail),
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (text) => provider.setEmail(text),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkCountyOfResidence,
-          validator: (p0) => _validate(context, keyCountyOfResidence),
-          controller: countyOfResidence,
-          readOnly: true,
-          onTap: () => _pickCounty(context),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkSubCountyOfResidence,
-          validator: (p0) => _validate(context, keySubCounty),
-          onChanged: (text) => provider.setSubCountyOfResidence(text),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkDateOfBirth,
-          validator: (p0) => _validate(context, keyDateOfBirth),
-          controller: dateOfBirth,
-          onTap: _pickDate,
-          readOnly: true,
-        ),
-        16.height,
-        DKTextField(
-          hint: dkGender,
-          validator: (p0) => _validate(context, keyGender),
-          readOnly: true,
-          controller: gender,
-          onTap: () => _pickGender(context),
-        ),
-        16.height,
-        DKTextField(
-          hint: dkBloodGroup,
-          validator: (p0) => _validate(context, keyBloodGroup),
-          controller: bloodGroup,
-          readOnly: true,
-          onTap: () => _pickBloodGroup(context),
-        ),
-        20.height,
-        DKButtonComponent(
-          text: dkSubmit,
-          onTap: () async {
-            await provider.submitData();
-            if (provider.success) {
-              if (mounted) {
-                RestartAppWidget.init(context);
+          16.height,
+          DKTextField(
+            hint: dkFirstName,
+            validator: (p0) => _validate(context, keyFirstName),
+            onChanged: (text) => provider.setFirstName(text),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkMiddleName,
+            validator: (p0) => _validate(context, keyMiddleName),
+            onChanged: (text) => provider.setMiddleNameName(text),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkLastName,
+            validator: (p0) => _validate(context, keyLastName),
+            onChanged: (text) => provider.setLastName(text),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkEmail,
+            validator: (p0) => _validate(context, keyEmail),
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (text) => provider.setEmail(text),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkCountyOfResidence,
+            validator: (p0) => _validate(context, keyCountyOfResidence),
+            controller: countyOfResidence,
+            readOnly: true,
+            onTap: () => _pickCounty(context),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkSubCountyOfResidence,
+            validator: (p0) => _validate(context, keySubCounty),
+            onChanged: (text) => provider.setSubCountyOfResidence(text),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkDateOfBirth,
+            validator: (p0) => _validate(context, keyDateOfBirth),
+            controller: dateOfBirth,
+            onTap: _pickDate,
+            readOnly: true,
+          ),
+          16.height,
+          DKTextField(
+            hint: dkGender,
+            validator: (p0) => _validate(context, keyGender),
+            readOnly: true,
+            controller: gender,
+            onTap: () => _pickGender(context),
+          ),
+          16.height,
+          DKTextField(
+            hint: dkBloodGroup,
+            validator: (p0) => _validate(context, keyBloodGroup),
+            controller: bloodGroup,
+            readOnly: true,
+            onTap: () => _pickBloodGroup(context),
+          ),
+          20.height,
+          DKButtonComponent(
+            text: dkSubmit,
+            onTap: () async {
+              provider.init();
+              await provider.submitData();
+              if (provider.success) {
+                if (mounted) {
+                  RestartAppWidget.init(context);
+                }
+              } else if (provider.profileErrors != null) {
+                _profileKey.currentState!.validate();
               }
-            }
-          },
-          gradient: dkSubmitButtonGradient,
-        ),
-      ],
+            },
+            gradient: dkSubmitButtonGradient,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -27,6 +27,8 @@ class _DKSplashScreenState extends State<DKSplashScreen> {
   }
 
   Future<Map<String, dynamic>> _ready() async {
+    await refreshToken();
+    
     final token = getStringAsync(keyToken);
     final onBoardingVisited = getBoolAsync(keyOnBoardingVisited);
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
@@ -10,7 +11,7 @@ import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:http/http.dart' as http;
 
 import '../Models/dk_profile_error_model.dart';
@@ -158,6 +159,7 @@ class DKProfileDataProvider extends ChangeNotifier {
       log(response.body);
       if (response.ok) {
         await refreshToken();
+        EasyLoading.showSuccess(jsonDecode(response.body)[keyMessage]);
         _success = true;
       } else {
         _profileErrors =
