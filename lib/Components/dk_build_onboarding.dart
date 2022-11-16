@@ -22,7 +22,7 @@ class DKBuildOnBoarding extends StatelessWidget {
           children: [
             Image.asset(
               urlImage,
-              height: context.height() * 0.5,
+              height: context.height() * 0.3,
               fit: BoxFit.fill,
             ),
             64.height,

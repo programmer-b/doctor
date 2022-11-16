@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_urls.dart';
-import 'package:afyadaktari/Models/dk_login_error_model.dart';
-import 'package:afyadaktari/Models/dk_user_credentials_model.dart';
+import 'package:afyadaktari/Models/auth/dk_login_error_model.dart';
+import 'package:afyadaktari/Models/auth/dk_user_credentials_model.dart';
 import 'package:afyadaktari/Utils/dk_easy_loading.dart';
 import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/cupertino.dart';

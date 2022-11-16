@@ -5,7 +5,7 @@ import 'package:afyadaktari/Commons/dk_strings.dart';
 import 'package:afyadaktari/Components/dk_button_component.dart';
 import 'package:afyadaktari/Components/dk_date_picker_component.dart';
 import 'package:afyadaktari/Components/dk_text_field.dart';
-import 'package:afyadaktari/Models/dk_profile_error_model.dart';
+import 'package:afyadaktari/Models/auth/dk_profile_error_model.dart';
 import 'package:afyadaktari/Provider/dk_profile_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';

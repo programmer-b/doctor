@@ -20,3 +20,11 @@ const keyPassword = "password";
 const keyConfirmPassword = "confirm_password";
 
 const keyMessage = "message";
+
+const keyTypeForgotPassword = "type_forgot_password";
+const keyTypeChangePassword = "type_change_password";
+
+const keyCurrentPassword = "current_password";
+const keyOldPassword = "old_password";
+const keyNewPassword = "new_password";
+const keyConfirmNewPassword = "confirm_new_password";

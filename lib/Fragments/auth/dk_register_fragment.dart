@@ -2,8 +2,8 @@ import 'package:afyadaktari/Commons/dk_colors.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_strings.dart';
 import 'package:afyadaktari/Components/dk_button_component.dart';
-import 'package:afyadaktari/Fragments/dk_login_fragment.dart';
-import 'package:afyadaktari/Fragments/dk_otp_verification_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_login_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_otp_verification_fragment.dart';
 import 'package:afyadaktari/Functions/auth_functions.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_register_data_provider.dart';
@@ -12,8 +12,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../Components/dk_text_field.dart';
-import '../Models/dk_register_error.dart';
+import '../../Components/dk_text_field.dart';
+import '../../Models/auth/dk_register_error.dart';
 
 class DKRegisterFragment extends StatefulWidget {
   const DKRegisterFragment({super.key});

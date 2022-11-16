@@ -1,23 +1,33 @@
+import 'dart:developer';
+
 import 'package:afyadaktari/Commons/dk_colors.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_strings.dart';
 import 'package:afyadaktari/Components/dk_otp_count_down_component.dart';
-import 'package:afyadaktari/Fragments/dk_profile_fragment.dart';
-import 'package:afyadaktari/Fragments/dk_register_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_profile_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_register_fragment.dart';
+import 'package:afyadaktari/Functions/global_functions.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_otp_data_provider.dart';
+import 'package:alt_sms_autofill/alt_sms_autofill.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:flutter/services.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:provider/provider.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class DKOTPVerificationFragment extends StatefulWidget {
   const DKOTPVerificationFragment(
-      {super.key, this.onPop = const DKRegisterFragment(), this.resend});
+      {super.key,
+      this.onPop = const DKRegisterFragment(),
+      this.resend,
+      this.onSuccessWidget = const DKProfileFragment(),
+      this.hidePhone = true});
   final Widget onPop;
+  final Widget onSuccessWidget;
   final bool? resend;
+  final bool hidePhone;
 
   @override
   State<DKOTPVerificationFragment> createState() =>
@@ -28,8 +38,12 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
   late final CountdownController _countdownController = CountdownController();
   late Widget onPop = widget.onPop;
   late String phoneNumber;
+  late Widget onSuccessWidget = widget.onSuccessWidget;
+  late bool hidePhone = widget.hidePhone;
 
   late bool resend = widget.resend ?? false;
+
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -37,11 +51,55 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
     init();
   }
 
+  String _comingSms = 'Unknown';
+
+  Future<void> initSmsListener() async {
+    String? comingSms;
+    try {
+      comingSms = await AltSmsAutofill().listenForSms;
+    } on PlatformException {
+      comingSms = 'Failed to get Sms.';
+    }
+    if (!mounted) return;
+    setState(() {
+      if (comingSms != null) {
+        _comingSms = comingSms;
+        log("====>Message: $_comingSms");
+        // Pattern mPattern = Pattern.compile("(|^)\\d{6}");
+
+        List<String> chars = _comingSms.split('');
+
+        chars.removeWhere((item) => !isNumber(item));
+
+        final otp = chars.join().substring(0, 6);
+
+        log("OTP: is $otp");
+        // log(_comingSms[32]);
+        _controller.text = otp;
+      } //used to set the code in the message to a string and setting it to a textcontroller. message length is 38. so my code is in string index 32-37.
+    });
+  }
+
   Future<void> init() async {
+    _controller = TextEditingController();
+    initSmsListener();
     phoneNumber = getStringAsync(keyMobile);
 
-    await SmsAutoFill().getAppSignature;
-    await SmsAutoFill().listenForCode();
+    if (hidePhone && phoneNumber != "") {
+      List<String> phoneDigits = phoneNumber.split('');
+
+      int length = phoneDigits.length;
+
+      int start = length - 6;
+      int end = length - 2;
+
+      phoneDigits.replaceRange(start, end, ["*", "*", "*", "*"]);
+
+      phoneNumber = phoneDigits.join();
+    }
+
+    // await SmsAutoFill().getAppSignature;
+    // await SmsAutoFill().listenForCode();
     if (!resend) {
       await 0.seconds.delay;
       if (mounted) {
@@ -69,7 +127,8 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
   }
 
   Future<void> disp() async {
-    await SmsAutoFill().unregisterListener();
+    await AltSmsAutofill().unregisterListener();
+    _controller.dispose();
   }
 
   @override
@@ -114,16 +173,16 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
                 hideKeyboard(context);
                 await context.read<DKOTPDataProvider>().submit(code);
                 if (provider.success) {
-                  EasyLoading.showSuccess("Phone number successfully verified");
                   if (mounted) {
                     context
                         .read<DkAuthUiState>()
-                        .switchFragment(const DKProfileFragment());
+                        .switchFragment(onSuccessWidget);
                   }
                 }
               }
 
               return PinFieldAutoFill(
+                controller: _controller,
                 textInputAction: TextInputAction.done,
                 decoration: UnderlineDecoration(
                     colorBuilder: FixedColorBuilder(
@@ -160,7 +219,7 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
                 ),
               ),
             22.height,
-            DKOTPCountDownComponent(controller: _countdownController)
+            DKOTPCountDownComponent(controller: _countdownController),
           ],
         ),
       ),

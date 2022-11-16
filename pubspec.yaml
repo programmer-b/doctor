@@ -47,6 +47,8 @@ dependencies:
   dropdown_button2: ^1.8.9
   flutter_easyloading: ^3.0.5
   smooth_page_indicator: ^1.0.0+2
+  alt_sms_autofill: ^1.0.0
+  cached_network_image: ^3.2.2
 
 dev_dependencies:
   flutter_test:

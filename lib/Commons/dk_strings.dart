@@ -15,6 +15,7 @@ const dkNewToAfyaDaktari = "New to $dkAppName?";
 const dkCreateNewAccount = "Create a new account";
 
 const dkPhoneNumber = "Phone number";
+const dkEnterYourPhoneNumber = "Enter your phone number";
 const dkReEnterPhoneNumber = "Re enter phone number";
 const dkUsername = "Username";
 const dkPassword = "Password";
@@ -36,6 +37,8 @@ const dkGender = "Select your gender";
 const dkDateOfBirth = "Date of birth";
 
 const dkSubmit = "Submit";
+const dkCancel = "Cancel";
+const dkConfirm = "Confirm";
 
 const dkSkip = "SKIP";
 const dkNext = "NEXT";
@@ -53,3 +56,18 @@ const dkAboutDesc =
     "Very good app. Well thought out about booking/rescheduling/canceling an appointment";
 
 const dkGetStarted = "Get Started";
+
+const dkForgotPasswordMsg =
+    "Enter your phone number then we will send you a code to reset password.";
+
+const dkAddNewPassword = "Add New Password";
+
+const dkEnterNewPassword = "Your new password";
+const dkReEnterNewPassword = "Re enter your new password";
+const dkEnterYourOldPassword = "Your old password";
+const dkEnterNewPasswordMsg = "Enter your new password below";
+
+const dkGoBackToLogin = "Go back to login";
+const dkGoBackToProfileScreen = "Go back to profile screen";
+
+const dkWelcome = "Welcome back!";

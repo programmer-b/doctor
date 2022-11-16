@@ -81,6 +81,7 @@ class Profile {
   dynamic gender;
   dynamic bloodGroup;
   dynamic countyOfResidence;
+  dynamic subCounty;
   dynamic address;
   int? createdAt;
 
@@ -94,6 +95,7 @@ class Profile {
       this.gender,
       this.bloodGroup,
       this.countyOfResidence,
+      this.subCounty,
       this.address,
       this.createdAt});
 
@@ -109,6 +111,7 @@ class Profile {
     countyOfResidence = json['county_of_residence'];
     address = json['address'];
     createdAt = json['created_at'];
+    subCounty = json['sub_county'];
   }
 
   Map<String, dynamic> toJson() {
@@ -122,6 +125,7 @@ class Profile {
     data['gender'] = gender;
     data['blood_group'] = bloodGroup;
     data['county_of_residence'] = countyOfResidence;
+    data['sub_county'] = subCounty;
     data['address'] = address;
     data['created_at'] = createdAt;
     return data;

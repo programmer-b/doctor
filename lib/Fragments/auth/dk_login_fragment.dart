@@ -5,9 +5,10 @@ import 'package:afyadaktari/Components/dk_button_component.dart';
 import 'package:afyadaktari/Components/dk_check_box_component.dart';
 import 'package:afyadaktari/Components/dk_terms_desc_component.dart';
 import 'package:afyadaktari/Components/dk_text_field.dart';
-import 'package:afyadaktari/Fragments/dk_register_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_forgot_password_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_register_fragment.dart';
 import 'package:afyadaktari/Functions/auth_functions.dart';
-import 'package:afyadaktari/Models/dk_login_error_model.dart';
+import 'package:afyadaktari/Models/auth/dk_login_error_model.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_login_data_provider.dart';
 import 'package:afyadaktari/Utils/dk_toast.dart';
@@ -87,7 +88,9 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
                   dkForgotpasswordText,
                   style: primaryTextStyle(color: dkPrimaryColor),
                 ),
-                onPressed: () => DKToast.toastTop("Forgot password pressed"),
+                onPressed: () => context
+                    .read<DkAuthUiState>()
+                    .switchFragment(const DKForgotPasswordFragment()),
               ),
             ),
             DKTextField(

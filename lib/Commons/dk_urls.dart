@@ -7,5 +7,5 @@ const dkVerifyUrl = "$dkBaseVersionUrl/verify";
 const dkResendUrl = "$dkBaseVersionUrl/resend";
 const dkRefreshUrl = "$dkBaseVersionUrl/refresh";
 const dkProfileUrl = "$dkBaseVersionUrl/profile";
-
-
+const dkResetPasswordUrl = "$dkBaseVersionUrl/";
+const dkChangePasswordUrl = "$dkBaseVersionUrl/";

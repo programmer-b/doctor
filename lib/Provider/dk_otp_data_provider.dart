@@ -5,7 +5,7 @@ import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_urls.dart';
 import 'package:afyadaktari/Functions/auth_functions.dart';
-import 'package:afyadaktari/Models/dk_otp_errors_model.dart';
+import 'package:afyadaktari/Models/auth/dk_otp_errors_model.dart';
 import 'package:afyadaktari/Utils/dk_easy_loading.dart';
 import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/material.dart';
@@ -43,15 +43,17 @@ class DKOTPDataProvider extends ChangeNotifier {
       if (response.ok) {
         await refreshToken();
         _success = true;
+        EasyLoading.showSuccess(
+            jsonDecode(response.body)["message"] ?? "Success");
       } else {
         _otpErrors = DKOTPErrorsModel.fromJson(jsonDecode(response.body));
       }
-      EasyLoading.dismiss();
-      notifyListeners();
     } on Exception catch (e) {
-      EasyLoading.dismiss();
       DKToast.showErrorToast("$e");
       rethrow;
+    } finally {
+      EasyLoading.dismiss();
+      notifyListeners();
     }
   }
 

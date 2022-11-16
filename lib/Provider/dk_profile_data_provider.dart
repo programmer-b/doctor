@@ -5,7 +5,7 @@ import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_urls.dart';
 import 'package:afyadaktari/Functions/auth_functions.dart';
-import 'package:afyadaktari/Models/dk_user_token_decode_model.dart';
+import 'package:afyadaktari/Models/auth/dk_user_token_decode_model.dart';
 import 'package:afyadaktari/Utils/dk_easy_loading.dart';
 import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:http/http.dart' as http;
 
-import '../Models/dk_profile_error_model.dart';
+import '../Models/auth/dk_profile_error_model.dart';
 
 class DKProfileDataProvider extends ChangeNotifier {
   String _firstName = "";
@@ -196,6 +196,28 @@ class DKProfileDataProvider extends ChangeNotifier {
     _gender = "";
     _bloodGroup = "";
     notifyListeners();
+  }
+
+  void setProfile() {
+    final String token = getStringAsync(keyToken);
+    final profile = decodeJWT(token);
+
+    _firstName = profile.usr?.profile?.firstName;
+    _middleName = profile.usr?.profile?.middleName ?? "";
+    _lastName = profile.usr?.profile?.lastName;
+    _email = profile.usr?.profile?.email ?? "";
+    _countyOfResidence = profile.usr?.profile?.countyOfResidence;
+    _subCountyOfResidence = profile.usr?.profile?.subCounty;
+    _bloodGroup = profile.usr?.profile?.bloodGroup;
+    _gender = profile.usr?.profile?.gender;
+    _dateOfBirth = profile.usr?.profile?.dateOfBirth;
+
+    notifyListeners();
+  }
+
+  DKUserTokenDecodeModel get profile {
+    final String token = getStringAsync(keyToken);
+    return decodeJWT(token);
   }
 }
 

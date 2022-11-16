@@ -1,4 +1,4 @@
-import 'package:afyadaktari/Fragments/dk_login_fragment.dart';
+import 'package:afyadaktari/Fragments/auth/dk_login_fragment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 

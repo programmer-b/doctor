@@ -16,3 +16,9 @@ extension IsOk on http.Response {
     return (statusCode ~/ 100) == 2;
   }
 }
+
+extension IsNumber on String {
+  bool isNumber(String item) {
+    return split('').contains(item);
+  }
+}

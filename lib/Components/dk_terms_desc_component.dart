@@ -18,9 +18,9 @@ class DKTermsDescComponent extends StatelessWidget {
             style: primaryTextStyle(),
           ),
           InkWell(
-              onTap: () => DKToast.toastTop("Conditios of use"),
+              onTap: () => DKToast.toastTop("Conditions of use"),
               child: Text(
-                "Conditios of use",
+                "Conditions of use",
                 style: primaryTextStyle(color: dkPrimaryColor),
               )),
           Text(

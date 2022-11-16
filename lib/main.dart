@@ -2,6 +2,7 @@ import 'package:afyadaktari/Commons/dk_colors.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_login_data_provider.dart';
 import 'package:afyadaktari/Provider/dk_otp_data_provider.dart';
+import 'package:afyadaktari/Provider/dk_password_data_provider.dart';
 import 'package:afyadaktari/Provider/dk_profile_data_provider.dart';
 import 'package:afyadaktari/Provider/dk_register_data_provider.dart';
 import 'package:afyadaktari/Provider/dk_screen_ui_provider.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => DKLoginDataProvider()),
           ChangeNotifierProvider(create: (context) => DKRegisterDataProvider()),
           ChangeNotifierProvider(create: (context) => DKOTPDataProvider()),
+          ChangeNotifierProvider(
+            create: (context) => DKPasswordProvider(),
+          ),
           ChangeNotifierProvider(
             create: (context) => DKProfileDataProvider(),
           )
