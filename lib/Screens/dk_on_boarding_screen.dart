@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../Commons/dk_keys.dart';
+
 class DKOnBoardingScreen extends StatefulWidget {
   const DKOnBoardingScreen({super.key});
 
@@ -23,6 +25,14 @@ class _DKOnBoardingScreenState extends State<DKOnBoardingScreen> {
     controller.dispose();
 
     super.dispose();
+  }
+
+  Future<void> _goToAuth() async {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      const DKAuthScreen().launch(context,
+          isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+    });
+    await setValue(keyOnBoardingVisited, true);
   }
 
   @override
@@ -59,10 +69,10 @@ class _DKOnBoardingScreenState extends State<DKOnBoardingScreen> {
                         borderRadius: BorderRadius.circular(3)),
                     backgroundColor: dkPrimaryColor,
                     minimumSize: const Size.fromHeight(80)),
-                onPressed: () => WidgetsBinding.instance.addPostFrameCallback(
-                    (timeStamp) => const DKAuthScreen().launch(context,
-                        isNewTask: true,
-                        pageRouteAnimation: PageRouteAnimation.Slide)),
+                onPressed: () =>
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      _goToAuth();
+                    }),
                 child: Text(dkGetStarted,
                     style: boldTextStyle(color: Colors.white)))
             : Container(

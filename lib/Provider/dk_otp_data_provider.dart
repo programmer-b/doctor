@@ -22,29 +22,26 @@ class DKOTPDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submit(code) async {
+  Future<void> submit(code, {bool temp = false}) async {
     DKEasyLoading.show();
 
-    final int userId = getIntAsync(keyUserId);
-    final token = getStringAsync(keyToken);
+    final int userId =
+        temp ? getIntAsync(keyTempUserId) : getIntAsync(keyUserId);
 
     final Map<String, String> body = {"user_id": "$userId", "OTP": code};
-    final Map<String, String> headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
 
-    final uri = Uri.parse(dkVerifyUrl);
+    final uri = Uri.parse(temp ? dkVerifyNumberUrl : dkVerifyUrl);
 
     try {
-      final response = await http.post(uri, body: body, headers: headers);
+      final response = await http.post(uri, body: body);
       log(response.body);
-
+      if (response.statusCode >= 500) {
+        DKToast.showErrorToast("Server Error");
+      }
       if (response.ok) {
-        await refreshToken();
+        temp ? null : await refreshToken();
         _success = true;
-        EasyLoading.showSuccess(
-            jsonDecode(response.body)["message"] ?? "Success");
+        DKToast.toastTop(jsonDecode(response.body)["message"] ?? "Success");
       } else {
         _otpErrors = DKOTPErrorsModel.fromJson(jsonDecode(response.body));
       }
@@ -74,9 +71,12 @@ class DKOTPDataProvider extends ChangeNotifier {
 
     try {
       final response = await http.post(uri, body: body, headers: headers);
+      if (response.statusCode >= 500) {
+        DKToast.showErrorToast("Server Error");
+      }
       log(response.body);
       if (response.ok) {
-        EasyLoading.showSuccess(jsonDecode(response.body)["message"] ??
+        DKToast.toastTop(jsonDecode(response.body)["message"] ??
             "OTP sent to your phone successfully.");
       } else {}
       EasyLoading.dismiss();

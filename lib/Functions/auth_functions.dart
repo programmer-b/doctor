@@ -108,7 +108,6 @@ void analyzeCredentials(
       const DKAuthScreen().launch(context);
     });
   } else {
-    
     Future.delayed(Duration.zero,
         () => const DKHomeScreen().launch(context, isNewTask: true));
   }
@@ -121,3 +120,4 @@ DKUserTokenDecodeModel decodeJWT(String token) {
   }
   throw "$token cannot be decoded";
 }
+

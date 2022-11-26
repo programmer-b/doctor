@@ -12,8 +12,11 @@ class DKBuildSplash extends StatelessWidget {
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(dkImageLogo, width: context.width() * 0.40),
+          Container(
+              constraints: const BoxConstraints(maxWidth: 200),
+              child: Image.asset(dkImageLogo, width: context.width() * 0.40)),
           10.height,
           Text(
             dkAppName,

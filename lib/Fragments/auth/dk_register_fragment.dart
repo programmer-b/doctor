@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../Components/dk_text_field.dart';
 import '../../Models/auth/dk_register_error.dart';
+import '../../Utils/dk_toast.dart';
 
 class DKRegisterFragment extends StatefulWidget {
   const DKRegisterFragment({super.key});
@@ -170,10 +171,9 @@ class _DKRegisterFragmentState extends State<DKRegisterFragment> {
                     final bool saveToken = await saveCredentials(
                         credentialsData: provider.credentialsModel);
                     if (saveToken) {
-                      EasyLoading.showSuccess(
+                      DKToast.toastTop(
                           provider.credentialsModel?.message ??
-                              "Registration successful",
-                          duration: 3500.milliseconds);
+                              "Registration successful");
                       if (mounted) {
                         context
                             .read<DkAuthUiState>()

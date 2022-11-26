@@ -52,18 +52,21 @@ class DKLoginDataProvider extends ChangeNotifier {
     try {
       final response = await http.post(uri, body: body);
       log(response.body);
+      if (response.statusCode >= 500) {
+        DKToast.showErrorToast("Server Error");
+      }
       if (response.ok) {
         _credentialsModel =
             DKUserCredentialsModel.fromJson(jsonDecode(response.body));
       } else {
         _loginErrors = DKLoginErrorModel.fromJson(jsonDecode(response.body));
       }
-      EasyLoading.dismiss();
-      notifyListeners();
     } catch (e) {
-      EasyLoading.dismiss();
       DKToast.showErrorToast("$e");
       rethrow;
+    } finally {
+      EasyLoading.dismiss();
+      notifyListeners();
     }
   }
 

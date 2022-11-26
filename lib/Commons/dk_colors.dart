@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const dkPrimaryTextColor = Colors.black;
-Color dkPrimaryColor = Colors.blue.shade700;
+Color dkPrimaryColor = const Color(0xFF1976D2);
 const dkColorOnButton = Colors.white;
 Color dkScaffoldColor = Colors.grey.shade100;
 

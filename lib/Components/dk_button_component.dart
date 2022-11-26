@@ -8,21 +8,24 @@ class DKButtonComponent extends StatelessWidget {
       required this.onTap,
       this.gradient,
       required this.text,
-      this.width, this.height});
+      this.width,
+      this.height,
+      this.isMin});
 
   final Function() onTap;
   final LinearGradient? gradient;
   final String text;
   final double? width;
   final double? height;
+  final bool? isMin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: height ?? 50,
-        width: width ?? double.infinity,
+        height: isMin ?? false ? 35 : height ?? 50,
+        width: isMin ?? false ? 150 : width ?? double.infinity,
         decoration: BoxDecoration(gradient: gradient),
         child: Material(
           color: Colors.transparent,

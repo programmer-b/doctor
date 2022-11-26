@@ -7,6 +7,7 @@ import 'package:afyadaktari/Utils/dk_easy_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:nb_utils/nb_utils.dart';
 
 import '../Utils/dk_toast.dart';
 
@@ -16,14 +17,6 @@ class DKPasswordProvider extends ChangeNotifier {
 
   void setCurrentPassword(currentPassword) {
     _currentPassword = currentPassword;
-    notifyListeners();
-  }
-
-  String _oldPassword = "";
-  String get oldPassword => _oldPassword;
-
-  void setOldPassword(oldPassword) {
-    _oldPassword = oldPassword;
     notifyListeners();
   }
 
@@ -46,7 +39,7 @@ class DKPasswordProvider extends ChangeNotifier {
   void initialize() {
     _currentPassword = "";
     _newPassword = "";
-    _oldPassword = "";
+    // _oldPassword = "";
     _confirmNewPassword = "";
 
     notifyListeners();
@@ -57,7 +50,7 @@ class DKPasswordProvider extends ChangeNotifier {
 
     _currentPassword = _currentPassword.trim();
     _newPassword = _newPassword.trim();
-    _oldPassword = _oldPassword.trim();
+    // _oldPassword = _oldPassword.trim();
     _confirmNewPassword = _confirmNewPassword.trim();
 
     Map<String, String> body = {};
@@ -71,30 +64,43 @@ class DKPasswordProvider extends ChangeNotifier {
       body = {
         keyNewPassword: _newPassword,
         keyConfirmNewPassword: _confirmNewPassword,
-        keyOldPassword: _oldPassword
+        keyCurrentPassword: _currentPassword
       };
     }
+
+    final String token = getStringAsync(keyTempToken);
+
+    final Map<String, String> headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
 
     final uri =
         Uri.parse(isChangePassword ? dkChangePasswordUrl : dkResetPasswordUrl);
 
-            try {
-      final response = await http.post(uri, body: body);
-      log(response.body);
-      if (response.ok) {
-        // _credentialsModel =
-        //     DKUserCredentialsModel.fromJson(jsonDecode(response.body));
+    try {
+      final response = await http.post(uri, body: body, headers: headers);
+      if (response.statusCode >= 500) {
+        DKToast.showErrorToast("Server Error");
+      } else if (response.ok) {
+        _success = true;
       } else {
-        // _loginErrors = DKLoginErrorModel.fromJson(jsonDecode(response.body));
+        _failure = true;
       }
-      EasyLoading.dismiss();
-      notifyListeners();
     } catch (e) {
-      EasyLoading.dismiss();
       DKToast.showErrorToast("$e");
       rethrow;
+    } finally {
+      EasyLoading.dismiss();
+      notifyListeners();
     }
   }
 
   void init() {}
+
+  bool _success = false;
+  bool get success => _success;
+
+  bool _failure = false;
+  bool get failure => _failure;
 }

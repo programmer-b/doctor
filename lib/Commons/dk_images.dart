@@ -1,3 +1,5 @@
+import 'dk_base_64.dart';
+
 const String dkmedilablogo = 'images/ml_medilabLogo.png';
 
 const String dkprofilepicture = 'images/ml_profile_Image.png';
@@ -80,3 +82,21 @@ const String mlprescription4 = 'images/ml_prescription4.png';
 
 const dkDummyProfileImage =
     "https://cdn-icons-png.flaticon.com/128/1177/1177568.png";
+
+const dkSeeDoctor = "assets/logos/dk_see_doctor.png";
+const dkMedicalReport = "assets/logos/dk_medical_reports.png";
+const dkMedicalInsuarance = "assets/logos/medical _insuarance.png";
+const dkMedicalSubscription = "assets/logos/medical_subscription.png";
+const dkMedicalOrder = "assets/logos/dk_medical_order.png";
+const dkHelp = "assets/logos/dk_help.png";
+
+const dkDoctor1 = doctor1;
+const dkDoctor2 = doctor2;
+const dkDoctor3 = doctor3;
+const dkDoctor4 = doctor4;
+const dkDoctor5 = doctor5;
+const dkDoctor6 = doctor6;
+const dkDoctor7 = doctor7;
+const dkDoctor8 = doctor8;
+const dkDoctor9 = doctor9;
+const dkDoctor10 = doctor10;

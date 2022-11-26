@@ -89,6 +89,9 @@ class DKRegisterDataProvider extends ChangeNotifier {
 
     try {
       final response = await http.post(uri, body: body);
+       if (response.statusCode >= 500) {
+        DKToast.showErrorToast("Server Error");
+      }
       log(response.body);
       if (response.ok) {
         _credentialsModel =

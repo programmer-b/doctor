@@ -1,4 +1,5 @@
 import 'package:afyadaktari/Commons/dk_colors.dart';
+import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_lists.dart';
 import 'package:afyadaktari/Commons/dk_strings.dart';
@@ -12,13 +13,16 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class DKProfileFragment extends StatefulWidget {
-  const DKProfileFragment({super.key});
+  const DKProfileFragment({super.key, this.isUpdateProfile = false});
+  final bool isUpdateProfile;
 
   @override
   State<DKProfileFragment> createState() => _DKProfileFragmentState();
 }
 
 class _DKProfileFragmentState extends State<DKProfileFragment> {
+  late bool isUpdate = widget.isUpdateProfile;
+
   final List<String> genderItems = ['Male', 'Female', 'Custom'];
 
   final List<String> bloodGroupItems = [
@@ -181,7 +185,7 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
   Future<void> init() async {
     await 0.seconds.delay;
     if (mounted) {
-      context.read<DKProfileDataProvider>().init();
+      isUpdate ? null : context.read<DKProfileDataProvider>().initialize();
     }
   }
 
@@ -190,6 +194,7 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
   @override
   Widget build(BuildContext context) {
     final provider = context.read<DKProfileDataProvider>();
+
     final dateOfBirth = TextEditingController(
         text: context.watch<DKProfileDataProvider>().dateOfBirth);
     final bloodGroup = TextEditingController(
@@ -206,12 +211,13 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
           Container(
             alignment: Alignment.centerLeft,
             child: Text(
-              dkCreateYourProfile,
+              isUpdate ? dkUpdateYourProfile : dkCreateYourProfile,
               style: boldTextStyle(size: 22, color: dkPrimaryTextColor),
             ),
           ),
           16.height,
           DKTextField(
+            initialValue: provider.firstName,
             hint: dkFirstName,
             validator: (p0) => _validate(context, keyFirstName),
             onChanged: (text) => provider.setFirstName(text),
@@ -219,17 +225,20 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
           16.height,
           DKTextField(
             hint: dkMiddleName,
+            initialValue: provider.middleName,
             validator: (p0) => _validate(context, keyMiddleName),
             onChanged: (text) => provider.setMiddleNameName(text),
           ),
           16.height,
           DKTextField(
+            initialValue: provider.lastName,
             hint: dkLastName,
             validator: (p0) => _validate(context, keyLastName),
             onChanged: (text) => provider.setLastName(text),
           ),
           16.height,
           DKTextField(
+            initialValue: provider.email,
             hint: dkEmail,
             validator: (p0) => _validate(context, keyEmail),
             keyboardType: TextInputType.emailAddress,
@@ -245,6 +254,7 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
           ),
           16.height,
           DKTextField(
+            initialValue: provider.subCountyOfResidence,
             hint: dkSubCountyOfResidence,
             validator: (p0) => _validate(context, keySubCounty),
             onChanged: (text) => provider.setSubCountyOfResidence(text),
@@ -281,7 +291,7 @@ class _DKProfileFragmentState extends State<DKProfileFragment> {
               await provider.submitData();
               if (provider.success) {
                 if (mounted) {
-                  RestartAppWidget.init(context);
+                  isUpdate ? finish(context) : context.restart;
                 }
               } else if (provider.profileErrors != null) {
                 _profileKey.currentState!.validate();

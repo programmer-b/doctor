@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Components/dk_build_splash.dart';
@@ -28,9 +30,11 @@ class _DKSplashScreenState extends State<DKSplashScreen> {
 
   Future<Map<String, dynamic>> _ready() async {
     await refreshToken();
-    
+
     final token = getStringAsync(keyToken);
     final onBoardingVisited = getBoolAsync(keyOnBoardingVisited);
+
+    log("TOKEN: $token");
 
     await 3.seconds.delay;
 
@@ -46,7 +50,6 @@ class _DKSplashScreenState extends State<DKSplashScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) =>
         const DKOnBoardingScreen().launch(context, isNewTask: true));
 
-    await setValue(keyOnBoardingVisited, true);
   }
 
   @override

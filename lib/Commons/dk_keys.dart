@@ -1,14 +1,17 @@
 const keyToken = "token";
+const keyTempToken = "temp token";
 const keyMobile = "mobile";
+const keyTempMobile = "temp_mobile";
 const keyCredentials = "credentials";
 const keyUserId = "user_id";
+const keyTempUserId = "temp user_id";  
 const keyOnBoardingVisited = "on_boarding_visited";
 
 const keyDateOfBirth = "date_of_birth";
 const keySubCounty = "sub_county";
 const keyFirstName = "first_name";
 const keyGender = "gender";
-const keyMiddleName  = "middle_name";
+const keyMiddleName = "middle_name";
 const keyLastName = "last_name";
 const keyEmail = "email";
 const keyBloodGroup = "blood_group";

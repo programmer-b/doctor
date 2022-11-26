@@ -13,7 +13,8 @@ import '../../Commons/dk_colors.dart';
 import '../../Components/dk_button_component.dart';
 
 class DKPasswordFragment extends StatefulWidget {
-  const DKPasswordFragment({super.key, required this.type});
+  const DKPasswordFragment({super.key, required this.type})
+      : assert(type == keyTypeChangePassword || type == keyTypeForgotPassword);
   final String type;
 
   @override
@@ -46,7 +47,7 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
   }
 
   final GlobalKey<FormState> _passwordFormKey = GlobalKey<FormState>();
-  late String type = widget.type;
+  String get type => widget.type;
 
   bool oldPasswordVisible = false;
   bool newPasswordVisible = false;
@@ -57,11 +58,13 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
     final provider = context.read<DKPasswordProvider>();
     bool isChangePassword = type == keyTypeChangePassword;
 
-    void backToLogin() =>
-        context.read<DkAuthUiState>().switchFragment(const DKLoginFragment());
+    void back() => isChangePassword
+        ? finish(context)
+        : context.read<DkAuthUiState>().switchFragment(const DKLoginFragment());
+
     return WillPopScope(
       onWillPop: () async {
-        backToLogin();
+        back();
         return false;
       },
       child: SizedBox(
@@ -73,7 +76,7 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  dkAddNewPassword,
+                  isChangePassword ? dkUpdatePassword : dkAddNewPassword,
                   style: boldTextStyle(size: 22),
                 ),
               ),
@@ -81,7 +84,9 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  dkEnterNewPasswordMsg,
+                  isChangePassword
+                      ? dkUpdatePasswordMsg
+                      : dkEnterNewPasswordMsg,
                   style: primaryTextStyle(),
                 ),
               ),
@@ -90,17 +95,17 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
                 DKTextField(
                   validator: (value) => _validate(context, keyOldPassword),
                   obsecureText: !oldPasswordVisible,
-                  hint: dkEnterYourOldPassword,
+                  hint: dkCurrentPassword,
                   suffixIcon: DKPasswordToggle(
                     visible: !oldPasswordVisible,
                     onPressed: () => setState(
                         () => oldPasswordVisible = !oldPasswordVisible),
                   ),
-                  onChanged: (text) => provider.setOldPassword(text),
+                  onChanged: (text) => provider.setCurrentPassword(text),
                 ),
               16.height,
               DKTextField(
-                hint: dkEnterNewPassword,
+                hint: dkNewPassword,
                 validator: (value) => _validate(context, keyNewPassword),
                 obsecureText: !newPasswordVisible,
                 suffixIcon: DKPasswordToggle(
@@ -127,19 +132,17 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   DKButtonComponent(
-                    height: 35,
-                    width: context.width() * 0.25,
-                    onTap: backToLogin,
+                    isMin: true,
+                    onTap: back,
                     text: dkCancel,
                     gradient: dkNavigateButtonGradient,
                   ),
                   10.width,
                   DKButtonComponent(
-                    height: 35,
-                    width: context.width() * 0.25,
+                    isMin: true,
                     text: dkConfirm,
                     onTap: () async {
-                      backToLogin();
+                      back();
                       // provider.init();
                       // await provider.submitData(
                       //     isChangePassword: isChangePassword);

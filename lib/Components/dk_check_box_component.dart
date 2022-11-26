@@ -24,7 +24,7 @@ class DKShowHidePasswordCheckBox extends StatelessWidget {
           ),
           Text(
             dkShowPasswordText,
-            style: primaryTextStyle( size: 17),
+            style: primaryTextStyle(size: 17),
           )
         ],
       ),

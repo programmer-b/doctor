@@ -49,6 +49,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   alt_sms_autofill: ^1.0.0
   cached_network_image: ^3.2.2
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

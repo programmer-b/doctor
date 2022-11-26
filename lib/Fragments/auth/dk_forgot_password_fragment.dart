@@ -4,7 +4,10 @@ import 'package:afyadaktari/Commons/dk_strings.dart';
 import 'package:afyadaktari/Fragments/auth/dk_login_fragment.dart';
 import 'package:afyadaktari/Fragments/auth/dk_otp_verification_fragment.dart';
 import 'package:afyadaktari/Fragments/auth/dk_password_fragment.dart';
+import 'package:afyadaktari/Models/auth/dk_mobile_error_model.dart';
+import 'package:afyadaktari/Models/auth/dk_mobile_success_model.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
+import 'package:afyadaktari/Provider/dk_mobile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -23,10 +26,49 @@ class DKForgotPasswordFragment extends StatefulWidget {
 final GlobalKey<FormState> _forgotPasswordFormKey = GlobalKey<FormState>();
 
 class _DKForgotPasswordFragmentState extends State<DKForgotPasswordFragment> {
-  String? _validate() => null;
+  String? _validate(BuildContext context, String type) {
+    final DKMobileErrorModel? errors = context.read<DKMobileProvider>().errors;
+
+    if (errors != null) {
+      switch (type) {
+        case keyMobile:
+          List error = errors.errors?.mobile ?? [];
+          if (error.isNotEmpty) {
+            return error.join(" , ");
+          }
+          break;
+      }
+    }
+
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) => context.read<DKMobileProvider>().initialize());
+  }
+
+  Future<void> switchToOTPScreen(DKMobileSuccessModel? data) async {
+    await setValue(keyTempUserId, data!.data!.userId);
+    await setValue(keyTempToken, data.data!.token);
+    await setValue(keyTempMobile, data.data!.phoneNumber);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => context
+        .read<DkAuthUiState>()
+        .switchFragment(const DKOTPVerificationFragment(
+          hidePhone: true,
+          onPop: DKForgotPasswordFragment(),
+          onSuccessWidget: DKPasswordFragment(type: keyTypeForgotPassword),
+          temp: true,
+        )));
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<DKMobileProvider>();
+
     void backToLogin() =>
         context.read<DkAuthUiState>().switchFragment(const DKLoginFragment());
     return WillPopScope(
@@ -58,53 +100,38 @@ class _DKForgotPasswordFragmentState extends State<DKForgotPasswordFragment> {
                 16.height,
                 DKTextField(
                   hint: dkEnterYourPhoneNumber,
-                  validator: (p0) {},
+                  validator: (p0) => _validate(context, keyMobile),
                   keyboardType: TextInputType.phone,
-                  // onChanged: (text) => context
-                  //     .read<DKRegisterDataProvider>()
-                  //     .setConfirmPhoneNumber(text),
+                  onChanged: (text) =>
+                      context.read<DKMobileProvider>().setMobile(text),
                 ),
                 28.height,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     DKButtonComponent(
-                      height: 35,
-                      width: context.width() * 0.25,
+                      isMin: true,
                       onTap: backToLogin,
                       text: dkCancel,
                       gradient: dkNavigateButtonGradient,
                     ),
                     10.width,
                     DKButtonComponent(
-                      height: 35,
-                      width: context.width() * 0.25,
+                      isMin: true,
                       text: dkSubmit,
                       onTap: () async {
-                        context
-                            .read<DkAuthUiState>()
-                            .switchFragment(const DKOTPVerificationFragment(
-                              onPop: DKForgotPasswordFragment(),
-                              onSuccessWidget: DKPasswordFragment(
-                                  type: keyTypeForgotPassword),
-                            ));
-                        // provider.init();
-                        // await provider.submitData(isChangePassword: isChangePassword);
+                        provider.init();
+                        await provider.submitData();
 
-                        // if (provider.credentialsModel != null) {
-                        //   final bool saveToken = await saveCredentials(
-                        //       credentialsData: provider.credentialsModel);
-                        //   if (saveToken) {
-                        //     EasyLoading.showSuccess(
-                        //         provider.credentialsModel?.message ??
-                        //             "Login successful");
-                        //     analyzeCredentials(
-                        //         context: context,
-                        //         token: provider.credentialsModel?.data?.token ?? "");
-                        //   }
-                        // } else if (provider.loginErrors != null) {
-                        //   _loginFormKey.currentState!.validate();
-                        // }
+                        if (provider.success != null) {
+                          if (mounted) {
+                            hideKeyboard(context);
+                            switchToOTPScreen(
+                                context.read<DKMobileProvider>().success);
+                          }
+                        } else if (provider.errors != null) {
+                          _forgotPasswordFormKey.currentState!.validate();
+                        }
                       },
                       gradient: dkSubmitButtonGradient,
                     ),

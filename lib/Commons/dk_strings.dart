@@ -25,6 +25,7 @@ const dkOTPverifyTitle = "Phone number verification";
 const dkOTPHeaderText = "Please enter the One Time Pin Sent to: ";
 
 const dkCreateYourProfile = "Create your profile.";
+const dkUpdateYourProfile = "Update your profile.";
 
 const dkFirstName = "First name";
 const dkMiddleName = "Middle name (optional)";
@@ -62,12 +63,35 @@ const dkForgotPasswordMsg =
 
 const dkAddNewPassword = "Add New Password";
 
-const dkEnterNewPassword = "Your new password";
-const dkReEnterNewPassword = "Re enter your new password";
-const dkEnterYourOldPassword = "Your old password";
+const dkNewPassword = "New password";
+const dkReEnterNewPassword = "Confirm password";
+const dkCurrentPassword = "Current password";
 const dkEnterNewPasswordMsg = "Enter your new password below";
+const dkUpdatePassword = "Update your password";
+const dkUpdatePasswordMsg = "Enter your current and new password below";
 
 const dkGoBackToLogin = "Go back to login";
 const dkGoBackToProfileScreen = "Go back to profile screen";
 
 const dkWelcome = "Welcome back!";
+
+const dkSuccess = "Success!";
+
+const dkViewAllMyAppointments = "View my appointments";
+
+const dkLogOut = "Logout";
+const dkLogOutMsg = "Are you sure you want to logout?";
+
+const dkAvailableDoctors = "Availbale doctors";
+const dkSearchForDoctors = "Search for doctors";
+
+const dkMedicalReportsText = "Medical Reports";
+const dkMedicalInsuaranceText = "Medical Insuarance";
+const dkSubscriptionText = "Subscription";
+const dkOrderText = "Order";
+const dkHelpText = "Help";
+const dkMyAppointmentsText = "My Appointments";
+const dkUpcomingText = "Upcoming";
+const dkHistoryText = "History";
+const dkSettingsText = "Settings";
+const dkInvoiceText = "Invoice";

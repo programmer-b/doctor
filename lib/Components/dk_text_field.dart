@@ -12,7 +12,8 @@ class DKTextField extends StatelessWidget {
       this.readOnly = false,
       this.onTap,
       this.controller,
-      this.validator});
+      this.validator,
+      this.initialValue});
   final String hint;
   final bool autoFocus;
   final Function(String)? onChanged;
@@ -23,6 +24,7 @@ class DKTextField extends StatelessWidget {
   final Function()? onTap;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,10 @@ class DKTextField extends StatelessWidget {
       keyboardType: keyboardType,
       onChanged: onChanged,
       autofocus: autoFocus,
+      initialValue: initialValue,
       decoration: InputDecoration(
+          errorMaxLines: 3,
+          constraints: const BoxConstraints(maxWidth: 400),
           suffixIcon: suffixIcon,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 5, horizontal: 8),

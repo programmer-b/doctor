@@ -67,94 +67,90 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
   @override
   Widget build(BuildContext context) {
     final provider = context.read<DKLoginDataProvider>();
-    return SizedBox(
-      width: double.infinity,
-      child: Form(
-        key: _loginFormKey,
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                dkSignInTitle,
-                style: boldTextStyle(size: 22),
-              ),
+    return Form(
+      key: _loginFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              dkSignInTitle,
+              style: boldTextStyle(size: 22),
             ),
-            12.height,
-            Container(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                child: Text(
-                  dkForgotpasswordText,
-                  style: primaryTextStyle(color: dkPrimaryColor),
-                ),
-                onPressed: () => context
-                    .read<DkAuthUiState>()
-                    .switchFragment(const DKForgotPasswordFragment()),
-              ),
+          ),
+          12.height,
+          TextButton(
+            child: Text(
+              dkForgotpasswordText,
+              style: primaryTextStyle(color: dkPrimaryColor),
             ),
-            DKTextField(
-                validator: (value) => _validate(context, keyUserName),
-                hint: dkUsernameOrMobileText,
-                onChanged: (text) => context
-                    .read<DKLoginDataProvider>()
-                    .setUsernameOrPassword(text)),
-            16.height,
-            DKTextField(
-              hint: dkYourPasswordText,
-              validator: (value) => _validate(context, keyPassword),
-              obsecureText:
-                  context.watch<DKLoginDataProvider>().canShowPassword,
-              onChanged: (text) => provider.setPassword(text),
-            ),
-            8.height,
-            const DKShowHidePasswordCheckBox(),
-            28.height,
-            DKButtonComponent(
-              text: dkLoginText,
-              onTap: () async {
-                provider.init();
-                await provider.submitData();
+            onPressed: () => context
+                .read<DkAuthUiState>()
+                .switchFragment(const DKForgotPasswordFragment()),
+          ),
+          DKTextField(
+              validator: (value) => _validate(context, keyUserName),
+              hint: dkUsernameOrMobileText,
+              onChanged: (text) => context
+                  .read<DKLoginDataProvider>()
+                  .setUsernameOrPassword(text)),
+          16.height,
+          DKTextField(
+            hint: dkYourPasswordText,
+            validator: (value) => _validate(context, keyPassword),
+            obsecureText: context.watch<DKLoginDataProvider>().canShowPassword,
+            onChanged: (text) => provider.setPassword(text),
+          ),
+          8.height,
+          const DKShowHidePasswordCheckBox(),
+          28.height,
+          DKButtonComponent(
+            text: dkLoginText,
+            onTap: () async {
+              provider.init();
+              await provider.submitData();
 
-                if (provider.credentialsModel != null) {
-                  final bool saveToken = await saveCredentials(
-                      credentialsData: provider.credentialsModel);
-                  if (saveToken) {
-                    EasyLoading.showSuccess(
-                        provider.credentialsModel?.message ??
-                            "Login successful");
-                    analyzeCredentials(
-                        context: context,
-                        token: provider.credentialsModel?.data?.token ?? "");
-                  }
-                } else if (provider.loginErrors != null) {
-                  _loginFormKey.currentState!.validate();
+              if (provider.credentialsModel != null) {
+                final bool saveToken = await saveCredentials(
+                    credentialsData: provider.credentialsModel);
+                if (saveToken) {
+                  DKToast.toastTop(
+                      provider.credentialsModel?.message ?? "Login successful");
+                  analyzeCredentials(
+                      context: context,
+                      token: provider.credentialsModel?.data?.token ?? "");
                 }
-              },
-              gradient: dkSubmitButtonGradient,
-            ),
-            16.height,
-            const DKTermsDescComponent(),
-            16.height,
-            _forNewUsersTitle(),
-            16.height,
-            DKButtonComponent(
-              text: dkCreateNewAccount,
-              onTap: () => context
-                  .read<DkAuthUiState>()
-                  .switchFragment(const DKRegisterFragment()),
-              gradient: dkNavigateButtonGradient,
-            ),
-          ],
-        ),
+              } else if (provider.loginErrors != null) {
+                _loginFormKey.currentState!.validate();
+              }
+            },
+            gradient: dkSubmitButtonGradient,
+          ),
+          16.height,
+          const DKTermsDescComponent(),
+          16.height,
+          _forNewUsersTitle(),
+          16.height,
+          DKButtonComponent(
+            text: dkCreateNewAccount,
+            onTap: () => context
+                .read<DkAuthUiState>()
+                .switchFragment(const DKRegisterFragment()),
+            gradient: dkNavigateButtonGradient,
+          ),
+        ],
       ),
     );
   }
 
   Widget _forNewUsersTitle() => Stack(
         children: [
-          const Divider(
-            thickness: 2,
+          Container(
+            alignment: Alignment.center,
+            child: const Divider(
+              thickness: 2,
+            ),
           ),
           Container(
             alignment: Alignment.center,

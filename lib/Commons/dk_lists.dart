@@ -1,4 +1,18 @@
-const List<Map<String,dynamic>> dkCountiesList = [
+import 'package:afyadaktari/Commons/dk_images.dart';
+import 'package:afyadaktari/Commons/dk_strings.dart';
+import 'package:afyadaktari/Screens/dk_appointment_screen.dart';
+import 'package:afyadaktari/Screens/dk_help_screen.dart';
+import 'package:afyadaktari/Screens/dk_home_screen.dart';
+import 'package:afyadaktari/Screens/dk_insuarance_screen.dart';
+import 'package:afyadaktari/Screens/dk_invoice_screen.dart';
+import 'package:afyadaktari/Screens/dk_order_screen.dart';
+import 'package:afyadaktari/Screens/dk_reports_screen.dart';
+import 'package:afyadaktari/Screens/dk_see_doctor_screen.dart';
+import 'package:afyadaktari/Screens/dk_settings_screen.dart';
+import 'package:afyadaktari/Screens/dk_subscription_screen.dart';
+import 'package:flutter/material.dart';
+
+const List<Map<String, dynamic>> dkCountiesList = [
   {"name": "Mombasa", "code": 1, "capital": "Mombasa City"},
   {"name": "Kwale", "code": 2, "capital": "Kwale"},
   {"name": "Kilifi", "code": 3, "capital": "Kilifi"},
@@ -46,4 +60,131 @@ const List<Map<String,dynamic>> dkCountiesList = [
   {"name": "Kisii", "code": 45, "capital": "Kisii"},
   {"name": "Nyamira", "code": 46, "capital": "Nyamira"},
   {"name": "Nairobi", "code": 47, "capital": "Nairobi City"}
+];
+
+const Map<String, dynamic> homeApplications = {
+  "apps": [
+    {"name": "See a doctor", "image": dkSeeDoctor, "route": DKSeeDoctor()},
+    {
+      "name": "Medical reports",
+      "image": dkMedicalReport,
+      "route": DKReportsScreeen()
+    },
+    {
+      "name": "Insuarance",
+      "image": dkMedicalInsuarance,
+      "route": DKInsuaranceScreen()
+    },
+    {
+      "name": "Subscription",
+      "image": dkMedicalSubscription,
+      "route": DKSubscription()
+    },
+    {"name": "Order", "image": dkMedicalOrder, "route": DKOrderScreen()},
+    {"name": "Help/FAQ", "image": dkHelp, "route": DKHelpScreen()}
+  ]
+};
+
+const Map<String, dynamic> drawerApplications = {
+  "apps": [
+    {"name": "Home", "icon": Icons.home, "route": DKHomeScreen()},
+    {
+      "name": "Appointments",
+      "icon": Icons.local_hospital,
+      "route": DKAppointmentScreen()
+    },
+    {
+      "name": "Invoice",
+      "icon": Icons.medical_services,
+      "route": DKInvoiceScreen()
+    },
+    {"name": "Settings", "icon": Icons.settings, "route": DKSettingsScreen()},
+    {
+      "name": dkLogOut,
+      "icon": Icons.logout,
+    }
+  ]
+};
+
+const List<Map<String, dynamic>> doctors = [
+  {
+    "name": "D.r Kamau Wachira",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 1,
+    "cost": "Ksh 495"
+  },
+  {
+    "name": "D.r Obilo Wenga",
+    "code": "Rgftr43-98",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 2,
+    "cost": "Ksh 3495"
+  },
+  {
+    "name": "D.r Alice Momio",
+    "code": "Qwerqws2-12",
+    "specialty": "Pharmaceutical practioner",
+    "available": false,
+    "reference_id": 3,
+    "cost": "Ksh 995"
+  },
+  {
+    "name": "D.r James Okoth",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 4,
+    "cost": "Ksh 695"
+  },
+  {
+    "name": "D.r Lilian Njeru",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 5,
+    "cost": "Ksh 1195"
+  },
+  {
+    "name": "D.r Mary Wangari",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 6,
+    "cost": "Ksh 1095"
+  },
+  {
+    "name": "D.r Seth Adam Mwangi",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 7,
+    "cost": "Ksh 905"
+  },
+  {
+    "name": "D.r Wawira Mercy",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 8,
+    "cost": "Ksh 705"
+  },
+  {
+    "name": "D.r Abdalla Mohammed",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": true,
+    "reference_id": 9,
+    "cost": "Ksh 900"
+  },
+  {
+    "name": "D.r Mackenzie Dong'o",
+    "code": "Ra008-5432q",
+    "specialty": "General practioner",
+    "available": false,
+    "reference_id": 10,
+    "cost": "Ksh 1495"
+  }
 ];

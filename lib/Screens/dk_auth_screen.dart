@@ -5,22 +5,29 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class DKAuthScreen extends StatefulWidget {
-  const DKAuthScreen({super.key});
+  const DKAuthScreen({super.key, this.initFragment});
+  final Widget? initFragment;
 
   @override
   State<DKAuthScreen> createState() => _DKAuthScreenState();
 }
 
 class _DKAuthScreenState extends State<DKAuthScreen> {
+  Widget? get initFragment => widget.initFragment;
   @override
   Widget build(BuildContext context) {
-    final currentFragment = context.watch<DkAuthUiState>().currentFragment;
+    final currentFragment =
+        initFragment ?? context.watch<DkAuthUiState>().currentFragment;
     return SafeArea(
       child: Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [const DKLogoTitle(), 25.height, currentFragment],
+          body: Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: [const DKLogoTitle(), 25.height, currentFragment],
+          ),
         ),
       )),
     );

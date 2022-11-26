@@ -1,6 +1,7 @@
 import 'package:afyadaktari/Commons/dk_colors.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_login_data_provider.dart';
+import 'package:afyadaktari/Provider/dk_mobile_provider.dart';
 import 'package:afyadaktari/Provider/dk_otp_data_provider.dart';
 import 'package:afyadaktari/Provider/dk_password_data_provider.dart';
 import 'package:afyadaktari/Provider/dk_profile_data_provider.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+
+import 'Provider/dk_navigation_drawer_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,12 +44,14 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (context) => DKProfileDataProvider(),
-          )
+          ),
+          ChangeNotifierProvider(create: (context) => DKMobileProvider()),
+          ChangeNotifierProvider(create: (context) => DKNavigationDrawerProvider())
         ],
         child: MaterialApp(
           title: 'Afya Daktari',
           theme: ThemeData(
-              scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+              scaffoldBackgroundColor: Colors.grey.shade200,
               textTheme: const TextTheme(
                   headline6: TextStyle(color: dkPrimaryTextColor))),
           home: const DKSplashScreen(),

@@ -23,11 +23,13 @@ class DKOTPVerificationFragment extends StatefulWidget {
       this.onPop = const DKRegisterFragment(),
       this.resend,
       this.onSuccessWidget = const DKProfileFragment(),
-      this.hidePhone = true});
+      this.hidePhone = true,
+      this.temp = false});
   final Widget onPop;
   final Widget onSuccessWidget;
   final bool? resend;
   final bool hidePhone;
+  final bool temp;
 
   @override
   State<DKOTPVerificationFragment> createState() =>
@@ -42,6 +44,8 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
   late bool hidePhone = widget.hidePhone;
 
   late bool resend = widget.resend ?? false;
+
+  late bool temp = widget.temp;
 
   late TextEditingController _controller;
 
@@ -85,7 +89,8 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
     initSmsListener();
     phoneNumber = getStringAsync(keyMobile);
 
-    if (hidePhone && phoneNumber != "") {
+    if (temp && hidePhone) {
+      phoneNumber = getStringAsync(keyTempMobile);
       List<String> phoneDigits = phoneNumber.split('');
 
       int length = phoneDigits.length;
@@ -98,8 +103,6 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
       phoneNumber = phoneDigits.join();
     }
 
-    // await SmsAutoFill().getAppSignature;
-    // await SmsAutoFill().listenForCode();
     if (!resend) {
       await 0.seconds.delay;
       if (mounted) {
@@ -171,7 +174,9 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
             Builder(builder: (context) {
               Future<void> submitCode(code) async {
                 hideKeyboard(context);
-                await context.read<DKOTPDataProvider>().submit(code);
+                await context
+                    .read<DKOTPDataProvider>()
+                    .submit(code, temp: temp);
                 if (provider.success) {
                   if (mounted) {
                     context
@@ -184,8 +189,8 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
               return PinFieldAutoFill(
                 controller: _controller,
                 textInputAction: TextInputAction.done,
-                decoration: UnderlineDecoration(
-                    colorBuilder: FixedColorBuilder(
+                decoration: BoxLooseDecoration(
+                    strokeColorBuilder: FixedColorBuilder(
                         otpErrors == null ? Colors.black54 : Colors.red),
                     textStyle: boldTextStyle(color: dkPrimaryTextColor)),
                 onCodeSubmitted: (code) {
@@ -193,10 +198,6 @@ class _DKOTPVerificationFragmentState extends State<DKOTPVerificationFragment> {
                 },
                 onCodeChanged: (code) async {
                   await 0.seconds.delay;
-                  // if (mounted) {
-                  //   context.watch<DKOTPDataProvider>().setOTP(code);
-                  // }
-                  // _countdownController.pause();
                   if (code != null) {
                     if (code.length == 6) {
                       submitCode(code);

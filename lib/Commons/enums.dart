@@ -1,3 +1,3 @@
 enum ProfileMenu {
-edit , changePassword
+edit , changePassword , logout
 }

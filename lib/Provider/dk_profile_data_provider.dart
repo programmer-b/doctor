@@ -156,10 +156,13 @@ class DKProfileDataProvider extends ChangeNotifier {
 
     try {
       final response = await http.put(uri, body: body, headers: headers);
+       if (response.statusCode >= 500) {
+        DKToast.showErrorToast("Server Error");
+      }
       log(response.body);
       if (response.ok) {
         await refreshToken();
-        EasyLoading.showSuccess(jsonDecode(response.body)[keyMessage]);
+        DKToast.toastTop(jsonDecode(response.body)[keyMessage]);
         _success = true;
       } else {
         _profileErrors =
