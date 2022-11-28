@@ -22,26 +22,30 @@ class DKPasswordFragment extends StatefulWidget {
 }
 
 class _DKPasswordFragmentState extends State<DKPasswordFragment> {
-  String? _validate(BuildContext context, String type) {
-    // final DKLoginErrorModel? errors =
-    //     context.read<DKLoginDataProvider>().loginErrors;
-
-    // if (errors != null) {
-    //   switch (type) {
-    //     case keyUserName:
-    //       List error = errors.errors?.username ?? [];
-    //       if (error.isNotEmpty) {
-    //         return error.join(" , ");
-    //       }
-    //       break;
-    //     case keyPassword:
-    //       List error = errors.errors?.password ?? [];
-    //       if (error.isNotEmpty) {
-    //         return error.join(" , ");
-    //       }
-    //       break;
-    //   }
-    // }
+  String? _validate(
+      BuildContext context, String type, Map<String, dynamic> response) {
+    if (response.isNotEmpty) {
+      switch (type) {
+        case keyCurrentPassword:
+          List error = response[keyErrors][keyCurrentPassword] ?? [];
+          if (error.isNotEmpty) {
+            return error.join(" , ");
+          }
+          break;
+        case keyNewPassword:
+          List error = response[keyErrors][keyNewPassword] ?? [];
+          if (error.isNotEmpty) {
+            return error.join(" , ");
+          }
+          break;
+        case keyConfirmPassword:
+          List error = response[keyErrors][keyConfirmPassword] ?? [];
+          if (error.isNotEmpty) {
+            return error.join(" , ");
+          }
+          break;
+      }
+    }
 
     return null;
   }
@@ -93,7 +97,8 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               12.height,
               if (isChangePassword)
                 DKTextField(
-                  validator: (value) => _validate(context, keyOldPassword),
+                  validator: (value) =>
+                      _validate(context, keyCurrentPassword, provider.responseMap),
                   obsecureText: !oldPasswordVisible,
                   hint: dkCurrentPassword,
                   suffixIcon: DKPasswordToggle(
@@ -106,7 +111,8 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               16.height,
               DKTextField(
                 hint: dkNewPassword,
-                validator: (value) => _validate(context, keyNewPassword),
+                validator: (value) =>
+                    _validate(context, keyNewPassword, provider.responseMap),
                 obsecureText: !newPasswordVisible,
                 suffixIcon: DKPasswordToggle(
                   visible: !newPasswordVisible,
@@ -118,7 +124,8 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               16.height,
               DKTextField(
                 hint: dkReEnterNewPassword,
-                validator: (value) => _validate(context, keyConfirmNewPassword),
+                validator: (value) => _validate(
+                    context, keyConfirmPassword, provider.responseMap),
                 obsecureText: !confirmNewPasswordVisible,
                 suffixIcon: DKPasswordToggle(
                   visible: !confirmNewPasswordVisible,
@@ -142,25 +149,15 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
                     isMin: true,
                     text: dkConfirm,
                     onTap: () async {
-                      back();
-                      // provider.init();
-                      // await provider.submitData(
-                      //     isChangePassword: isChangePassword);
+                      provider.init();
+                      await provider.submitData(
+                          isChangePassword: isChangePassword);
 
-                      // if (provider.credentialsModel != null) {
-                      //   final bool saveToken = await saveCredentials(
-                      //       credentialsData: provider.credentialsModel);
-                      //   if (saveToken) {
-                      //     EasyLoading.showSuccess(
-                      //         provider.credentialsModel?.message ??
-                      //             "Login successful");
-                      //     analyzeCredentials(
-                      //         context: context,
-                      //         token: provider.credentialsModel?.data?.token ?? "");
-                      //   }
-                      // } else if (provider.loginErrors != null) {
-                      //   _loginFormKey.currentState!.validate();
-                      // }
+                      if (provider.success) {
+                        back();
+                      } else if (provider.failure) {
+                        _passwordFormKey.currentState!.validate();
+                      }
                     },
                     gradient: dkSubmitButtonGradient,
                   ),

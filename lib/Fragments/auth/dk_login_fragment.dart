@@ -80,14 +80,17 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
             ),
           ),
           12.height,
-          TextButton(
-            child: Text(
-              dkForgotpasswordText,
-              style: primaryTextStyle(color: dkPrimaryColor),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              child: Text(
+                dkForgotpasswordText,
+                style: primaryTextStyle(color: dkPrimaryColor),
+              ),
+              onPressed: () => context
+                  .read<DkAuthUiState>()
+                  .switchFragment(const DKForgotPasswordFragment()),
             ),
-            onPressed: () => context
-                .read<DkAuthUiState>()
-                .switchFragment(const DKForgotPasswordFragment()),
           ),
           DKTextField(
               validator: (value) => _validate(context, keyUserName),

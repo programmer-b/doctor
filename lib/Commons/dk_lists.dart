@@ -109,6 +109,7 @@ const Map<String, dynamic> drawerApplications = {
 const List<Map<String, dynamic>> doctors = [
   {
     "name": "D.r Kamau Wachira",
+    "image": dkDoctor1Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -117,6 +118,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Obilo Wenga",
+    "image": dkDoctor2Image,
     "code": "Rgftr43-98",
     "specialty": "General practioner",
     "available": true,
@@ -125,6 +127,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Alice Momio",
+    "image": dkDoctor3Image,
     "code": "Qwerqws2-12",
     "specialty": "Pharmaceutical practioner",
     "available": false,
@@ -133,6 +136,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r James Okoth",
+    "image": dkDoctor4Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -141,6 +145,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Lilian Njeru",
+    "image": dkDoctor5Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -149,6 +154,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Mary Wangari",
+    "image": dkDoctor6Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -157,6 +163,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Seth Adam Mwangi",
+    "image": dkDoctor7Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -165,6 +172,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Wawira Mercy",
+    "image": dkDoctor8Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -173,6 +181,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Abdalla Mohammed",
+    "image": dkDoctor9Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": true,
@@ -181,6 +190,7 @@ const List<Map<String, dynamic>> doctors = [
   },
   {
     "name": "D.r Mackenzie Dong'o",
+    "image": dkDoctor10Image,
     "code": "Ra008-5432q",
     "specialty": "General practioner",
     "available": false,

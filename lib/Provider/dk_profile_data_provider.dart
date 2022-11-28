@@ -151,12 +151,14 @@ class DKProfileDataProvider extends ChangeNotifier {
     };
 
     final int profileId = decodedToken.usr?.profile?.id ?? 0;
+    log("PROFILE ID: $profileId");
+    log("TOKEN: $token");
 
     final uri = Uri.parse("$dkProfileUrl/$profileId");
 
     try {
       final response = await http.put(uri, body: body, headers: headers);
-       if (response.statusCode >= 500) {
+      if (response.statusCode >= 500) {
         DKToast.showErrorToast("Server Error");
       }
       log(response.body);

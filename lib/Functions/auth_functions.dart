@@ -50,15 +50,21 @@ Future<bool> saveCredentials(
 
 Future<DKRefreshTokenModel?> refreshToken() async {
   final userId = getIntAsync(keyUserId);
+  final token = getStringAsync(keyToken);
+
   log("user_id: $userId");
 
   final uri = Uri.parse(dkRefreshUrl);
   log("URL: $uri");
 
   final Map<String, String> body = {keyUserId: "$userId"};
+  final Map<String, String> headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
 
   try {
-    final response = await http.post(uri, body: body);
+    final response = await http.post(uri, body: body, headers: headers);
     log("REFRESHED TOKEN: ${response.body}");
 
     if (response.ok && userId != 0 && response.body != "null") {
@@ -120,4 +126,3 @@ DKUserTokenDecodeModel decodeJWT(String token) {
   }
   throw "$token cannot be decoded";
 }
-

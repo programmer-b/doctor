@@ -31,3 +31,5 @@ const keyCurrentPassword = "current_password";
 const keyOldPassword = "old_password";
 const keyNewPassword = "new_password";
 const keyConfirmNewPassword = "confirm_new_password";
+
+const keyErrors = "errors";

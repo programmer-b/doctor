@@ -8,6 +8,7 @@ import 'package:afyadaktari/Components/dk_home_app_button.dart';
 import 'package:afyadaktari/Fragments/home/dk_home_drawer_fragment.dart';
 import 'package:afyadaktari/Models/home/dk_home_apps_model.dart';
 import 'package:afyadaktari/Provider/dk_profile_data_provider.dart';
+import 'package:afyadaktari/Screens/dk_appointment_screen.dart';
 import 'package:afyadaktari/Screens/dk_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
@@ -28,8 +29,6 @@ class _DKHomeScreenState extends State<DKHomeScreen> {
         (timeStamp) => context.read<DKProfileDataProvider>().setProfile());
   }
 
-  final apps = DKHomeAppsModel.fromJson(homeApplications);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +47,8 @@ class _DKHomeScreenState extends State<DKHomeScreen> {
                 homeApplications["apps"].length,
                 (index) => DkHomeAppButton(
                     index: index,
-                    image: apps.apps![index].image!,
-                    title: apps.apps![index].name!)),
+                    image: homeApplications["apps"][index]["image"],
+                    title: homeApplications["apps"][index]["name"])),
           ),
         ),
       ),
@@ -75,7 +74,7 @@ class _DKHomeScreenState extends State<DKHomeScreen> {
                   dkViewAllMyAppointments,
                   style: boldTextStyle(color: dkPrimaryColor),
                 )),
-          ),
+          ).onTap(() => const DKAppointmentScreen().launch(context)),
         ),
         actions: [
           IconButton(

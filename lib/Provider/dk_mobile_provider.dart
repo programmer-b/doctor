@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:afyadaktari/Commons/dk_extensions.dart';
 import 'package:afyadaktari/Commons/dk_strings.dart';
@@ -32,7 +33,8 @@ class DKMobileProvider extends ChangeNotifier {
 
     try {
       final response = await http.post(uri, body: body);
-       if (response.statusCode >= 500) {
+      log(response.body);
+      if (response.statusCode >= 500) {
         DKToast.showErrorToast("Server Error");
       }
       if (response.ok) {

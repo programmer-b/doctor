@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:afyadaktari/Commons/dk_colors.dart';
+import 'package:afyadaktari/Commons/dk_lists.dart';
 import 'package:afyadaktari/Commons/dk_strings.dart';
+import 'package:afyadaktari/Components/dk_button_component.dart';
 import 'package:afyadaktari/Components/dk_text_field.dart';
+import 'package:afyadaktari/Fragments/apps/dk_see_doctor_fragment.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class DKSeeDoctor extends StatefulWidget {
   const DKSeeDoctor({super.key});
@@ -15,16 +22,9 @@ class _DKSeeDoctorState extends State<DKSeeDoctor> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(dkAvailableDoctors),
+        backgroundColor: dkPrimaryColor,
       ),
-      body: Container(
-        constraints: const BoxConstraints(maxWidth: 400),
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: const [
-            DKTextField(hint: dkSearchForDoctors),
-          ],
-        ),
-      ),
+      body: const DKSeeDoctorFragment(),
     );
   }
 }

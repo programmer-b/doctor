@@ -19,7 +19,7 @@ class DKDrawerAppTile extends StatelessWidget {
     return Consumer<DKNavigationDrawerProvider>(
         builder: (context, snapshot, widget) {
       bool isCurrentIndex = snapshot.currentIndex == index;
-      final Widget route = app["route"];
+      final Widget? route = app["route"];
       return InkWell(
         onTap: app["name"] == dkLogOut
             ? () => context.showLogOut()

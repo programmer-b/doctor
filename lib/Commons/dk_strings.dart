@@ -83,7 +83,7 @@ const dkLogOut = "Logout";
 const dkLogOutMsg = "Are you sure you want to logout?";
 
 const dkAvailableDoctors = "Availbale doctors";
-const dkSearchForDoctors = "Search for doctors";
+const dkSearchForDoctors = "Search for available doctors";
 
 const dkMedicalReportsText = "Medical Reports";
 const dkMedicalInsuaranceText = "Medical Insuarance";
@@ -95,3 +95,5 @@ const dkUpcomingText = "Upcoming";
 const dkHistoryText = "History";
 const dkSettingsText = "Settings";
 const dkInvoiceText = "Invoice";
+
+const dkUpComingText = "Upcoming";

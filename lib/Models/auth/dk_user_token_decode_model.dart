@@ -55,7 +55,7 @@ class Usr {
     mobileVerified = json['mobile_verified'];
     profileUpdated = json['profile_updated'];
     profile =
-        json['profile'] != null ? Profile.fromJson(json['profile']) : null;
+        json['patient profile'] != null ? Profile.fromJson(json['patient profile']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -63,9 +63,9 @@ class Usr {
     data['id'] = id;
     data['username'] = username;
     data['mobile_verified'] = mobileVerified;
-    data['profile_updated'] = profileUpdated;
+    data['patient profile'] = profileUpdated;
     if (profile != null) {
-      data['profile'] = profile!.toJson();
+      data['patient profile'] = profile!.toJson();
     }
     return data;
   }

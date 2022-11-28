@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:afyadaktari/Commons/dk_extensions.dart';
@@ -7,7 +8,7 @@ import 'package:afyadaktari/Utils/dk_easy_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide log;
 
 import '../Utils/dk_toast.dart';
 
@@ -47,6 +48,7 @@ class DKPasswordProvider extends ChangeNotifier {
 
   Future<void> submitData({required bool isChangePassword}) async {
     DKEasyLoading.show();
+    _responseMap = {};
 
     _currentPassword = _currentPassword.trim();
     _newPassword = _newPassword.trim();
@@ -58,31 +60,44 @@ class DKPasswordProvider extends ChangeNotifier {
     if (!isChangePassword) {
       body = {
         keyNewPassword: _newPassword,
-        keyConfirmNewPassword: _confirmNewPassword
+        keyConfirmPassword: _confirmNewPassword
       };
     } else {
       body = {
         keyNewPassword: _newPassword,
-        keyConfirmNewPassword: _confirmNewPassword,
+        keyConfirmPassword: _confirmNewPassword,
         keyCurrentPassword: _currentPassword
       };
     }
 
-    final String token = getStringAsync(keyTempToken);
+    Map<String, String> headers = {};
 
-    final Map<String, String> headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    if (isChangePassword) {
+      final String token = getStringAsync(keyToken);
+      headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+    } else {
+      final String token = getStringAsync(keyTempToken);
+      headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+    }
 
     final uri =
         Uri.parse(isChangePassword ? dkChangePasswordUrl : dkResetPasswordUrl);
 
     try {
       final response = await http.post(uri, body: body, headers: headers);
+      log("RESPNSE : ${response.body}");
+      _responseMap = jsonDecode(response.body);
+
       if (response.statusCode >= 500) {
         DKToast.showErrorToast("Server Error");
       } else if (response.ok) {
+        DKToast.toastTop(jsonDecode(response.body)[keyMessage]);
         _success = true;
       } else {
         _failure = true;
@@ -103,4 +118,7 @@ class DKPasswordProvider extends ChangeNotifier {
 
   bool _failure = false;
   bool get failure => _failure;
+
+  Map<String, dynamic> _responseMap = {};
+  Map<String, dynamic> get responseMap => _responseMap;
 }
