@@ -21,7 +21,7 @@ jobs:
     name: Build Artifacts and Release
     runs-on: ubuntu-latest
     env:
-      GITHUB_TOKEN: ${{ secrets.DANTECH }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
           artifacts: "build/app/outputs/flutter-apk/app-release.apk"
           #,build/app/outputs/bundle/release/app-release.aab,build/ios/iphoneos/app.ipa"
           tag: v1.1.${{ github.run_number }}
-          token: ${{ secrets.DANTECH }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
