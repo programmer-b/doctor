@@ -125,15 +125,9 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
                   DKToast.toastTop(
                       provider.credentialsModel?.message ?? "Login successful");
 
-                  if (mounted) {
-                    if (roles.role == Roles.admin) {
-                      const DKHomeScreen().launch(context);
-                    }
-                  } else {
-                    analyzeCredentials(
-                        context: context,
-                        token: provider.credentialsModel?.data?.token ?? "");
-                  }
+                  analyzeCredentials(
+                      context: context,
+                      token: provider.credentialsModel?.data?.token ?? "");
                 }
               } else if (provider.loginErrors != null) {
                 _loginFormKey.currentState!.validate();

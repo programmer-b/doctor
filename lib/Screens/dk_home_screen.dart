@@ -7,14 +7,12 @@ import 'package:afyadaktari/Commons/dk_strings.dart';
 import 'package:afyadaktari/Components/dk_home_app_button.dart';
 import 'package:afyadaktari/Fragments/home/dk_home_drawer_fragment.dart';
 import 'package:afyadaktari/Provider/dk_profile_data_provider.dart';
-import 'package:afyadaktari/Provider/dk_role_provider.dart';
 import 'package:afyadaktari/Screens/dk_appointment_screen.dart';
 import 'package:afyadaktari/Screens/dk_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' hide log;
 import 'package:provider/provider.dart';
 
-import '../Commons/enums.dart';
 
 class DKHomeScreen extends StatefulWidget {
   const DKHomeScreen({super.key});
@@ -24,18 +22,12 @@ class DKHomeScreen extends StatefulWidget {
 }
 
 class _DKHomeScreenState extends State<DKHomeScreen> {
-  late Roles role;
-
   @override
   void initState() {
     super.initState();
 
-    role = context.read<DKRoleProvider>().role;
-
-   if(role == Roles.patient){
-     WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) => context.read<DKProfileDataProvider>().setProfile());
-   }
   }
 
   @override
