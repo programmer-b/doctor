@@ -97,3 +97,7 @@ const dkSettingsText = "Settings";
 const dkInvoiceText = "Invoice";
 
 const dkUpComingText = "Upcoming";
+
+const dkAdminText = "Admin";
+const dkPatientText = "Patient";
+const dkDoctorText = "Doctor";

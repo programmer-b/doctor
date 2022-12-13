@@ -11,3 +11,6 @@ const dkRequestPasswordReset = "$vPath/requestpasswordreset";
 const dkResetPasswordUrl = "$vPath/resetpassword";
 const dkChangePasswordUrl = "$vPath/changepassword";
 const dkVerifyNumberUrl = "$vPath/verifynumber";
+
+const dkAdminLogin = "$vPath/adminlogin";
+const dkDoctorLogin = "$vPath/doctorlogin";

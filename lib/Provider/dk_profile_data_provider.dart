@@ -151,10 +151,11 @@ class DKProfileDataProvider extends ChangeNotifier {
     };
 
     final int profileId = decodedToken.usr?.profile?.id ?? 0;
-    log("PROFILE ID: $profileId");
-    log("TOKEN: $token");
 
     final uri = Uri.parse("$dkProfileUrl/$profileId");
+
+    log('URL: $uri');
+    log('token: $token');
 
     try {
       final response = await http.put(uri, body: body, headers: headers);

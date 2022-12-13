@@ -1,5 +1,3 @@
-import 'dk_base_64.dart';
-
 const String dkmedilablogo = 'images/ml_medilabLogo.png';
 
 const String dkprofilepicture = 'images/ml_profile_Image.png';

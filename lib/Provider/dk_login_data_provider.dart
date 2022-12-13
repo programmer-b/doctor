@@ -2,14 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:afyadaktari/Commons/dk_extensions.dart';
+import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_urls.dart';
+import 'package:afyadaktari/Commons/enums.dart';
 import 'package:afyadaktari/Models/auth/dk_login_error_model.dart';
 import 'package:afyadaktari/Models/auth/dk_user_credentials_model.dart';
+import 'package:afyadaktari/Provider/dk_role_provider.dart';
 import 'package:afyadaktari/Utils/dk_easy_loading.dart';
 import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:nb_utils/nb_utils.dart' as utils;
 
 class DKLoginDataProvider extends ChangeNotifier {
   String _usernameOrMobile = "";
@@ -47,13 +51,24 @@ class DKLoginDataProvider extends ChangeNotifier {
       "password": _password
     };
 
-    final uri = Uri.parse(dkLoginUrl);
+    final Roles role = DKRoleProvider.getCurrentRole(utils.getStringAsync(keyRole));
+
+    Uri uri() {
+      switch (role) {
+        case Roles.admin:
+          return Uri.parse(dkAdminLogin);
+        case Roles.patient:
+          return Uri.parse(dkLoginUrl);
+        case Roles.doctor:
+          return Uri.parse(dkLoginUrl);
+      }
+    }
 
     try {
-      final response = await http.post(uri, body: body);
+      final response = await http.post(uri(), body: body);
       log(response.body);
       if (response.statusCode >= 500) {
-        DKToast.showErrorToast("Server Error");
+        DKToast.showErrorToast("Server Error ${response.body}");
       }
       if (response.ok) {
         _credentialsModel =

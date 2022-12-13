@@ -1,6 +1,7 @@
 import 'package:afyadaktari/Commons/dk_colors.dart';
 import 'package:afyadaktari/Commons/dk_keys.dart';
 import 'package:afyadaktari/Commons/dk_strings.dart';
+import 'package:afyadaktari/Commons/enums.dart';
 import 'package:afyadaktari/Components/dk_button_component.dart';
 import 'package:afyadaktari/Components/dk_check_box_component.dart';
 import 'package:afyadaktari/Components/dk_terms_desc_component.dart';
@@ -11,9 +12,10 @@ import 'package:afyadaktari/Functions/auth_functions.dart';
 import 'package:afyadaktari/Models/auth/dk_login_error_model.dart';
 import 'package:afyadaktari/Provider/dk_auth_ui_state.dart';
 import 'package:afyadaktari/Provider/dk_login_data_provider.dart';
+import 'package:afyadaktari/Provider/dk_role_provider.dart';
+import 'package:afyadaktari/Screens/dk_home_screen.dart';
 import 'package:afyadaktari/Utils/dk_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -67,6 +69,8 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
   @override
   Widget build(BuildContext context) {
     final provider = context.read<DKLoginDataProvider>();
+    final roles = context.read<DKRoleProvider>();
+
     return Form(
       key: _loginFormKey,
       child: Column(
@@ -81,7 +85,7 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
           ),
           12.height,
           Container(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.centerRight,
             child: TextButton(
               child: Text(
                 dkForgotpasswordText,
@@ -120,9 +124,16 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
                 if (saveToken) {
                   DKToast.toastTop(
                       provider.credentialsModel?.message ?? "Login successful");
-                  analyzeCredentials(
-                      context: context,
-                      token: provider.credentialsModel?.data?.token ?? "");
+
+                  if (mounted) {
+                    if (roles.role == Roles.admin) {
+                      const DKHomeScreen().launch(context);
+                    }
+                  } else {
+                    analyzeCredentials(
+                        context: context,
+                        token: provider.credentialsModel?.data?.token ?? "");
+                  }
                 }
               } else if (provider.loginErrors != null) {
                 _loginFormKey.currentState!.validate();
@@ -149,11 +160,8 @@ class _DKLoginFragmentState extends State<DKLoginFragment> {
 
   Widget _forNewUsersTitle() => Stack(
         children: [
-          Container(
-            alignment: Alignment.center,
-            child: const Divider(
-              thickness: 2,
-            ),
+          const Divider(
+            thickness: 2,
           ),
           Container(
             alignment: Alignment.center,

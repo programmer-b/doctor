@@ -33,3 +33,9 @@ const keyNewPassword = "new_password";
 const keyConfirmNewPassword = "confirm_new_password";
 
 const keyErrors = "errors";
+
+const keyRole = "role";
+
+const keyAdmin = "admin";
+const keyPatient = "patient";
+const keyDoctor = "doctor";

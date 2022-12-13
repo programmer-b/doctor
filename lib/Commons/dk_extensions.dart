@@ -12,7 +12,7 @@ extension SnapshotReady on AsyncSnapshot {
 }
 
 extension ValueIsNull on dynamic {
-  bool get isNull => this == 0 || this == null || this == false;
+  bool get isNull => this == 0 || this == null || this == false || this == '';
 }
 
 extension IsOk on http.Response {

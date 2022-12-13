@@ -52,6 +52,8 @@ Future<DKRefreshTokenModel?> refreshToken() async {
   final userId = getIntAsync(keyUserId);
   final token = getStringAsync(keyToken);
 
+  if (userId.isNull && token.isNull) return null;
+
   log("user_id: $userId");
 
   final uri = Uri.parse(dkRefreshUrl);
@@ -59,9 +61,9 @@ Future<DKRefreshTokenModel?> refreshToken() async {
 
   final Map<String, String> body = {keyUserId: "$userId"};
   final Map<String, String> headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token',
+  };
 
   try {
     final response = await http.post(uri, body: body, headers: headers);
