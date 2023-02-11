@@ -97,8 +97,8 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               12.height,
               if (isChangePassword)
                 DKTextField(
-                  validator: (value) =>
-                      _validate(context, keyCurrentPassword, provider.responseMap),
+                  validator: (value) => _validate(
+                      context, keyCurrentPassword, provider.responseMap),
                   obsecureText: !oldPasswordVisible,
                   hint: dkCurrentPassword,
                   suffixIcon: DKPasswordToggle(
@@ -111,8 +111,10 @@ class _DKPasswordFragmentState extends State<DKPasswordFragment> {
               16.height,
               DKTextField(
                 hint: dkNewPassword,
-                validator: (value) =>
-                    _validate(context, keyNewPassword, provider.responseMap),
+                validator: (value) => _validate(
+                    context,
+                    isChangePassword ? keyNewPassword : keyPassword,
+                    provider.responseMap),
                 obsecureText: !newPasswordVisible,
                 suffixIcon: DKPasswordToggle(
                   visible: !newPasswordVisible,

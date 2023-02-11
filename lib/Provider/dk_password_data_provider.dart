@@ -57,13 +57,17 @@ class DKPasswordProvider extends ChangeNotifier {
 
     Map<String, String> body = {};
 
+    final String userId = getIntAsync(keyTempUserId).toString();
+
     if (!isChangePassword) {
       body = {
-        keyNewPassword: _newPassword,
+        keyUserId : userId,
+        keyPassword: _newPassword,
         keyConfirmPassword: _confirmNewPassword
       };
     } else {
       body = {
+        keyUserId : userId,
         keyNewPassword: _newPassword,
         keyConfirmPassword: _confirmNewPassword,
         keyCurrentPassword: _currentPassword
