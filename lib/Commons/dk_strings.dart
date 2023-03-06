@@ -69,6 +69,10 @@ const dkCurrentPassword = "Current password";
 const dkEnterNewPasswordMsg = "Enter your new password below";
 const dkUpdatePassword = "Update your password";
 const dkUpdatePasswordMsg = "Enter your current and new password below";
+const dkConfirmAppointMsg =
+    "Confirm your appointment request for the following details.";
+const dkAppointBookSuccessMsg =
+    "Your appointment has successfully been booked. Please aveil on time.";
 
 const dkGoBackToLogin = "Go back to login";
 const dkGoBackToProfileScreen = "Go back to profile screen";
@@ -83,6 +87,7 @@ const dkLogOut = "Logout";
 const dkLogOutMsg = "Are you sure you want to logout?";
 
 const dkAvailableDoctors = "Availbale doctors";
+const dkBookAppointment = "Book Appointment";
 const dkSearchForDoctors = "Search for available doctors";
 
 const dkMedicalReportsText = "Medical Reports";
@@ -101,3 +106,13 @@ const dkUpComingText = "Upcoming";
 const dkAdminText = "Admin";
 const dkPatientText = "Patient";
 const dkDoctorText = "Doctor";
+
+const dkTimeTxt = "Time";
+const dkDateTxt = "Date";
+const dkAmountTxt = "Amount";
+const dkSpecialityTxt = "Speciality";
+const dkSpecialistTxt = "Specialist";
+
+const dkSuccessTxt = "Success";
+const dkFailureTxt = "Failure";
+const dkOk = "OK";

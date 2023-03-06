@@ -1,3 +1,4 @@
+import 'package:afyadaktari/Screens/dk_book_appointment.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -20,105 +21,103 @@ class _DKSeeDoctorFragmentState extends State<DKSeeDoctorFragment> {
     return Container(
       constraints: const BoxConstraints(maxWidth: 400),
       padding: const EdgeInsets.all(8),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            DKTextField(
-              hint: dkSearchForDoctors,
-              suffixIcon:
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-            ),
-            15.height,
-            Column(
-              children: doctors
-                  .map((e) => Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black38)),
-                        margin: const EdgeInsets.all(5),
-                        child: Wrap(
-                          spacing: 15,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 70, maxHeight: 70),
-                                  margin: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(e["image"]))),
-                                ),
-                                5.width,
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          e["name"],
+      child: Column(
+        children: [
+          DKTextField(
+            hint: dkSearchForDoctors,
+            suffixIcon:
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          ),
+          15.height,
+          ListView(
+            children: doctors
+                .map((e) => Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black38)),
+                      margin: const EdgeInsets.all(5),
+                      child: Wrap(
+                        spacing: 15,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                constraints: const BoxConstraints(
+                                    maxWidth: 70, maxHeight: 70),
+                                margin: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,),
+                                        child: const Icon(Icons.account_circle, size: 60,color: Colors.black12,),
+                              )
+                              
+                              ,
+                              5.width,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        e["name"],
+                                        style: boldTextStyle(
+                                            color: dkPrimaryColor, size: 12),
+                                      ),
+                                      5.width,
+                                      Text(e["code"],
                                           style: boldTextStyle(
-                                              color: dkPrimaryColor, size: 14),
-                                        ),
-                                        5.width,
-                                        Text(e["code"],
-                                            style: boldTextStyle(
-                                                color: dkPrimaryColor,
-                                                size: 14)),
-                                      ],
-                                    ),
-                                    4.height,
-                                    Text(
-                                      e["specialty"],
-                                      style: primaryTextStyle(
-                                          color: dkPrimaryColor, size: 14),
-                                    ),
-                                    6.height,
-                                    Row(
-                                      children: [
-                                        Text(
-                                          e["cost"],
+                                              color: dkPrimaryColor,
+                                              size: 12)),
+                                    ],
+                                  ),
+                                  4.height,
+                                  Text(
+                                    e["specialty"],
+                                    style: primaryTextStyle(
+                                        color: dkPrimaryColor, size: 12),
+                                  ),
+                                  6.height,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        e["cost"],
+                                        style: boldTextStyle(
+                                            color: dkPrimaryColor, size: 12),
+                                      ),
+                                      5.width,
+                                      Text(
+                                          e["available"]
+                                              ? "Available"
+                                              : "Not Available",
                                           style: boldTextStyle(
-                                              color: dkPrimaryColor, size: 16),
-                                        ),
-                                        5.width,
-                                        Text(
-                                            e["available"]
-                                                ? "Available"
-                                                : "Not Available",
-                                            style: boldTextStyle(
-                                                color: dkPrimaryColor,
-                                                size: 16)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            if (!e["available"])
-                              Container()
-                            else
-                              DKButtonComponent(
-                                onTap: () {},
-                                text: "See Now",
-                                isMin: true,
-                                gradient: dkSubmitButtonGradient,
+                                              color: dkPrimaryColor,
+                                              size: 12)),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            DKButtonComponent(
-                              onTap: () {},
-                              text: "Schedule",
-                              isMin: e["available"],
-                              gradient: dkSubmitButtonGradient,
-                              height: 35,
-                            )
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            )
-          ],
-        ),
+                            ],
+                          ),
+                          // if (!e["available"])
+                          //   Container()
+                          // else
+                          //   DKButtonComponent(
+                          //     onTap: () {},
+                          //     text: "See Now",
+                          //     isMin: true,
+                          //     gradient: dkSubmitButtonGradient,
+                          //   ),
+                          DKButtonComponent(
+                            onTap: () => const DKBookAppointment().launch(context),
+                            text: "Book Appointment",
+                            isMin: false,
+                            gradient: dkSubmitButtonGradient,
+                            height: 28,
+                          )
+                        ],
+                      ),
+                    ))
+                .toList(),
+          ).expand()
+        ],
       ),
     );
   }

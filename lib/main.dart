@@ -15,6 +15,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
+import 'Fragments/apps/appointments/appointments_provider.dart';
 import 'Provider/dk_navigation_drawer_provider.dart';
 
 Future<void> main() async {
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(create: (context) => DKMobileProvider()),
           ChangeNotifierProvider(create: (context) => DKNavigationDrawerProvider()),
-          ChangeNotifierProvider(create: (context) => DKRoleProvider())
+          ChangeNotifierProvider(create: (context) => DKRoleProvider()),
+          ChangeNotifierProvider(create: (context) => AppointmentsProvider())
         ],
         child: MaterialApp(
           title: dkAppName,
